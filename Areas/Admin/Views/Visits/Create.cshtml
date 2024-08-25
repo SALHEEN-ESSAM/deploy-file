@@ -1,0 +1,144 @@
+﻿@model Amana.ViewModels.VisitsAndSamples.VisitsViewModel
+@using Amana.GlobalResources;
+
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_Layout2.cshtml";
+}
+@section sectionSubHeader{
+
+    <div class="kt-subheader__main">
+        <h3 class="kt-subheader__title">
+            @Cpanel.Visits
+        </h3>
+        <span class="kt-subheader__separator kt-hidden"></span>
+        <div class="kt-subheader__breadcrumbs">
+            <a href="#" class="kt-subheader__breadcrumbs-home"><i class="flaticon2-shelter"></i></a>
+            @*<span class="kt-subheader__breadcrumbs-separator"></span>
+                <a href="" class="kt-subheader__breadcrumbs-link">
+                    @ctgry.SuperCategoryName
+                </a>*@
+            <span class="kt-subheader__breadcrumbs-separator"></span>
+            <span class="kt-subheader__breadcrumbs-link kt-subheader__breadcrumbs-link--active">@Cpanel.AddEditVisit</span>
+        </div>
+    </div>
+}
+<div class="row">
+    <div class="col-lg-12">
+        <!--begin::Portlet-->
+        <div class="kt-portlet">
+            <div class="kt-portlet__head">
+                <div class="kt-portlet__head-label">
+                    <h3 class="kt-portlet__head-title">
+                        @Cpanel.AddEditVisit
+                    </h3>
+                </div>
+            </div>
+
+            <!--begin::Form-->
+
+            @using (Html.BeginForm("Create", "Visits", FormMethod.Post, new { enctype = "multipart/form-data", @class = "kt-form kt-form--label-right" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true)
+                @Html.HiddenFor(model => model.VisitId)
+
+
+                <div class="kt-portlet__body">
+                    @if (ViewBag.Success == true)
+                    {
+                        @Html.Partial("~/Areas/Admin/Views/Shared/UcSuccess.cshtml")
+                    }
+
+                    @if (ViewBag.CustomError != null)
+                    {
+                        @Html.Partial("~/Areas/Admin/Views/Shared/UcCustomError.cshtml", ViewBag.CustomError as string)
+                    }
+                    <div class="form-group row">
+                        <div class="col-lg-6">
+                            <label>
+                                @Cpanel.Location
+                            </label>
+                            @Html.DropDownList("ddlLocations", ViewData["LocationsLst"] as SelectList, @Amana.GlobalResources.Cpanel.ChooseOption, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-lg-6">
+                            <label>
+                                @Html.LabelFor(model => model.FactoryId, Cpanel.FactoryType)
+                            </label>
+                            @Html.DropDownListFor(model => model.FactoryId, ViewData["FactoriesLst"] as SelectList, @Amana.GlobalResources.Cpanel.ChooseOption, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-lg-6">
+
+                            @Html.LabelFor(model => model.UserId, Cpanel.Observer)
+                            @Html.DropDownListFor(model => model.UserId, ViewData["UsersLst"] as SelectList, @Amana.GlobalResources.Cpanel.ChooseOption, new { @class = "form-control" })
+
+                            @Html.ValidationMessageFor(model => model.UserId)
+
+                        </div>
+
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-lg-6">
+                            @Html.LabelFor(model => model.VisitDate, Cpanel.VisitDate)
+
+                            @Html.TextBoxFor(model => model.VisitDate, new { @class = "form-control kt_datepicker_1" })
+                            @Html.ValidationMessageFor(model => model.VisitDate, "", new { @class = "text-danger" })
+
+                        </div>
+                    </div>
+
+                </div>
+                <div class="kt-portlet__foot">
+                    <div class="kt-form__actions">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <input type="submit" value="@Amana.GlobalResources.Cpanel.Save" class="btn btn-warning" />
+                                @Html.ActionLink(@Amana.GlobalResources.Cpanel.BackToList, "Visits", new { }, new { @class = "btn btn-secondary" })
+
+                            </div>
+                            @*<div class="col-lg-6 kt-align-right">
+                                    <button type="reset" class="btn btn-danger">Delete</button>
+                                </div>*@
+                        </div>
+                    </div>
+                </div>
+
+            }
+
+
+            <!--end::Form-->
+        </div>
+
+
+    </div>
+</div>
+<script>
+    $("#liVisits").addClass("kt-menu__item--open");
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#ddlLocations').change(function () {
+            $.ajax({
+                type: "post",
+                url: "/ar/Admin/Factorys/GetFactoriesByLocation",
+                data: { locationId: $('#ddlLocations').val() },
+                datatype: "json",
+                traditional: true,
+                success: function (data) {
+                    var district = "<select id='FactoryId'>";
+                    district = district + '<option value="">--اختر--</option>';
+                    for (var i = 0; i < data.length; i++) {
+                        district = district + '<option value=' + data[i].Value + '>' + data[i].Text + '</option>';
+                    }
+                    district = district + '</select>';
+                    $('#FactoryId').html(district);
+                }
+            });
+        });
+    });
+</script>
+

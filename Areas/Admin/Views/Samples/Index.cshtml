@@ -1,0 +1,210 @@
+﻿@model  List<Amana.Models.Entities.VisitsSample>
+@using Amana.Models.Utilities;
+@using Amana.Models.Helpers;
+@using Amana.GlobalResources;
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_Layout2.cshtml";
+    //startDate=DateTime.Now
+    var currentUser = (Amana.Models.Entities.C_UserItems)HttpContext.Current.Session["UserDetails"];
+
+    var status = string.IsNullOrEmpty(Request["status"]) ? "" : Request["status"];
+    string startDate = string.IsNullOrEmpty(Request["startDate"]) ? HelperMethods.GetFirstDayInMonth(DateTime.Now).ToString("dd/MM/yyyy") : Request["startDate"].ToString();
+    string endDate = string.IsNullOrEmpty(Request["endDate"]) ? HelperMethods.GetLastDayInMonth(DateTime.Now).ToString("dd/MM/yyyy") : Request["endDate"].ToString();
+}
+@section sectionSubHeader{
+
+    <div class="kt-subheader__main">
+        <h3 class="kt-subheader__title">
+            @Cpanel.Samples
+
+        </h3>
+        <span class="kt-subheader__separator kt-hidden"></span>
+        <div class="kt-subheader__breadcrumbs">
+            <a href="#" class="kt-subheader__breadcrumbs-home"><i class="flaticon2-shelter"></i></a>
+            @*<span class="kt-subheader__breadcrumbs-separator"></span>
+                <a href="" class="kt-subheader__breadcrumbs-link">
+                    قائمة
+                </a>*@
+            <span class="kt-subheader__breadcrumbs-separator"></span>
+            <span class="kt-subheader__breadcrumbs-link kt-subheader__breadcrumbs-link--active">  @Cpanel.SamplesList</span>
+
+        </div>
+    </div>
+}
+<div class="kt-portlet kt-portlet--mobile">
+    <div class="kt-portlet__head kt-portlet__head--lg">
+        <div class="kt-portlet__head-label">
+            <span class="kt-portlet__head-icon">
+                <i class="kt-font-brand flaticon2-line-chart"></i>
+            </span>
+
+            <h3 class="kt-portlet__head-title">
+               @Cpanel.SamplesList
+            </h3>
+
+        </div>
+        @*<div class="kt-portlet__head-toolbar">
+                <div class="kt-portlet__head-wrapper">
+                    <div class="kt-portlet__head-actions">
+                        <a href="@Url.Action("Create")" class="btn btn-brand btn-elevate btn-icon-sm">
+                            <i class="la la-plus"></i>
+                            إضافة
+                        </a>
+                    </div>
+                </div>
+            </div>*@
+    </div>
+
+    <div class="kt-portlet__body">
+        @if (ViewBag.Success == true)
+        {
+            @Html.Partial("~/Areas/Admin/Views/Shared/UcSuccess.cshtml")
+        }
+        <!--begin: Search Form -->
+        @using (Html.BeginForm("Index", "Samples", FormMethod.Get, new { @class = "kt-form kt-form--label-right kt-margin-t-20 kt-margin-b-10" }))
+        {
+            <div class="row align-items-center">
+                <div class="col-xl-12 order-2 order-xl-1">
+                    <div class="row align-items-center">
+                        <div class="col-md-1 kt-margin-b-20-tablet-and-mobile">
+                            <div class="kt-form__control">
+                                <label>@Cpanel.SampleNo</label>
+                                <input id="sampleId" name="sampleId" type="text" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="col-md-2 kt-margin-b-20-tablet-and-mobile">
+                            <div class="kt-form__control">
+                                <label>@Cpanel.FactoryName</label>
+                                @Html.DropDownList("factoryId", ViewData["FactoriesLst"] as SelectList, @Amana.GlobalResources.Cpanel.ChooseOption, new { @class = "form-control select2control" })
+                            </div>
+                        </div>
+                        <div class="col-md-2 kt-margin-b-20-tablet-and-mobile">
+                            <div class="kt-form__control">
+                                <label>@Cpanel.Observer</label>
+                                @Html.DropDownList("userId", ViewData["UsersLst"] as SelectList, @Amana.GlobalResources.Cpanel.ChooseOption, new { @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="col-md-2 kt-margin-b-20-tablet-and-mobile">
+                            <div class="kt-form__control">
+                                <label>@Cpanel.Status</label>
+                                @Html.DropDownList("status", new List<SelectListItem>
+                                {
+                                    new SelectListItem{ Text= "-- الكل --", Value = "" , Selected= (status=="") },
+                                    new SelectListItem{ Text= "لدى المراقب للمراجعة", Value = "0" , Selected= (status=="0") },
+                                    new SelectListItem{ Text= "قيد المراجعة", Value = "1" , Selected= (status=="1") },
+                                    new SelectListItem{ Text= "فى الإستقبال", Value = "2", Selected= (status=="2") },
+                                    new SelectListItem{ Text= "فى المختبر", Value = "3", Selected= (status=="3") },
+                                    new SelectListItem{ Text= "تم الانتهاء من العينة", Value = "4", Selected= (status=="4") }
+
+                                }, new { @class = "form-control" })
+                            </div>
+                        </div>
+
+                        <div class="col-md-2 kt-margin-b-20-tablet-and-mobile">
+                            <div class="kt-form__control">
+                                <label>@Cpanel.From</label>
+                                <input id="startDate" name="startDate" type="text" class="form-control kt_datepicker_1" value="@startDate" />
+                            </div>
+                        </div>
+                        <div class="col-md-2 kt-margin-b-20-tablet-and-mobile">
+                            <div class="kt-form__control">
+                                <label>@Cpanel.To</label>
+                                <input id="endDate" name="endDate" type="text" class="form-control kt_datepicker_1" value="@endDate" />
+                            </div>
+                        </div>
+
+                        <div class="col-md-1">
+                            <input type="submit" value="@Amana.GlobalResources.Cpanel.Search" class="btn btn-default kt-mt-20" />
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+        }
+
+        <!--end: Search Form -->
+        <!--begin: Datatable -->
+        @if (Model.Count > 0)
+        {
+            <table class="table table-striped- table-bordered table-hover table-checkable" id="kt_table_1">
+                <thead>
+                    <tr>
+                        <th>@Cpanel.SampleNo</th>
+                        <th>@Cpanel.SampleDate</th>
+                        <th>@Cpanel.FactoryName</th>
+                        <th>@Cpanel.Observer</th>
+                        <th>@Cpanel.Status</th>
+                        <th>
+                            @Cpanel.Details
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        int i = 0;
+                        foreach (var item in Model)
+                        {
+                            i++;
+                            <tr>
+                                <td>
+                                    @item.SampleId
+                                </td>
+                                <td>
+                                    @item.Visits.VisitDate.ToString("dd / MM / yyyy")
+                                </td>
+                                <td>
+                                    @item.Visits.Factories.Name
+                                </td>
+                                <td>
+                                    @item.Visits.C_UserItems.Name
+                                </td>
+                                <td>
+                                    @Html.Raw(Html.SampleStatusBadge(item.SampleStatus))
+
+                                </td>
+                                <td nowrap>
+                                    <a href="@Url.Action("SampleDetails",new {id= item.VisitId})" class="btn btn-success btn-sm mr-2">
+                                        @Cpanel.SampleDetails
+                                    </a>
+                                    @if (!currentUser.RoleId.HasValue)
+                                    {
+                                        <a href="@Url.Action("LabSampleDetails",new {id= item.VisitId})" class="btn btn-warning btn-sm mr-2">
+                                           @Cpanel.SampleResult
+                                        </a>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    }
+
+                </tbody>
+            </table>
+
+            <!--end: Datatable -->
+        }
+        else
+        {
+            <p>@Cpanel.NoData</p>
+        }
+    </div>
+</div>
+
+@section sectionScripts{
+
+
+    <script>
+      
+        $(document).ready(function () {
+          
+            $("#liSamples").addClass("kt-menu__item--open");
+
+        });
+    </script>
+}
+
+
+
+
+

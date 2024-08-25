@@ -1,0 +1,217 @@
+﻿@model  List<Amana.Models.Entities.Visits>
+@using Amana.Models.Utilities;
+@using Amana.GlobalResources;
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_Layout2.cshtml";
+    //startDate=DateTime.Now
+
+    string startDate = string.IsNullOrEmpty(Request["startDate"]) ? HelperMethods.GetFirstDayInMonth(DateTime.Now).ToString("dd/MM/yyyy") : Request["startDate"].ToString();
+    string endDate = string.IsNullOrEmpty(Request["endDate"]) ? HelperMethods.GetLastDayInMonth(DateTime.Now).ToString("dd/MM/yyyy") : Request["endDate"].ToString();
+}
+@section sectionSubHeader{
+
+    <div class="kt-subheader__main">
+        <h3 class="kt-subheader__title">
+            @Cpanel.Visits
+        </h3>
+        <span class="kt-subheader__separator kt-hidden"></span>
+        <div class="kt-subheader__breadcrumbs">
+            <a href="#" class="kt-subheader__breadcrumbs-home"><i class="flaticon2-shelter"></i></a>
+            @*<span class="kt-subheader__breadcrumbs-separator"></span>
+                <a href="" class="kt-subheader__breadcrumbs-link">
+                    قائمة
+                </a>*@
+            <span class="kt-subheader__breadcrumbs-separator"></span>
+            <span class="kt-subheader__breadcrumbs-link kt-subheader__breadcrumbs-link--active">@Cpanel.VisitsList</span>
+
+        </div>
+    </div>
+}
+<div class="kt-portlet kt-portlet--mobile">
+    <div class="kt-portlet__head kt-portlet__head--lg">
+        <div class="kt-portlet__head-label">
+            <span class="kt-portlet__head-icon">
+                <i class="kt-font-brand flaticon2-line-chart"></i>
+            </span>
+
+            <h3 class="kt-portlet__head-title">
+                @Cpanel.VisitsList
+            </h3>
+
+        </div>
+        <div class="kt-portlet__head-toolbar">
+            <div class="kt-portlet__head-wrapper">
+                <div class="kt-portlet__head-actions">
+                    <a href="@Url.Action("Create")" class="btn btn-brand btn-elevate btn-icon-sm">
+                        <i class="la la-plus"></i>
+                        @Cpanel.Create
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="kt-portlet__body">
+        @if (ViewBag.Success == true)
+        {
+            @Html.Partial("~/Areas/Admin/Views/Shared/UcSuccess.cshtml")
+        }
+        @if (ViewBag.CustomError != null)
+        {
+            @Html.Partial("~/Areas/Admin/Views/Shared/UcCustomError.cshtml", ViewBag.CustomError as string)
+        }
+        <!--begin: Search Form -->
+        @using (Html.BeginForm("Visits", "Visits", FormMethod.Get, new { @class = "kt-form kt-form--label-right kt-margin-t-20 kt-margin-b-10" }))
+        {
+            <div class="row align-items-center">
+                <div class="col-xl-8 order-2 order-xl-1">
+                    <div class="row align-items-center">
+                        <div class="col-md-3 kt-margin-b-20-tablet-and-mobile">
+                            <div class="kt-form__control">
+                                <label>@Cpanel.FactoryName</label>
+                                @Html.DropDownList("factoryId", ViewData["FactoriesLst"] as SelectList, @Amana.GlobalResources.Cpanel.ChooseOption, new { @class = "form-control select2control" })
+                            </div>
+                        </div>
+                        <div class="col-md-2 kt-margin-b-20-tablet-and-mobile">
+                            <div class="kt-form__control">
+                                <label>@Cpanel.Observer</label>
+                                @Html.DropDownList("userId", ViewData["UsersLst"] as SelectList, @Amana.GlobalResources.Cpanel.ChooseOption, new { @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="col-md-2 kt-margin-b-20-tablet-and-mobile">
+                            <div class="kt-form__control">
+                                <label>@Cpanel.Location</label>
+                                @Html.DropDownList("locationId", ViewData["LocationsLst"] as SelectList, @Amana.GlobalResources.Cpanel.ChooseOption, new { @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="col-md-2 kt-margin-b-20-tablet-and-mobile">
+                            <div class="kt-form__control">
+                                <label>@Cpanel.From</label>
+                                <input id="startDate" name="startDate" type="text" class="form-control kt_datepicker_1" value="@startDate" />
+                            </div>
+                        </div>
+                        <div class="col-md-2 kt-margin-b-20-tablet-and-mobile">
+                            <div class="kt-form__control">
+                                <label>@Cpanel.To</label>
+                                <input id="endDate" name="endDate" type="text" class="form-control kt_datepicker_1" value="@endDate" />
+                            </div>
+                        </div>
+                        @*<div class="col-md-1 kt-margin-b-20-tablet-and-mobile">
+                            <div class="kt-form__control">
+                                <label>الحالة</label>
+                            </div>
+                        </div>*@
+                        <div class="col-md-1">
+                            <input type="submit" value="@Amana.GlobalResources.Cpanel.Search" class="btn btn-default kt-mt-20" />
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+        }
+
+        <!--end: Search Form -->
+        <!--begin: Datatable -->
+        @if (Model.Count > 0)
+        {
+            <table class="table table-striped- table-bordered table-hover table-checkable" id="kt_table_1">
+                <thead>
+                    <tr>
+                        <th>@Cpanel.VisitNo</th>
+                        <th>@Cpanel.VisitDate</th>
+                        <th>@Cpanel.FactoryName</th>
+                        <th>@Cpanel.Location</th>
+                        <th>@Cpanel.Observer</th>
+                        <th>@Cpanel.IsVisitDone</th>
+                        <th>
+                            
+
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        int i = 0;
+                        foreach (var item in Model)
+                        {
+                            i++;
+                            <tr>
+                                <td>
+                                    @item.VisitId
+                                </td>
+                                <td>
+                                    @item.VisitDate.ToString("dd / MM / yyyy")
+                                </td>
+                                <td>
+                                    @item.Factories.Name
+                                </td>
+                                <td>
+                                    @(item.Factories.IdxLocations ==null ? Cpanel.NotDefined :item.Factories.IdxLocations.Name)
+                                </td>
+                                <td>
+                                    @item.C_UserItems.Name
+                                </td>
+                                <td>
+                                    @if (item.IsVisitDone == true)
+                                    {
+                                        <span class="btn btn-bold btn-sm btn-font-sm  btn-label-success">@Cpanel.Yes</span>
+                                    }
+                                    else
+                                    {
+                                <span class="btn btn-sm btn-label-danger btn-bold">@Cpanel.No</span>
+                                    }
+                                </td>
+                                <td nowrap>
+                                    @if (!item.IsVisitDone)
+                                    {
+                                        <a href="@Url.Action("Create", new { id = item.VisitId })" class="btn btn-success btn-sm mr-2">
+                                            @Cpanel.Edit
+                                        </a>
+                                    }
+
+                                    <a href="@Url.Action("SampleDetails","Samples", new { id = item.VisitId })" class="btn btn-warning btn-sm mr-2">
+                                        @Cpanel.SampleDetails
+                                    </a>
+
+                                    <a href="@Url.Action("DeleteVisit","Visits", new { id = item.VisitId })" onclick="return confirm('سيتم الحذف, هل أنت متاكد ؟');" class="btn btn-danger btn-sm mr-2">
+                                       @Cpanel.Delete
+                                    </a>
+                                    @*<button type="button" class="btn btn-bold btn-label-brand btn-sm" onclick="ShowFormsModal('@Url.Action("VisitDetails",new {id= item.VisitId})')">بيانات الزيارة</button>*@
+
+
+                                </td>
+                            </tr>
+                        }
+                    }
+
+                </tbody>
+            </table>
+
+            <!--end: Datatable -->
+        }
+        else
+        {
+            <p>@Cpanel.NoData</p>
+        }
+    </div>
+</div>
+
+@section sectionScripts{
+   
+
+    <script>
+      
+        $(document).ready(function () {
+         
+                $("#liVisits").addClass("kt-menu__item--open");
+  
+        });
+    </script>
+}
+
+
+
+
+

@@ -1,0 +1,114 @@
+﻿@model Amana.Models.Entities.FactoryWarnings
+@using System.Globalization;
+@using Amana.GlobalResources;
+<td>
+    @Model.WarningDate.ToString("MMMM yyyy", CultureInfo.CreateSpecificCulture("ar-EG"))
+</td>
+<td>
+    @Model.Factories.Name
+</td>
+<td>
+    @if (Model.IsFinalWarning == true)
+    {
+        <span class="btn btn-sm btn-label-warning btn-bold">@Cpanel.FinalWarning</span>
+    }
+    else
+    {
+        <span class="btn btn-sm btn-label-primary-o2 btn-bold">@Cpanel.NormalWarning</span>
+    }
+</td>
+<td>
+    @{
+        var v_lowPresuureCount = Model.FactoryWarningSamples.Count(w => w.VisitsSample.V_IsLowPressure == true);
+        var v_BaseColumn35Count = Model.FactoryWarningSamples.Count(w => w.VisitsSample.V_BaseColumn35 == true);
+        var v_IsCleanLocationCount = Model.FactoryWarningSamples.Count(w => w.VisitsSample.V_IsCleanLocation == true);
+        var v_IsHighTempCount = Model.FactoryWarningSamples.Count(w => w.VisitsSample.V_IsHighTemp == true);
+        var v_IsSlumbCount = Model.FactoryWarningSamples.Count(w => w.VisitsSample.V_IsSlumb == true);
+        var v_TechnicalStuffCount = Model.FactoryWarningSamples.Count(w => w.VisitsSample.V_TechnicalStuff == true);
+    }
+    @if (v_lowPresuureCount > 0)
+    {
+        <span class="btn btn-bold btn-sm btn-font-sm  btn-label-danger" style="margin: 2px;">
+            انخفاض مقاومة الضفط
+            @if (v_lowPresuureCount > 1)
+            {
+                <text> ( @v_lowPresuureCount مخالفة ) </text>
+            }
+        </span>
+    }
+    @if (v_BaseColumn35Count > 0)
+    {
+        <span class="btn btn-bold btn-sm btn-font-sm  btn-label-danger" style="margin: 2px;">
+            عدم استخدام خلطة صنف 30 للأساسات والأعمدة
+            @if (v_BaseColumn35Count > 1)
+            {
+                <text> ( @v_BaseColumn35Count مخالفة ) </text>
+            }
+        </span>
+    }
+    @if (v_IsCleanLocationCount > 0)
+    {
+        <span class="btn btn-bold btn-sm btn-font-sm  btn-label-danger" style="margin: 2px;">
+            عدم الإهتمام بنظافة الموقع وحماية البيئة
+            @if (v_IsCleanLocationCount > 1)
+            {
+                <text> ( @v_IsCleanLocationCount مخالفة ) </text>
+            }
+        </span>
+    }
+    @if (v_IsHighTempCount > 0)
+    {
+        <span class="btn btn-bold btn-sm btn-font-sm  btn-label-danger" style="margin: 2px;">
+            ارتفاع درجة حرارة الخرسانة
+            @if (v_IsHighTempCount > 1)
+            {
+                <text> ( @v_IsHighTempCount مخالفة ) </text>
+            }
+        </span>
+    }
+    @if (v_IsSlumbCount > 0)
+    {
+        <span class="btn btn-bold btn-sm btn-font-sm  btn-label-danger" style="margin: 2px;">
+            انخفاض مقدار الهبوط
+            @if (v_IsSlumbCount > 1)
+            {
+                <text> ( @v_IsSlumbCount مخالفة ) </text>
+            }
+        </span>
+    }
+    @if (v_TechnicalStuffCount > 0)
+    {
+        <span class="btn btn-bold btn-sm btn-font-sm  btn-label-danger" style="margin: 2px;">
+            عدم تواجد الجهاز الفني للمختبر
+            @if (v_TechnicalStuffCount > 1)
+            {
+                <text> ( @v_TechnicalStuffCount مخالفة ) </text>
+            }
+        </span>
+    }
+
+</td>
+<td>
+    @if (Model.DidClosed == true)
+    {
+        <span class="btn btn-sm btn-label-primary" style="margin: 2px;">
+            تم إغلاق المصنع بتاريخ @(Model.CloseFactoryStartDate.HasValue ? Model.CloseFactoryStartDate.Value.ToString("dd / MM / yyyy") : "")
+            @if (Model.CloseFactoryEndDate.HasValue)
+            {
+                <br /><b>تاريخ إعادة الفتح :</b> @Model.CloseFactoryEndDate.Value.ToString("dd / MM / yyyy")
+            }
+        </span>
+    }
+    @if (Model.DidIntensiveVisits == true)
+    {
+        <span class="btn btn-sm btn-label-primary" style="margin: 2px;">
+            تم تطبيق المراقبة المكثفة بتاريخ @(Model.IntensiveVisitsStartDate.HasValue ? Model.IntensiveVisitsStartDate.Value.ToString("dd / MM / yyyy") : "")
+            @if (Model.IntensiveVisitsEndDate.HasValue)
+            {
+                <br /><b>حتى تاريخ  :</b>@Model.IntensiveVisitsEndDate.Value.ToString("dd / MM / yyyy")
+
+
+            }
+        </span>
+    }
+</td>

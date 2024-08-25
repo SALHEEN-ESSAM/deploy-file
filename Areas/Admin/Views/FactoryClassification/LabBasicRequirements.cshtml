@@ -1,0 +1,184 @@
+﻿@model Amana.ViewModels.Classifications.LabBasicRequirementsViewModel
+@using Amana.Models.Helpers;
+@using Amana.GlobalResources;
+
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_Layout2.cshtml";
+
+    Amana.Models.Entities.Cls_FactoryClassifications classificationItem = (Amana.Models.Entities.Cls_FactoryClassifications)ViewBag.ClassificationItem;
+}
+@section sectionSubHeader{
+
+    <div class="kt-subheader__main">
+        <h3 class="kt-subheader__title">
+            @Cpanel.Classification
+        </h3>
+        <span class="kt-subheader__separator kt-hidden"></span>
+        <div class="kt-subheader__breadcrumbs">
+            <a href="#" class="kt-subheader__breadcrumbs-home"><i class="flaticon2-shelter"></i></a>
+            <span class="kt-subheader__breadcrumbs-separator"></span>
+            <span class="kt-subheader__breadcrumbs-link kt-subheader__breadcrumbs-link--active">  @Cpanel.FactoryDataEntry</span>
+            <span class="kt-subheader__breadcrumbs-separator"></span>
+            <span class="kt-subheader__breadcrumbs-link kt-subheader__breadcrumbs-link--active">
+                @Cpanel.LabBasicRequirements
+            </span>
+
+        </div>
+    </div>
+}
+
+<div class="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content" style="padding:0px;">
+
+    <!--Begin::App-->
+    <div class="kt-grid kt-grid--desktop kt-grid--ver kt-grid--ver-desktop kt-app">
+        @if (classificationItem != null)
+        {
+
+            <div class="col-md-4">
+                @Html.Partial("_ClassificationItem", classificationItem);
+            </div>
+
+        }
+
+        <div class="col-md-8">
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <!--begin::Portlet-->
+                    <div class="kt-portlet">
+                        <div class="kt-portlet__head">
+                            <div class="kt-portlet__head-label">
+                                <h3 class="kt-portlet__head-title">
+                                    @Cpanel.LabBasicRequirements
+
+                                </h3>
+                            </div>
+                        </div>
+
+
+                        <!--begin::Form-->
+                        <div class="kt-portlet__body">
+                            @if (ViewBag.Success == true)
+                            {
+                                @Html.Partial("~/Areas/Admin/Views/Shared/UcSuccess.cshtml")
+                            }
+                            @using (Html.BeginForm("LabBasicRequirements", "FactoryClassification", FormMethod.Post, new { enctype = "multipart/form-data", @class = "kt-form kt-form--label-right" }))
+                            {
+                                @Html.AntiForgeryToken()
+                                @Html.ValidationSummary(true)
+                                @Html.HiddenFor(model => model.ClassificationId)
+
+                                <div class="kt-portlet__body">
+                                    <div class="kt-section kt-section--first">
+
+                                        <h3 class="kt-section__title">
+                                            1.   @Cpanel.QualityLab
+                                            :
+                                        </h3>
+                                        <div class="kt-checkbox-list">
+                                            @foreach (var item in Model.ListProp18)
+                                            {
+                                                Html.RenderPartial("_ClsProperty", item);
+                                            }
+
+                                        </div>
+                                        <div class="kt-separator kt-separator--border-dashed kt-separator--space-lg kt-separator--portlet-fit"></div>
+                                        <h3 class="kt-section__title">
+                                            2.   @Cpanel.Equipments
+                                            :
+                                        </h3>
+                                        <div class="kt-checkbox-list">
+                                            @foreach (var item in Model.ListProp19)
+                                            {
+                                                Html.RenderPartial("_ClsProperty", item);
+                                            }
+                                            @foreach (var item in Model.ListProp33)
+                                            {
+                                                Html.RenderPartial("_ClsProperty", item);
+                                            }
+                                        </div>
+
+                                    </div>
+
+                                    @*<div class="form-group row">
+                                            <div class="col-lg-6">
+                                                <label>
+                                                    اسم المصنع
+                                                    :
+                                                </label>
+                                                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                                                @Html.ValidationMessageFor(model => model.Name)
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <label>
+                                                    كود المصنع
+                                                    :
+                                                </label>
+                                                @Html.EditorFor(model => model.CodeNo, new { htmlAttributes = new { @class = "form-control" } })
+                                                @Html.ValidationMessageFor(model => model.CodeNo)
+                                            </div>
+                                        </div>*@
+
+
+                                </div>
+                                <div class="kt-portlet__foot">
+                                    <div class="kt-form__actions">
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <input type="submit" value="@Amana.GlobalResources.Cpanel.Save" class="btn btn-warning" />
+
+                                            </div>
+                                            @*<div class="col-lg-6 kt-align-right">
+                                                    <button type="reset" class="btn btn-danger">Delete</button>
+                                                </div>*@
+                                        </div>
+                                    </div>
+                                </div>
+
+                            }
+
+
+                        </div>
+
+
+                        <!--end::Form-->
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+    <!--End::App-->
+</div>
+@section sectionScripts{
+    <script>
+        $(document).ready(function () {
+            $("#lnkLabBasicRequirements").addClass("kt-widget__item--active");
+        });
+
+
+
+        $('input:checkbox[name^="ListProp33"]').bind('click', function () {
+
+            if ($('input:checkbox[name^="ListProp33"]:not(:checked)').length > 0) {
+                $('input:checkbox[name^="ListProp19"]').prop('checked', false)
+            }
+            else {
+                $('input:checkbox[name^="ListProp19"]').prop('checked', true)
+
+
+            }
+
+        });
+
+    </script>
+}
+
+
+
+
+

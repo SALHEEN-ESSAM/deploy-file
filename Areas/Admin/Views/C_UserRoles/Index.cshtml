@@ -1,0 +1,54 @@
+﻿@model PagedList.IPagedList<Amana.Models.Entities.C_UserRolesLoc>
+@using PagedList.Mvc;
+
+@{
+    Layout = "_Layout.cshtml";
+    int langId = ViewBag.LangId;
+}
+
+<h1>@Amana.GlobalResources.Users.UserRoles</h1>
+<div class="sep100x100"></div>
+
+@Html.ActionLink(@Amana.GlobalResources.Cpanel.Create + " »", "Create", null, new { @class = "lnkCreate" })
+
+@if (Model.Count > 0)
+{
+    <div class="table-responsive">
+        <table class="tblView">
+            <tr>
+                <th>
+                    @Html.ActionLink(@Amana.GlobalResources.Cpanel.Title, "Index", new { sortOrder = ViewBag.TitleSortParam, currentFilter = ViewBag.CurrentFilter }) <span><img src="~/Content/Admin/images/icoSort.png" /></span>
+                </th>
+                <th class="settings"><img src="~/Content/Admin/images/icoSettings.png" alt="" /></th>
+            </tr>
+
+            @{
+    int i = 0;
+    foreach (var item in Model)
+    {
+        i++;
+        <tr class="@(i % 2 == 0 ? "even" : "odd")">
+            <td>
+                @Html.DisplayFor(modelItem => item.Title) <span class="notTranslated">@(!item.IsTranslated ? Amana.GlobalResources.Cpanel.NotTranslated : "")</span>
+            </td>
+            <td>
+                @Html.ActionLink(@Amana.GlobalResources.Users.UserItems, "Index", "C_UserItems", new { id = item.RoleId }, null) |
+                @Html.ActionLink(@Amana.GlobalResources.Cpanel.Edit, "Create", new { id = item.RoleId }) |
+                @Html.ActionLink(@Amana.GlobalResources.Cpanel.Delete, "Delete", new { id = item.RoleId })
+            </td>
+        </tr>
+    }
+            }
+
+        </table>
+    </div>
+}
+
+
+@if (Model.TotalItemCount > Model.PageSize)
+{
+    <p style="text-align:center; margin:10px 0;">@Amana.GlobalResources.Cpanel.Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) @Amana.GlobalResources.Cpanel.Of @Model.PageCount</p>
+
+    @Html.PagedListPager(Model, page => Url.Action("Index",
+        new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+}

@@ -1,0 +1,162 @@
+﻿@model  List<Amana.Models.Entities.Visits>
+@using Amana.Models.Utilities;
+@using Amana.GlobalResources;
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_Layout2.cshtml";
+    var periodId = Request["periodId"];
+    var repType = Request["repType"];
+}
+@section sectionSubHeader{
+
+    <div class="kt-subheader__main noPrint">
+        <h3 class="kt-subheader__title">
+            @Cpanel.Reports
+        </h3>
+        <span class="kt-subheader__separator kt-hidden"></span>
+        <div class="kt-subheader__breadcrumbs">
+            <a href="#" class="kt-subheader__breadcrumbs-home"><i class="flaticon2-shelter"></i></a>
+            @*<span class="kt-subheader__breadcrumbs-separator"></span>
+                <a href="" class="kt-subheader__breadcrumbs-link">
+                    قائمة
+                </a>*@
+            <span class="kt-subheader__breadcrumbs-separator"></span>
+            <span class="kt-subheader__breadcrumbs-link kt-subheader__breadcrumbs-link--active">   @Cpanel.ClassificationSummaryReport</span>
+
+        </div>
+    </div>
+}
+
+<div class="kt-portlet kt-portlet--mobile">
+    <div class="kt-portlet__head kt-portlet__head--lg">
+        <div class="kt-portlet__head-label">
+            <span class="kt-portlet__head-icon">
+                <i class="kt-font-brand flaticon2-line-chart"></i>
+            </span>
+
+            <h3 class="kt-portlet__head-title">
+                @Cpanel.ClassificationSummaryReport
+            </h3>
+
+        </div>
+        <div class="kt-portlet__head-toolbar">
+            <div class="kt-portlet__head-wrapper">
+                <div class="kt-portlet__head-actions">
+                    @*<a href="@Url.Action("Create")" class="btn btn-brand btn-elevate btn-icon-sm">
+                            <i class="la la-plus"></i>
+                            إضافة
+                        </a>*@
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="kt-portlet__body" id="myDivToPrint ">
+        @if (ViewBag.Success == true)
+        {
+            @Html.Partial("~/Areas/Admin/Views/Shared/UcSuccess.cshtml")
+        }
+        <!--begin: Search Form -->
+
+
+        @using (Html.BeginForm("ClassificationSummaryReport", "Reports", FormMethod.Get, new { @class = "kt-form kt-form--label-right kt-margin-t-20 kt-margin-b-10" }))
+        {
+
+            <div class="row align-items-center">
+
+                <div class="col-md-3 kt-margin-b-20-tablet-and-mobile">
+                    <div class="kt-form__control">
+                        <label>
+                            @Cpanel.Period
+                            :
+                        </label>
+                        @Html.DropDownList("periodId", ViewData["PeriodsLst"] as SelectList, @Amana.GlobalResources.Cpanel.ChooseOption, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="col-md-2 kt-margin-b-20-tablet-and-mobile">
+                    <div class="kt-form__control">
+                        <label>
+                           @Cpanel.ReportType
+                            :
+                        </label>
+                        <div class="kt-radio-list">
+                            <input type="radio" id="repType1" name="repType" value="1" @(repType == "1" ? "checked=checked" : (repType == "2" ? "" : "checked=checked")) />&nbsp;&nbsp;<label for="repType1"> @Cpanel.WithIndicators</label>
+                            <input type="radio" id="repType2" name="repType" value="2" @(repType == "2" ? "checked=checked" : "") />&nbsp;&nbsp;<label for="repType2"> @Cpanel.WithoutIndicators</label>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-md-2 noPrint">
+                    <input id="btnSearch" type="submit" value="@Cpanel.ViewReport" class="btn btn-success btn-sm kt-mt-20" />
+                </div>
+                <div class="col-md-5 kt-margin-b-20-tablet-and-mobile">
+                    @if (!string.IsNullOrEmpty(periodId))
+                    {
+                        @Html.Action("RptApprovalView", new { reportTypeId = (int)Amana.Models.Enums.ReportTypesEnum.ClassificationSummaryReport, timePeriodId = periodId })
+                    }
+                </div>
+
+            </div>
+
+        }
+
+
+
+
+        <div class="row align-items-center kt-mt-10">
+
+            <div id="divReport" style="text-align:center;width:830px;margin:auto">
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+@section sectionScripts{
+    <script>
+        $("#liReports").addClass("kt-menu__item--open");
+    </script>
+    @if (!string.IsNullOrEmpty(periodId))
+    {
+        <script>
+            $(function () {
+                //ASPX page URL to load report
+                var pId = $("#periodId").val();
+                var src = "/Reports/ClassificationSummaryReport.aspx?" + "pId=" + pId + "&t=" + $("input:radio[name='repType']:checked").val();;
+                //Create a dynamic iframe here and append this to div tag
+                var iframe = '<iframe id="reportFrame" width="100%" height="1250px" style="border:1px solid #ccc;" scrolling="no" frameborder="0" src="' + src + '" allowfullscreen></iframe>';
+                $("#divReport").html(iframe);
+            });
+        </script>
+
+    }
+    @*<script>
+            $(function () {
+                $('#btnSearch').click(function () {
+
+                    var pId = $("#periodId").val();
+                    if (pId != '') {
+                        //ASPX page URL to load report
+                        var src = '/Reports/ClassificationSummaryReport.aspx?';
+                        //We can add parameters here
+                        //alert();
+                        src = src + "pId=" + pId + "&t=" + $("input:radio[name='repType']:checked").val();
+
+                        window.open(src);
+                        //Create a dynamic iframe here and append this to div tag
+                        //var iframe = '<iframe id="reportFrame" width="100%" height="1250px" style="border:1px solid #ccc;" scrolling="no" frameborder="0" src="' + src + '" allowfullscreen></iframe>';
+                        //$("#divReport").html(iframe);
+                    }
+
+                });
+
+
+
+            });
+        </script>*@
+}
+
+
+
+
+

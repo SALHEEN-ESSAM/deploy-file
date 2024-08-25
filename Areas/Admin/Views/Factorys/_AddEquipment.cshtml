@@ -1,0 +1,96 @@
+﻿@model Amana.ViewModels.Factories.FactoryEquipmentViewModel
+    @using Amana.GlobalResources;
+
+@{
+    Layout = null;
+}
+<div class="modal-header">
+    <h1 class="modal-title">@Cpanel.Create</h1>
+</div>
+@using (Html.BeginForm("AddEquipment", "Factorys", FormMethod.Post, new { enctype = "multipart/form-data", @class = "kt-form kt-form--label-right" }))
+{
+<div class="modal-body">
+
+    @if (ViewBag.Success == true)
+    {
+        @Html.Partial("~/Areas/Admin/Views/Shared/UcSuccess.cshtml")
+    }
+    @Html.HiddenFor(model => model.ID)
+    @Html.HiddenFor(model => model.FactoryId)
+
+    <div class="form-group row">
+
+        <div class="col-lg-6">
+            @Html.LabelFor(model => model.EquipmentName, Cpanel.EquipmentName)
+            @Html.DropDownListFor(m => m.EquipmentName, new List<SelectListItem>
+                               {
+                                   new SelectListItem{ Text= Cpanel.CentralMixingStation, Value = "محطة الخلط المركزية" },
+                                   new SelectListItem{ Text= Cpanel.ConcreteCar, Value = "سيارة نقل الخرسانة" },
+                                   new SelectListItem{ Text= Cpanel.ConcretePump, Value = "مضخة الخرسانة" },
+                                   new SelectListItem{ Text= Cpanel.Sheol, Value = "شيول" },
+                                   new SelectListItem{ Text= Cpanel.FixedWaterTank, Value = "خزان مياة ثابت"},
+                                   new SelectListItem{ Text= Cpanel.WaterCooler, Value =  "مبرد ماء"},
+                                   new SelectListItem{ Text= Cpanel.IceProductionStation, Value =  "محطة إنتاج ثلج"},
+                                   new SelectListItem{ Text= Cpanel.AggregateWashingStation , Value =  "محطة لغسيل الركام"},
+                               }, new { @class = "form-control" })
+
+            @Html.ValidationMessageFor(model => model.EquipmentName)
+        </div>
+        <div class="col-lg-6">
+
+            @Html.LabelFor(model => model.TotalCount, Cpanel.TotalNumber)
+
+            @Html.EditorFor(model => model.TotalCount, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.TotalCount, "", new { @class = "text-danger" })
+
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-lg-6">
+            @Html.LabelFor(model => model.EquipWorking, Cpanel.NumberOfEquipmentRunning)
+
+            @Html.EditorFor(model => model.EquipWorking, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.EquipWorking, "", new { @class = "text-danger" })
+        </div>
+        <div class="col-lg-6">
+            @Html.LabelFor(model => model.EquipNoWorking, Cpanel.NumberOfNotRunningEquipment)
+
+            @Html.EditorFor(model => model.EquipNoWorking, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.EquipNoWorking, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-lg-6">
+            @Html.LabelFor(model => model.EquipSpare, Cpanel.NumberOfSpareEquipment)
+
+            @Html.EditorFor(model => model.EquipSpare, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.EquipSpare, "", new { @class = "text-danger" })
+        </div>
+        <div class="col-lg-6">
+            @Html.LabelFor(model => model.Notes, Cpanel.Notes)
+
+            @Html.EditorFor(model => model.Notes, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Notes, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+
+        </div>
+        @*<div class="col-lg-6 kt-align-right">
+                <button type="reset" class="btn btn-danger">Delete</button>
+            </div>*@
+    </div>
+
+</div>
+
+    <div class="modal-footer">
+        <div>
+            <input type="submit" value="@Amana.GlobalResources.Cpanel.Save" class="btn btn-warning" />
+
+            <input type="button" value="@Cpanel.Close" data-dismiss="modal" class="btn btn-danger" />
+        </div>
+    </div>
+
+}

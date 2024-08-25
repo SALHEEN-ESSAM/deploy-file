@@ -1,0 +1,33 @@
+﻿@using Amana.Models.Helpers;
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_Layout2.cshtml";
+
+    try
+    {
+        Amana.Models.Entities.C_UserItems user = (Amana.Models.Entities.C_UserItems)Session["UserDetails"];
+        if (!user.IsAdmin && user.RoleId != null)
+        {
+            Response.Redirect("/" + Amana.GlobalResources.Cpanel.Lang + "/Admin/Home/Permission");
+        }
+    }
+    catch
+    {
+        Html.SignOutUser();
+        Response.Redirect("~/Admin/C_Login");
+    }
+}
+
+@section sectionHead{
+    @RenderSection("sectionHead", false)
+}
+@*@section sectionSubHeader{
+    @RenderSection("sectionSubHeader", false)
+}*@
+
+@RenderBody()
+
+
+@section sectionScripts{
+    @RenderSection("sectionScripts", false)
+}
+

@@ -1,0 +1,47 @@
+﻿@model Amana.ViewModels.Settings.IdxConcreteSourceViewModel
+@using Amana.GlobalResources;
+@{
+    Layout = null;
+}
+<div class="modal-header">
+    <h1 class="modal-title">@Cpanel.Create</h1>
+</div>
+@using (Html.BeginForm("AddLocation", "Settings", FormMethod.Post, new { enctype = "multipart/form-data", @class = "kt-form kt-form--label-right" }))
+{
+<div class="modal-body">
+
+    @if (ViewBag.Success == true)
+    {
+        @Html.Partial("~/Areas/Admin/Views/Shared/UcSuccess.cshtml")
+    }
+    @Html.HiddenFor(model => model.SourceId)
+    <div class="form-group row">
+
+        <div class="col-lg-6">
+            @Html.LabelFor(model => model.Name, Cpanel.Location)
+            @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Name)
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-lg-6">
+
+        </div>
+        @*<div class="col-lg-6 kt-align-right">
+                <button type="reset" class="btn btn-danger">Delete</button>
+            </div>*@
+    </div>
+
+</div>
+
+    <div class="modal-footer">
+        <div>
+            <input type="submit" value="@Cpanel.Save" class="btn btn-warning" />
+
+            <input type="button" value="@Cpanel.Close" data-dismiss="modal" class="btn btn-danger" />
+        </div>
+    </div>
+
+}

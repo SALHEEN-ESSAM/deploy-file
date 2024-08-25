@@ -1,0 +1,34 @@
+﻿@model  Amana.ViewModels.Classifications.ClassificationLabPropertyViewModel
+@using HtmlHelpers.BeginCollectionItem;
+@using Amana.Models.Utilities;
+
+@{
+    Layout = null;
+    string name = HelperMethods.GetCategoryLabListName(Model.CategoryId);
+}
+
+@using (Html.BeginCollectionItem(name))
+{
+    <div class="form-group row">
+        @Html.HiddenFor(model => model.LabPropertyId)
+        @Html.HiddenFor(model => model.CategoryId)
+
+        <div class="col-6">
+            <label>
+                @Html.DisplayFor(model => model.PropertyText)
+            </label>
+        </div>
+        <div class="col-3">
+
+            @Html.DropDownListFor(model => model.SelectedChoice, Model.Choices, @Amana.GlobalResources.Cpanel.ChooseOption, new Dictionary<string, object> { { "data-val", "true" }, { "data-val-required", @Amana.GlobalResources.Cpanel.Required },{"class" , "form-control" } })
+             
+
+        </div>
+
+    </div>
+  
+   
+
+
+
+}

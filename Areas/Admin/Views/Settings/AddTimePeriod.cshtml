@@ -1,0 +1,76 @@
+﻿@model Amana.ViewModels.Settings.StngTimePeriodViewModel
+@using Amana.GlobalResources;
+
+@{
+    Layout = null;
+}
+<div class="modal-header">
+    <h1 class="modal-title"> @Cpanel.Create</h1>
+</div>
+@using (Html.BeginForm("AddTimePeriod", "Settings", FormMethod.Post, new { enctype = "multipart/form-data", @class = "kt-form kt-form--label-right" }))
+{
+    <div class="modal-body">
+
+        @if (ViewBag.Success == true)
+        {
+            @Html.Partial("~/Areas/Admin/Views/Shared/UcSuccess.cshtml")
+        }
+        @Html.HiddenFor(model => model.TimePeriodId)
+        @Html.HiddenFor(model => model.IsClassificationPeriod)
+        <div class="form-group row">
+
+            <div class="col-lg-6">
+                @Html.LabelFor(model => model.Title, Cpanel.Period)
+                @Html.TextBoxFor(model => model.Title, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Title)
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-lg-6">
+                @Html.LabelFor(model => model.StartDate, Cpanel.DateStart)
+                @Html.TextBoxFor(model => model.StartDate, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
+
+                @*<input type="date"  id="StartDate" class = "form-control" data-val="true" data-val-date="The field StartDate must be a date." data-val-required="The StartDate field is required."  />*@
+                @Html.ValidationMessageFor(model => model.StartDate)
+            </div>
+
+        </div>
+        <div class="form-group row">
+            <div class="col-lg-6">
+                @Html.LabelFor(model => model.EndDate, Cpanel.DateEnd)
+                @Html.TextBoxFor(model => model.EndDate, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
+                @*<input type="date" id="EndDate" class="form-control" data-val="true" data-val-date="The field EndDate must be a date." data-val-required="The EndDate field is required." />*@
+
+                @Html.ValidationMessageFor(model => model.EndDate)
+            </div>
+
+        </div>
+        <div class="form-group row">
+            <div class="col-lg-6">
+                @Html.CheckBoxFor(model => model.IsCurrentPeriod)
+                @Html.LabelFor(model => model.IsCurrentPeriod, Cpanel.CurrentPeriod)
+
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+
+            </div>
+            @*<div class="col-lg-6 kt-align-right">
+                    <button type="reset" class="btn btn-danger">Delete</button>
+                </div>*@
+        </div>
+
+    </div>
+
+    <div class="modal-footer">
+        <div>
+            <input type="submit" value="@Cpanel.Save" class="btn btn-warning" />
+
+            <input type="button" value="@Cpanel.Close" data-dismiss="modal" class="btn btn-danger" />
+        </div>
+    </div>
+
+}

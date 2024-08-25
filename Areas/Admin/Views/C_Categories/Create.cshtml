@@ -1,0 +1,76 @@
+﻿@model Amana.ViewModels.C_CategoriesViewModel
+
+@{
+    Layout = "_Layout.cshtml";
+    var catVocId = Request.QueryString["catVocId"];
+    var parentId = Request.QueryString["parentId"];
+}
+
+<h1>@Amana.GlobalResources.Cpanel.Categories - @Amana.GlobalResources.Cpanel.Create</h1>
+<div class="sep100x100"></div>
+
+@if (ViewBag.Success == true)
+{
+    @Html.Partial("~/Areas/Admin/Views/Shared/UcSuccess.cshtml")
+}
+
+@using (Html.BeginForm("Create", "C_Categories", new { catVocId = catVocId, parentId = parentId }, FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.CatId)
+
+<div>
+    @Html.ValidationSummary(true)
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Title, @Amana.GlobalResources.Cpanel.Title)
+        <div class="col-md-7">
+            @Html.TextBoxFor(model => model.Title)
+            @Html.ValidationMessageFor(model => model.Title)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.Brief, @Amana.GlobalResources.Cpanel.Brief)
+        <div class="col-md-7">
+            @Html.TextAreaFor(model => model.Brief, new { @class = "txtBrief" })
+            @Html.ValidationMessageFor(model => model.Brief)
+        </div>
+    </div>
+
+    <div class="form-group detailsContainer">
+        @Html.LabelFor(model => model.Details, @Amana.GlobalResources.Cpanel.Details)
+        <div class="col-md-12">
+            @Html.TextAreaFor(model => model.Details, new { @class = "richText" })
+            @Html.ValidationMessageFor(model => model.Details)
+        </div>
+    </div>
+  
+    <div class="form-group">
+        @Html.LabelFor(model => model.ImageUrl, @Amana.GlobalResources.Cpanel.Image)
+        <div class="col-md-7">
+            <input type="file" id="ImageUrl" name="ImageUrl" class="text-box single-line" accept="image/*" />
+            @Html.ValidationMessageFor(model => model.ImageUrl)
+        </div>
+        @if (Model != null && !string.IsNullOrEmpty(Model.ImageUrl))
+        {
+            <div class="imgContainer">
+                <img src="/Uploads/Categories/@Model.ImageUrl" alt="" height="75" class="img_1" />
+                <a href="@Url.Action("DeleteImage", new { id = Model.CatId })" class="lnkDeleteImg"></a>
+            </div>
+        }
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.IsActive, @Amana.GlobalResources.Cpanel.IsActive + " ?")
+        @Html.CheckBoxFor(model => model.IsActive, new { @checked = true })
+    </div>
+
+    <div class="sep100x100"></div>
+    <div class="form-group">
+        <div>
+            <input type="submit" value="@Amana.GlobalResources.Cpanel.Save" name="command" class="lnkCreate lnkInline" /> |
+            <input type="submit" value="@Amana.GlobalResources.Cpanel.SaveNew" name="command" class="lnkCreate lnkInline saveNew" /> |
+            @Html.ActionLink(@Amana.GlobalResources.Cpanel.BackToList, "Index", new { id = catVocId, parentId = parentId }, new { @class = "lnkBack" })
+        </div>
+    </div>
+</div>
+}

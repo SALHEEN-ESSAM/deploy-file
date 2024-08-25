@@ -1,0 +1,120 @@
+﻿@model Amana.ViewModels.Settings.StngPropertyViewModel
+@using Amana.GlobalResources;
+
+@{
+    Amana.Models.Entities.StngCategories ctgry = ViewBag.Category;
+    Layout = "~/Areas/Admin/Views/Shared/_Layout2.cshtml";
+}
+@section sectionSubHeader{
+
+    <div class="kt-subheader__main">
+        <h3 class="kt-subheader__title">
+            @Cpanel.Settings
+        </h3>
+        <span class="kt-subheader__separator kt-hidden"></span>
+        <div class="kt-subheader__breadcrumbs">
+            <a href="#" class="kt-subheader__breadcrumbs-home"><i class="flaticon2-shelter"></i></a>
+            <span class="kt-subheader__breadcrumbs-separator"></span>
+            <a href="" class="kt-subheader__breadcrumbs-link">
+                @ctgry.SuperCategoryName
+            </a>
+            <span class="kt-subheader__breadcrumbs-separator"></span>
+            <span class="kt-subheader__breadcrumbs-link kt-subheader__breadcrumbs-link--active">  @ctgry.Name</span>
+        </div>
+    </div>
+}
+<div class="row">
+    <div class="col-lg-12">
+        <!--begin::Portlet-->
+        <div class="kt-portlet">
+            <div class="kt-portlet__head">
+                <div class="kt-portlet__head-label">
+                    <h3 class="kt-portlet__head-title">
+                        @Amana.GlobalResources.Cpanel.Create / @Amana.GlobalResources.Cpanel.Edit
+                    </h3>
+                </div>
+            </div>
+
+
+            <!--begin::Form-->
+
+            @using (Html.BeginForm("AddProperty", "Settings", FormMethod.Post, new { enctype = "multipart/form-data", @class = "kt-form kt-form--label-right" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true)
+                @Html.HiddenFor(model => model.ID)
+                @Html.HiddenFor(model => model.ConClsCategoryId)
+
+                <div class="kt-portlet__body">
+                    @if (ViewBag.Success == true)
+                    {
+                        @Html.Partial("~/Areas/Admin/Views/Shared/UcSuccess.cshtml")
+                    }
+
+                    <div class="form-group row">
+                        <div class="col-lg-6">
+                            <label>
+                                @Cpanel.Name
+                                :
+                            </label>
+                            <input type="text" value='@ctgry.Name' id="ctgryName" class="form-control" disabled />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-lg-6">
+
+                            @Html.LabelFor(model => model.PropertyText, @Amana.GlobalResources.Cpanel.Title)
+
+                            @Html.EditorFor(model => model.PropertyText, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.PropertyText)
+
+                        </div>
+
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-lg-6">
+
+                            @Html.LabelFor(model => model.PropertyWeight, @Cpanel.Degree)
+
+                            @Html.EditorFor(model => model.PropertyWeight, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.PropertyWeight, "", new { @class = "text-danger" })
+
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="kt-portlet__foot">
+                    <div class="kt-form__actions">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <input type="submit" value="@Amana.GlobalResources.Cpanel.Save" class="btn btn-warning" />
+                                @Html.ActionLink(@Amana.GlobalResources.Cpanel.BackToList, "Index", new { id = ctgry.SuperCategory }, new { @class = "btn btn-secondary" })
+
+                            </div>
+                            @*<div class="col-lg-6 kt-align-right">
+                                    <button type="reset" class="btn btn-danger">Delete</button>
+                                </div>*@
+                        </div>
+                    </div>
+                </div>
+
+            }
+
+
+            <!--end::Form-->
+        </div>
+
+
+    </div>
+</div>
+
+@section sectionScripts{
+    <script>
+        $(document).ready(function () {
+            $("#liSettings").addClass("kt-menu__item--open");
+            $("#liClassificationSettings").addClass("kt-menu__item--open");
+
+        });
+    </script>
+}

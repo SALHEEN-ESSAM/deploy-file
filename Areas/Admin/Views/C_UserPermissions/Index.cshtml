@@ -1,0 +1,89 @@
+﻿@model List<Amana.ViewModels.C_UserPermissionsViewModel>
+
+@{
+    Layout = "_Layout.cshtml";
+}
+
+<h1>@Amana.GlobalResources.Users.UserPermissions</h1>
+<div class="sep100x100"></div>
+
+@if (ViewBag.Success == true)
+{
+    @Html.Partial("~/Areas/Admin/Views/Shared/UcSuccess.cshtml")
+}
+
+@using (Html.BeginForm("Index", "C_UserPermissions", null))
+{
+    <div class="form-group">
+        @Html.Label(@Amana.GlobalResources.Users.UserRoles)
+        <div class="col-md-7">
+            @Html.DropDownList("RoleId", null, @Amana.GlobalResources.Cpanel.ChooseOption, new { @onchange = "this.form.submit();" })
+        </div>
+    </div>
+}
+
+<script type="text/javascript">
+    $(function () {
+        var roleId = $("#RoleId").val()
+        $("#HiddenRoleId").val(roleId);
+    });
+</script>
+
+@if (Model.Count > 0)
+{
+    using (Html.BeginForm("Create", "C_UserPermissions", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <input type="submit" value="@Amana.GlobalResources.Cpanel.Save »" class="lnkCreate" />
+
+        @Html.Hidden("HiddenRoleId");
+
+    <div class="table-responsive">
+        <table class="tblView">
+            <tr>
+                <th>
+                    @Amana.GlobalResources.Cpanel.Title
+                </th>
+                <th>
+                    @Amana.GlobalResources.Users.Read
+                </th>
+                <th>
+                    @Amana.GlobalResources.Users.Insert
+                </th>
+                <th>
+                    @Amana.GlobalResources.Users.Update
+                </th>
+                <th>
+                    @Amana.GlobalResources.Users.Delete
+                </th>
+            </tr>
+
+            @{
+                                    int i = 0;
+                                    foreach (var item in Model)
+                                    {
+                                        @Html.HiddenFor(m => m[i].TypeId);
+                <tr class="@(i % 2 == 0 ? "even" : "odd")">
+                    <td>
+                        @Html.DisplayFor(m => m[i].Title)
+                    </td>
+                    <td>
+                        @Html.CheckBoxFor(m => m[i].IsRead)
+                    </td>
+                    <td>
+                        @Html.CheckBoxFor(m => m[i].IsInsert)
+                    </td>
+                    <td>
+                        @Html.CheckBoxFor(m => m[i].IsUpdate)
+                    </td>
+                    <td>
+                        @Html.CheckBoxFor(m => m[i].IsDelete)
+                    </td>
+                </tr>
+                                                                         i++;
+                                    }
+            }
+
+        </table>
+    </div>
+    }
+}

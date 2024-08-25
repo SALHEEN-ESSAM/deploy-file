@@ -1,0 +1,150 @@
+﻿@model  List<Amana.Models.Entities.VisitsSample>
+@using Amana.Models.Utilities;
+@using Amana.Models.Helpers;
+@using Amana.GlobalResources;
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_Layout2.cshtml";
+    var user = (Amana.Models.Entities.C_UserItems)HttpContext.Current.Session["UserDetails"];
+
+}
+@section sectionSubHeader{
+
+    <div class="kt-subheader__main">
+        <h3 class="kt-subheader__title">
+            @Cpanel.Samples
+        </h3>
+        <span class="kt-subheader__separator kt-hidden"></span>
+        <div class="kt-subheader__breadcrumbs">
+            <a href="#" class="kt-subheader__breadcrumbs-home"><i class="flaticon2-shelter"></i></a>
+            @*<span class="kt-subheader__breadcrumbs-separator"></span>
+                <a href="" class="kt-subheader__breadcrumbs-link">
+                    قائمة
+                </a>*@
+            <span class="kt-subheader__breadcrumbs-separator"></span>
+            <span class="kt-subheader__breadcrumbs-link kt-subheader__breadcrumbs-link--active">   @Cpanel.SamplesResults    </span>
+
+        </div>
+    </div>
+}
+<div class="kt-portlet kt-portlet--mobile">
+    <div class="kt-portlet__head kt-portlet__head--lg">
+        <div class="kt-portlet__head-label">
+            <span class="kt-portlet__head-icon">
+                <i class="kt-font-brand flaticon2-line-chart"></i>
+            </span>
+
+            <h3 class="kt-portlet__head-title">
+                @Cpanel.SamplesResults
+            </h3>
+
+        </div>
+        @*<div class="kt-portlet__head-toolbar">
+                <div class="kt-portlet__head-wrapper">
+                    <div class="kt-portlet__head-actions">
+                        <a href="@Url.Action("Create")" class="btn btn-brand btn-elevate btn-icon-sm">
+                            <i class="la la-plus"></i>
+                            إضافة
+                        </a>
+                    </div>
+                </div>
+            </div>*@
+    </div>
+
+    <div class="kt-portlet__body">
+        @if (ViewBag.Success == true)
+        {
+            @Html.Partial("~/Areas/Admin/Views/Shared/UcSuccess.cshtml")
+        }
+        <div class="container">
+
+            <!--begin: Datatable -->
+            @if (Model.Count > 0)
+            {
+                <table class="table table-striped- table-bordered table-hover table-checkable" id="kt_table_1">
+                    <thead>
+                        <tr>
+                            <th>@Cpanel.Index</th>
+                            <th>@Cpanel.FactoryType</th>
+                            <th>@Cpanel.SampleNo</th>
+                            <th>@Cpanel.SampleDate</th>
+                            <th>@Cpanel.ConcreteClass</th>
+                            <th>@Cpanel.ConcreteType</th>
+                            <th>@Cpanel.Usage</th>
+                            <th>@Cpanel.Temprature</th>
+                            <th>@Cpanel.Slump</th>
+                            <th>@Cpanel.Day7CrushingResult</th>
+                            <th>@Cpanel.Day28CrushingResult</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            int i = 0;
+                            foreach (var item in Model)
+                            {
+                                i++;
+                                <tr>
+                                    <td>
+                                        @i.ToString()
+                                    </td>
+                                    <td>
+                                        @item.Visits.Factories.Name
+                                    </td>
+                                    <td>
+                                        @item.SampleId
+                                    </td>
+                                    <td>
+                                        @item.SampleDate.ToString("dd / MM / yyyy")
+                                    </td>
+                                    <td>
+                                        @("C-"+item.ConcreteClass)
+                                    </td>
+                                    <td>
+                                        @item.ConcreteType
+                                    </td>
+                                    <td>
+                                        @Html.ConcreteUsageName(item.ConcreteUsage.HasValue ? item.ConcreteUsage.Value : 0, item.ConcreteUsageOther)
+                                    </td>
+                                    <td style="@(item.V_IsHighTemp==true ? "background-color:red" : "")">
+                                        @item.ConcreteTemperture
+                                    </td>
+                                    <td style="@(item.V_IsSlumb==true ? "background-color:red" : "")">
+                                        @item.SlumpValue
+                                    </td>
+                                    <td>
+                                        @item.LabResist7days
+                                    </td>
+                                    <td style="@(item.V_IsLowPressure==true ? "background-color:red" : "")">
+                                        @item.LabResist28days
+                                    </td>
+
+
+                                </tr>
+                            }
+                        }
+
+                    </tbody>
+                </table>
+
+                <!--end: Datatable -->
+            }
+            else
+            {
+                <p>@Cpanel.NoData</p>
+            }
+            <br />
+        </div>
+
+    </div>
+</div>
+
+@section sectionScripts{
+    <script>
+                   // $("#liLab").addClass("kt-menu__item--open");
+    </script>
+}
+
+
+
+
+

@@ -1,0 +1,34 @@
+﻿@model Amana.Models.Entities.C_NodeLoc
+
+@{
+    ViewBag.Title = @Amana.GlobalResources.Cpanel.Delete;
+    Layout = "_Layout.cshtml";
+    int typeId = int.Parse(Request.QueryString["typeId"]);
+    var nodeId = ViewContext.RouteData.Values["id"];
+    var catId = Request.QueryString["catId"];
+    var pageNum = Request.QueryString["page"];
+    var parentId = Request.QueryString["parentId"];
+}
+
+@if (ViewBag.Error == true)
+{
+    @Html.Partial("~/Areas/Admin/Views/Shared/UcDelete.cshtml")
+}
+else
+{
+    <h1>@Amana.GlobalResources.Cpanel.ConfirmDelete</h1>
+    <br />
+    <h2>@Model.Title</h2>
+}
+
+<div class="sep100x100"></div>
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+
+    <div class="form-actions no-color">
+        <input type="submit" value="@Amana.GlobalResources.Cpanel.Delete" class="lnkCreate lnkInline" /> |
+        @Html.ActionLink(@Amana.GlobalResources.Cpanel.BackToList, "Index", new { id = typeId, page = pageNum, catId = catId, parentId = parentId }, new { @class = "lnkBack" })
+    </div>
+}
+

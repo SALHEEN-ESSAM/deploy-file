@@ -1,0 +1,194 @@
+﻿@model Amana.ViewModels.C_UserItemsViewModel
+@using Amana.Models.Helpers;
+
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_Layout2.cshtml";
+    var roleId = Model.RoleId;// Request.QueryString["roleId"];
+    Amana.Models.Entities.C_UserRolesLoc roleInfo = ViewBag.RoleLoc;
+}
+@section sectionSubHeader{
+
+    <div class="kt-subheader__main">
+        <h3 class="kt-subheader__title">
+            المستخدمين
+        </h3>
+        <span class="kt-subheader__separator kt-hidden"></span>
+        <div class="kt-subheader__breadcrumbs">
+            <a href="#" class="kt-subheader__breadcrumbs-home"><i class="flaticon2-shelter"></i></a>
+
+            <span class="kt-subheader__breadcrumbs-separator"></span>
+            <span class="kt-subheader__breadcrumbs-link kt-subheader__breadcrumbs-link--active">
+                @if (roleInfo != null)
+                {
+                    <text> @roleInfo.Title</text>
+                }
+              
+            </span>
+
+        </div>
+    </div>
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <!--begin::Portlet-->
+        <div class="kt-portlet">
+            <div class="kt-portlet__head">
+                <div class="kt-portlet__head-label">
+                    <h3 class="kt-portlet__head-title">
+                        @if (roleInfo != null)
+                        {
+                            <text> @roleInfo.Title</text>
+                        }
+                    </h3>
+                </div>
+            </div>
+
+
+            <!--begin::Form-->
+
+            @using (Html.BeginForm("Create", "C_UserItems", FormMethod.Post, new { enctype = "multipart/form-data", @class = "kt-form kt-form--label-right" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true)
+                @Html.HiddenFor(model => model.UserId)
+                @Html.HiddenFor(model => model.FactoryId)
+
+
+                <div class="kt-portlet__body">
+                    @if (ViewBag.Success == true)
+                    {
+                        @Html.Partial("~/Areas/Admin/Views/Shared/UcSuccess.cshtml")
+                    }
+                    @if (ViewBag.CustomError != null)
+                    {
+                        @Html.Partial("~/Areas/Admin/Views/Shared/UcCustomError.cshtml", ViewBag.CustomError as string)
+                    }
+                    <div class="form-group" style="display:none">
+                        @Html.LabelFor(model => model.RoleId, @Amana.GlobalResources.Users.UserRoles)
+                        <div class="col-md-7">
+                            @Html.DropDownListFor(model => model.RoleId, ViewData["Roles"] as SelectList, @Amana.GlobalResources.Cpanel.ChooseOption)
+                            @Html.ValidationMessageFor(model => model.RoleId)
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-6">
+                            @Html.LabelFor(model => model.Name, @Amana.GlobalResources.Cpanel.Name)
+
+                            @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Name)
+                        </div>
+                        <div class="col-md-6">
+                            @Html.LabelFor(model => model.JobTitle, "المسمى الوظيفي")
+
+                            @Html.TextBoxFor(model => model.JobTitle, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.JobTitle)
+                        </div>
+                        <div class="col-md-6">
+                            @Html.LabelFor(model => model.IsMale, @Amana.GlobalResources.Cpanel.Sex)
+                            <div class="kt-radio-inline">
+                                <label class="kt-radio kt-radio--brand">
+                                    @Html.RadioButtonFor(model => model.IsMale, true, new { @checked = true }) @Amana.GlobalResources.Cpanel.Male
+                                    <span></span>
+                                </label>
+                                <label class="kt-radio kt-radio--brand">
+                                    @Html.RadioButtonFor(model => model.IsMale, false) @Amana.GlobalResources.Cpanel.Female
+                                    <span></span>
+                                </label>
+
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-6">
+                            @Html.LabelFor(model => model.Email, @Amana.GlobalResources.Cpanel.Email)
+                            @Html.TextBoxFor(model => model.Email, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Email)
+
+                        </div>
+                        <div class="col-md-6">
+
+                            @if (Model.UserId <= 0)
+                            {
+                                @Html.LabelFor(model => model.Password, @Amana.GlobalResources.Users.Password)
+                                @Html.TextBoxFor(model => model.Password, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.Password)
+                            }
+
+                        </div>
+
+
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-6">
+                            @Html.LabelFor(model => model.Phone, @Amana.GlobalResources.Cpanel.Phone)
+                            @Html.TextBoxFor(model => model.Phone, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Phone)
+
+                        </div>
+                        <div class="col-md-6">
+
+                            @Html.LabelFor(model => model.CellPhone, @Amana.GlobalResources.Cpanel.CellPhone)
+                            @Html.TextBoxFor(model => model.CellPhone, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.CellPhone)
+
+                        </div>
+
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-6">
+                            @Html.LabelFor(model => model.ImageUrl, "صورة التوقيع")
+
+                            <input type="file" id="ImageUrl" name="ImageUrl" class="form-control" accept="image/*" />
+                            @Html.ValidationMessageFor(model => model.ImageUrl)
+
+                            @if (Model != null && !string.IsNullOrEmpty(Model.ImageUrl))
+                            {
+                                <div class="imgContainer">
+                                    <img src="@("/Uploads/Users/"+Model.ImageUrl)" alt="" height="60" class="img_1" />
+                                    <a href="@Url.Action("DeleteImage", new { id = Model.UserId })" class="badge badge-danger"  title="حذف الصورة">X</a>
+                                </div>
+                            }
+                        </div>
+
+                    </div>
+                    <div class="form-group" style="display:none">
+                        @Html.LabelFor(model => model.IsActive, @Amana.GlobalResources.Cpanel.IsActive + " ?")
+                        @Html.CheckBoxFor(model => model.IsActive, new { @checked = true })
+                    </div>
+
+                </div>
+                <div class="kt-portlet__foot">
+                    <div class="kt-form__actions">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <input type="submit" value="@Amana.GlobalResources.Cpanel.Save" class="btn btn-warning" />
+                                @if (!Model.FactoryId.HasValue)
+                                {
+                                    @Html.ActionLink(@Amana.GlobalResources.Cpanel.BackToList, "Index", new { id = Request.QueryString["roleId"] }, new { @class = "btn btn-secondary" })
+                                }
+
+                            </div>
+                            @*<div class="col-md-6 kt-align-right">
+                                    <button type="reset" class="btn btn-danger">Delete</button>
+                                </div>*@
+                        </div>
+                    </div>
+                </div>
+
+            }
+
+
+            <!--end::Form-->
+        </div>
+
+
+    </div>
+</div>
+
+<script>
+    $("#liUsers").addClass("kt-menu__item--open");
+
+</script>

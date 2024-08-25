@@ -1,0 +1,270 @@
+﻿@model List<Amana.Models.Entities.C_UserItems>
+@using Amana.Models;
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_Layout2.cshtml";
+    int langId = ViewBag.LangId;
+    var roleId = ViewContext.RouteData.Values["id"];
+    var pageNum = Request.QueryString["page"];
+    Amana.Models.Entities.C_UserRolesLoc roleInfo = ViewBag.RoleLoc;
+    Amana.Models.Entities.C_UserItems user = (Amana.Models.Entities.C_UserItems)Session["UserDetails"];
+}
+@section sectionSubHeader{
+
+    <div class="kt-subheader__main">
+        <h3 class="kt-subheader__title">
+            المستخدمين
+        </h3>
+        <span class="kt-subheader__separator kt-hidden"></span>
+        <div class="kt-subheader__breadcrumbs">
+            <a href="#" class="kt-subheader__breadcrumbs-home"><i class="flaticon2-shelter"></i></a>
+            @*<span class="kt-subheader__breadcrumbs-separator"></span>
+                <a href="" class="kt-subheader__breadcrumbs-link">
+                    قائمة المصانع
+                </a>*@
+            <span class="kt-subheader__breadcrumbs-separator"></span>
+            <span class="kt-subheader__breadcrumbs-link kt-subheader__breadcrumbs-link--active">
+                @if (roleInfo != null)
+                {
+                    <text> @roleInfo.Title</text>
+                }
+                @*@if (roleId.ToString() == "2")
+                    {
+                        <text>قائمة المراقبين</text>
+                    }
+                    else if (roleId.ToString() == "1003")
+                    {
+                        <text>موظفي المختبر</text>
+                    }
+                    else if (roleId.ToString() == "1004")
+                    {
+                        <text>موظفي الإستقبال</text>
+                    }
+                    else if (roleId.ToString() == "1005")
+                    {
+                        <text>مهندسي المواد </text>
+                    }
+                    else if (roleId.ToString() == "1002")
+                    {
+                        <text>المصانع  </text>
+                    }
+                    else if (roleId.ToString() == "1006")
+                    {
+                        <text>منسوبي الأمانة  </text>
+                    }*@
+
+            </span>
+
+        </div>
+    </div>
+}
+<div class="kt-portlet kt-portlet--mobile">
+    <div class="kt-portlet__head kt-portlet__head--lg">
+        <div class="kt-portlet__head-label">
+            <span class="kt-portlet__head-icon">
+                <i class="kt-font-brand flaticon2-line-chart"></i>
+            </span>
+
+            <h3 class="kt-portlet__head-title">
+                @if (roleInfo != null)
+                {
+                    <text> @roleInfo.Title</text>
+                }
+                @*@if (roleId.ToString() == "2")
+                    {
+                        <text>قائمة المراقبين</text>
+                    }
+                    else if (roleId.ToString() == "1003")
+                    {
+                        <text>موظفي المختبر</text>
+                    }
+                    else if (roleId.ToString() == "1004")
+                    {
+                        <text>موظفي الإستقبال</text>
+                    }
+                    else if (roleId.ToString() == "1005")
+                    {
+                        <text>مهندسي المواد </text>
+                    }
+                    else if (roleId.ToString() == "1002")
+                    {
+                        <text>المصانع  </text>
+                    }
+                    else if (roleId.ToString() == "1006")
+                    {
+                        <text>منسوبي الأمانة  </text>
+                    }*@
+
+            </h3>
+
+        </div>
+        <div class="kt-portlet__head-toolbar">
+            <div class="kt-portlet__head-wrapper">
+                <div class="kt-portlet__head-actions">
+                    <a href="@Url.Action("Create",new { roleId = roleId })" class="btn btn-brand btn-elevate btn-icon-sm">
+                        <i class="la la-plus"></i>
+                        إضافة
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="kt-portlet__body">
+        @if (ViewBag.Success == true)
+        {
+            @Html.Partial("~/Areas/Admin/Views/Shared/UcSuccess.cshtml")
+        }
+        <!--begin: Search Form -->
+        @*@using (Html.BeginForm("Index", "C_UserItems", FormMethod.Get, new { @class = "kt-form kt-form--label-right kt-margin-t-20 kt-margin-b-10" }))
+            {
+                <div class="row align-items-center">
+                    <div class="col-xl-8 order-2 order-xl-1">
+                        <div class="row align-items-center">
+
+                            <div class="col-md-4 kt-margin-b-20-tablet-and-mobile">
+
+
+                                <div class="kt-form__control">
+
+                                    @Html.TextBox("searchString", ViewBag.CurrentFilter as string, new { @class = "txtSearch form-control", placeholder = "بحث..." })
+
+                                </div>
+
+
+                            </div>
+                            <div class="col-md-4">
+                                <input type="submit" value="@Amana.GlobalResources.Cpanel.Search" class="btn btn-success btn-sm mr-2" />
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+            }*@
+
+        <!--end: Search Form -->
+
+
+        @if (Model.Count > 0)
+        {
+
+            <table class="table table-striped- table-bordered table-hover table-checkable" id="kt_table_1">
+
+                <thead>
+                    <tr>
+                        <th>
+                            @Amana.GlobalResources.Cpanel.Name
+                        </th>
+                        <th>
+                            المسمى الوظيفي
+                        </th>
+                        <th>
+                            @Amana.GlobalResources.Cpanel.Email
+                        </th>
+                        <th>
+                            @Amana.GlobalResources.Cpanel.PostDate
+                        </th>
+                        @if (roleId.ToString() == "2")
+                        {
+                            <th>
+                                متاح ؟
+                            </th>
+                        }
+
+                        <th class="settings"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        int i = 0;
+                        foreach (var item in Model)
+                        {
+                            i++;
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.JobTitle)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Email)
+                                </td>
+                                <td>
+                                    @item.DateJoin.ToString("dd / MM / yyyy")
+                                </td>
+                                @if (roleId.ToString() == "2")
+                                {
+                            <td>
+
+                                @if (item.IsAvailable == true)
+                                {
+                                    <span class="btn btn-bold btn-sm btn-font-sm  btn-label-success mr-2">متاح</span>
+                                }
+                                else
+                                {
+                                    <span class="btn btn-bold btn-sm btn-font-sm  btn-label-danger mr-2">غير متاح</span>
+                                }
+                                @if (user.RoleId == null || user.RoleId == 1006)
+                                {
+                                    @Html.ActionLink("تغيير", "Activate", new { id = item.UserId }, new { @class = "btn btn-warning btn-sm mr-2" })
+                                }
+                                </td>
+                                }
+                                @*<td>
+                                        @Html.ActionLink(" ", "Activate", new { id = item.UserId, page = pageNum }, new { @class = @item.IsActive ? "activated" : "notActivated" })
+                                    </td>*@
+                            <td>
+                                @if (user.RoleId == null || user.RoleId == 1006)
+                                {
+                                    @Html.ActionLink(@Amana.GlobalResources.Cpanel.Edit, "Create", new { id = item.UserId, roleId = item.RoleId }, new { @class = "btn btn-success btn-sm mr-2" })
+                                    if (item.UserId != AppSettings.GeneralManagerId && item.UserId != AppSettings.ProjectManagerId && item.UserId != AppSettings.ProjectSupervisorId)
+                                    {
+                                        @Html.ActionLink(@Amana.GlobalResources.Cpanel.Delete, "Delete", new { id = item.UserId, roleId = item.RoleId }, new { @class = "btn btn-danger btn-sm mr-2" })
+
+                                    }
+                                }
+
+                                @if (roleId.ToString() == "2" && (user.RoleId == 1005 || user.UserId == AppSettings.ProjectManagerId || user.UserId == AppSettings.ProjectSupervisorId))
+                                {
+
+                                    @Html.ActionLink("تسجيل دخول بالحساب", "LoginWithUserAccount", new { id = item.UserId }, new { @class = "btn btn-warning btn-sm mr-2" })
+
+                                }
+                            </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+
+            </table>
+
+        }
+        else
+        {
+            <p class="kt-padding-t-20">لا يوجد بيانات</p>
+        }
+
+    </div>
+</div>
+
+@section sectionScripts{
+   
+
+    <script>
+    
+
+        $(document).ready(function () {
+
+            $("#liUsers").addClass("kt-menu__item--open");
+
+        });
+    </script>
+}
+
+
+
+
+

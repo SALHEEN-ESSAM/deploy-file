@@ -1,0 +1,490 @@
+﻿@model Amana.ViewModels.Classifications.ConcreteMixturesInfoFormViewModel
+@using Amana.Models.Helpers;
+@using Amana.GlobalResources; 
+
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_Layout2.cshtml";
+    Amana.Models.Entities.Cls_FactoryClassifications classificationItem = (Amana.Models.Entities.Cls_FactoryClassifications)ViewBag.ClassificationItem;
+
+}
+@section sectionSubHeader{
+
+    <div class="kt-subheader__main">
+        <h3 class="kt-subheader__title">
+            @Cpanel.Classification
+        </h3>
+        <span class="kt-subheader__separator kt-hidden"></span>
+        <div class="kt-subheader__breadcrumbs">
+            <a href="#" class="kt-subheader__breadcrumbs-home"><i class="flaticon2-shelter"></i></a>
+            <span class="kt-subheader__breadcrumbs-separator"></span>
+            <span class="kt-subheader__breadcrumbs-link kt-subheader__breadcrumbs-link--active">   @Cpanel.FactoryDataEntry</span>
+            <span class="kt-subheader__breadcrumbs-separator"></span>
+            <span class="kt-subheader__breadcrumbs-link kt-subheader__breadcrumbs-link--active">
+              @Cpanel.ConcreteMixes
+            </span>
+
+        </div>
+    </div>
+}
+
+<div class="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content" style="padding:0px;">
+
+    <!--Begin::App-->
+    <div class="kt-grid kt-grid--desktop kt-grid--ver kt-grid--ver-desktop kt-app">
+        @if (classificationItem != null)
+        {
+
+            <div class="col-md-4">
+                @Html.Partial("_ClassificationItem", classificationItem);
+            </div>
+
+        }
+
+        <div class="col-md-8">
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <!--begin::Portlet-->
+                    <div class="kt-portlet">
+                        <div class="kt-portlet__head">
+                            <div class="kt-portlet__head-label">
+                                <h3 class="kt-portlet__head-title">
+                                    @Cpanel.ConcreteMixes
+
+                                </h3>
+                            </div>
+                        </div>
+
+
+                        <!--begin::Form-->
+                        <div class="kt-portlet__body">
+                            @if (ViewBag.Success == true)
+                            {
+                                @Html.Partial("~/Areas/Admin/Views/Shared/UcSuccess.cshtml")
+                            }
+
+                            @using (Html.BeginForm("ConcreteMixturesInfo", "FactoryClassification", FormMethod.Post, new { enctype = "multipart/form-data", @class = "kt-form kt-form--label-right" }))
+                            {
+                                @Html.AntiForgeryToken()
+                                @Html.ValidationSummary(true)
+                                @Html.HiddenFor(model => model.ClassificationId)
+
+                            <div class="kt-portlet__body">
+                                <div class="kt-section kt-section--first">
+                                    <h3 class="kt-section__title">
+                                        Compressive Strength 35 :
+                                    </h3>
+                                    <div class="form-group row">
+                                        <div class="col-4">
+                                            <label>
+                                               @Cpanel.ConcreteToWater
+                                                :
+                                            </label>
+                                            @Html.EditorFor(model => model.ConcWater40, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.ConcWater40)
+                                        </div>
+                                        <div class="col-4">
+                                            <label>
+                                                @Cpanel.MixResults
+                                                :
+                                            </label>
+                                            @Html.EditorFor(model => model.MixResult40, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.MixResult40)
+                                        </div>
+                                        <div class="col-4">
+                                            <label>
+                                                @Cpanel.Concrete @Cpanel.KG
+                                                :
+                                            </label>
+                                            @Html.EditorFor(model => model.CementKg40, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.CementKg40)
+                                        </div>
+
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-4">
+                                            <label>
+                                                @Cpanel.HotWater @Cpanel.KG
+                                                :
+                                            </label>
+                                            @Html.EditorFor(model => model.HotWater40, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.HotWater40)
+                                        </div>
+                                        <div class="col-4">
+                                            <label>
+                                                @Cpanel.CoarseAggregate 3/4
+                                                :
+                                            </label>
+                                            @Html.EditorFor(model => model.Rookam3by4Kg40, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.Rookam3by4Kg40)
+                                        </div>
+                                        <div class="col-4">
+                                            <label>
+                                                @Cpanel.CoarseAggregate  3/8
+                                                :
+                                            </label>
+                                            @Html.EditorFor(model => model.Rookam3by8Kg40, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.Rookam3by8Kg40)
+                                        </div>
+
+
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-4">
+                                            <label>
+                                                @Cpanel.SilicaSand
+                                                :
+                                            </label>
+                                            @Html.EditorFor(model => model.SelicaSandKg40, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.SelicaSandKg40)
+                                        </div>
+                                        <div class="col-4">
+                                            <label>
+                                                @Cpanel.WashedSand
+                                                :
+                                            </label>
+                                            @Html.EditorFor(model => model.WachingSandKg40, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.WachingSandKg40)
+                                        </div>
+                                        <div class="col-4">
+                                            <label>
+                                                @Cpanel.Additions
+                                                :
+                                            </label>
+                                            @Html.EditorFor(model => model.RP264Litter40, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.RP264Litter40)
+                                        </div>
+                                       
+                                    </div>
+
+                                    <div class="kt-separator kt-separator--border-dashed kt-separator--space-lg kt-separator--portlet-fit"></div>
+
+
+                                </div>
+                                <div class="kt-section kt-section--first">
+                                    <h3 class="kt-section__title">
+                                        Compressive Strength 30 :
+                                    </h3>
+                                    <div class="form-group row">
+                                        <div class="col-4">
+                                            <label>
+                                                @Cpanel.ConcreteToWater
+                                                :
+                                            </label>
+                                            @Html.EditorFor(model => model.ConcWater35, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.ConcWater35)
+                                        </div>
+                                        <div class="col-4">
+                                            <label>
+                                                @Cpanel.MixResults
+                                                :
+                                            </label>
+                                            @Html.EditorFor(model => model.MixResult35, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.MixResult35)
+                                        </div>
+                                        <div class="col-4">
+                                            <label>
+                                                @Cpanel.Concrete @Cpanel.KG
+                                                :
+                                            </label>
+                                            @Html.EditorFor(model => model.CementKg35, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.CementKg35)
+                                        </div>
+                                       
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-4">
+                                            <label>
+                                                @Cpanel.HotWater @Cpanel.KG
+                                                :
+                                            </label>
+                                            @Html.EditorFor(model => model.HotWater35, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.HotWater35)
+                                        </div>
+                                        <div class="col-4">
+                                            <label>
+                                                @Cpanel.CoarseAggregate 3/4
+                                                :
+                                            </label>
+                                            @Html.EditorFor(model => model.Rookam3by4Kg35, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.Rookam3by4Kg35)
+                                        </div>
+                                        <div class="col-4">
+                                            <label>
+                                                @Cpanel.CoarseAggregate 3/8
+                                                :
+                                            </label>
+                                            @Html.EditorFor(model => model.Rookam3by8Kg35, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.Rookam3by8Kg35)
+                                        </div>
+                                       
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-4">
+                                            <label>
+                                                @Cpanel.SilicaSand
+                                                :
+                                            </label>
+                                            @Html.EditorFor(model => model.SelicaSandKg35, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.SelicaSandKg35)
+                                        </div>
+                                        <div class="col-4">
+                                            <label>
+                                                @Cpanel.WashedSand
+                                                :
+                                            </label>
+                                            @Html.EditorFor(model => model.WachingSandKg35, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.WachingSandKg35)
+                                        </div>
+                                        <div class="col-4">
+                                            <label>
+                                                @Cpanel.Additions
+                                                :
+                                            </label>
+                                            @Html.EditorFor(model => model.RP264Litter35, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.RP264Litter35)
+                                        </div>
+                                     
+                                    </div>
+
+                                    <div class="kt-separator kt-separator--border-dashed kt-separator--space-lg kt-separator--portlet-fit"></div>
+
+
+                                </div>
+                                <div class="kt-section kt-section--first">
+                                    <h3 class="kt-section__title">
+                                        Compressive Strength 25 :
+                                    </h3>
+                                    <div class="form-group row">
+                                        <div class="col-4">
+                                            <label>
+                                                @Cpanel.ConcreteToWater
+                                                :
+                                            </label>
+                                            @Html.EditorFor(model => model.ConcWater30, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.ConcWater30)
+                                        </div>
+                                        <div class="col-4">
+                                            <label>
+                                                @Cpanel.MixResults
+                                                :
+                                            </label>
+                                            @Html.EditorFor(model => model.MixResult30, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.MixResult30)
+                                        </div>
+                                        <div class="col-4">
+                                            <label>
+                                                @Cpanel.Concrete @Cpanel.KG
+                                                :
+                                            </label>
+                                            @Html.EditorFor(model => model.CementKg30, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.CementKg30)
+                                        </div>
+                                      
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-4">
+                                            <label>
+                                                @Cpanel.HotWater @Cpanel.KG
+                                                :
+                                            </label>
+                                            @Html.EditorFor(model => model.HotWater30, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.HotWater30)
+                                        </div>
+                                        <div class="col-4">
+                                            <label>
+                                                @Cpanel.CoarseAggregate 3/4
+                                                :
+                                            </label>
+                                            @Html.EditorFor(model => model.Rookam3by4Kg30, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.Rookam3by4Kg30)
+                                        </div>
+                                        <div class="col-4">
+                                            <label>
+                                                @Cpanel.CoarseAggregate 3/8
+                                                :
+                                            </label>
+                                            @Html.EditorFor(model => model.Rookam3by8Kg30, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.Rookam3by8Kg30)
+                                        </div>
+                                       
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-4">
+                                            <label>
+                                                @Cpanel.SilicaSand
+                                                :
+                                            </label>
+                                            @Html.EditorFor(model => model.SelicaSandKg30, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.SelicaSandKg30)
+                                        </div>
+                                        <div class="col-4">
+                                            <label>
+                                                @Cpanel.WashedSand
+                                                :
+                                            </label>
+                                            @Html.EditorFor(model => model.WachingSandKg30, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.WachingSandKg30)
+                                        </div>
+                                        <div class="col-4">
+                                            <label>
+                                                @Cpanel.Additions
+                                                :
+                                            </label>
+                                            @Html.EditorFor(model => model.RP264Litter30, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.RP264Litter30)
+                                        </div>
+                                      
+                                    </div>
+
+                                    <div class="kt-separator kt-separator--border-dashed kt-separator--space-lg kt-separator--portlet-fit"></div>
+
+
+                                </div>
+                                <div class="kt-section kt-section--first">
+                                    <h3 class="kt-section__title">
+                                        Compressive Strength 15 :
+                                    </h3>
+                                    <div class="form-group row">
+                                        <div class="col-4">
+                                            <label>
+                                                @Cpanel.ConcreteToWater
+                                                :
+                                            </label>
+                                            @Html.EditorFor(model => model.ConcWater20, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.ConcWater20)
+                                        </div>
+                                        <div class="col-4">
+                                            <label>
+                                                @Cpanel.MixResults
+                                                :
+                                            </label>
+                                            @Html.EditorFor(model => model.MixResult20, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.MixResult20)
+                                        </div>
+                                        <div class="col-4">
+                                            <label>
+                                                @Cpanel.Concrete @Cpanel.KG
+                                                :
+                                            </label>
+                                            @Html.EditorFor(model => model.CementKg20, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.CementKg20)
+                                        </div>
+
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-4">
+                                            <label>
+                                                @Cpanel.HotWater @Cpanel.KG
+                                                :
+                                            </label>
+                                            @Html.EditorFor(model => model.HotWater20, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.HotWater20)
+                                        </div>
+                                        <div class="col-4">
+                                            <label>
+                                                @Cpanel.CoarseAggregate  3/4
+                                                :
+                                            </label>
+                                            @Html.EditorFor(model => model.Rookam3by4Kg20, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.Rookam3by4Kg20)
+                                        </div>
+                                        <div class="col-4">
+                                            <label>
+                                                @Cpanel.CoarseAggregate  3/8
+                                                :
+                                            </label>
+                                            @Html.EditorFor(model => model.Rookam3by8Kg20, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.Rookam3by8Kg20)
+                                        </div>
+
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-4">
+                                            <label>
+                                                @Cpanel.SilicaSand
+                                                :
+                                            </label>
+                                            @Html.EditorFor(model => model.SelicaSandKg20, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.SelicaSandKg20)
+                                        </div>
+                                        <div class="col-4">
+                                            <label>
+                                                @Cpanel.WashedSand
+                                                :
+                                            </label>
+                                            @Html.EditorFor(model => model.WachingSandKg20, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.WachingSandKg20)
+                                        </div>
+                                        <div class="col-4">
+                                            <label>
+                                                @Cpanel.Additions
+                                                :
+                                            </label>
+                                            @Html.EditorFor(model => model.RP264Litter20, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.RP264Litter20)
+                                        </div>
+
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-4">
+                                            <label>
+                                               @Cpanel.EndDateApproval :
+                                            </label>
+                                            @Html.TextBoxFor(model => model.FinishDate, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
+                                            @Html.ValidationMessageFor(model => model.FinishDate)
+                                        </div>
+                                      
+
+                                    </div>
+
+
+                                    <div class="kt-separator kt-separator--border-dashed kt-separator--space-lg kt-separator--portlet-fit"></div>
+
+
+                                </div>
+                                
+                            </div>
+                                <div class="kt-portlet__foot">
+                                    <div class="kt-form__actions">
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <input type="submit" value="@Amana.GlobalResources.Cpanel.Save" class="btn btn-warning" />
+
+                                            </div>
+                                          
+                                        </div>
+                                    </div>
+                                </div>
+
+                                }
+
+                            </div>
+
+
+                        <!--end::Form-->
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+    <!--End::App-->
+</div>
+@section sectionScripts{
+    <script>
+        $(document).ready(function () {
+            $("#lnkConcreteMixturesInfo").addClass("kt-widget__item--active");
+        });
+
+    </script>
+}
+
+
+
+
+

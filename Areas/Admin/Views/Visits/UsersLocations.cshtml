@@ -1,0 +1,230 @@
+﻿@model  List<Amana.Models.Entities.Visits>
+@using Amana.Models.Utilities;
+@using System.Globalization;
+@using Amana.GlobalResources;
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_Layout2.cshtml";
+    //startDate=DateTime.Now
+
+    DateTime startDate = HelperMethods.GetFirstDayInMonth(HelperMethods.GetCurrentDateTime());
+    DateTime endDate = HelperMethods.GetLastDayInMonth(HelperMethods.GetCurrentDateTime());
+    List<Amana.Models.Entities.C_UserItems> userLst = ViewBag.Users;
+    List<Amana.Models.Entities.UserLocations> userLocLst = ViewBag.UserLocation;
+    int? userId = string.IsNullOrEmpty(Request["userId"]) ? (int?)null : int.Parse(Request["userId"]);
+}
+@section sectionSubHeader{
+
+    <div class="kt-subheader__main">
+        <h3 class="kt-subheader__title">
+            @Cpanel.Visits
+        </h3>
+        <span class="kt-subheader__separator kt-hidden"></span>
+        <div class="kt-subheader__breadcrumbs">
+            <a href="#" class="kt-subheader__breadcrumbs-home"><i class="flaticon2-shelter"></i></a>
+            @*<span class="kt-subheader__breadcrumbs-separator"></span>
+                <a href="" class="kt-subheader__breadcrumbs-link">
+                    قائمة
+                </a>*@
+            <span class="kt-subheader__breadcrumbs-separator"></span>
+            <span class="kt-subheader__breadcrumbs-link kt-subheader__breadcrumbs-link--active">مواقع المراقبين خلال الشهر</span>
+        </div>
+    </div>
+}
+<div class="kt-portlet kt-portlet--mobile">
+    <div class="kt-portlet__head kt-portlet__head--lg">
+        <div class="kt-portlet__head-label">
+            <span class="kt-portlet__head-icon">
+                <i class="kt-font-brand flaticon2-line-chart"></i>
+            </span>
+
+            <h3 class="kt-portlet__head-title">
+                مواقع المراقبين خلال الشهر
+            </h3>
+
+        </div>
+        <div class="kt-portlet__head-toolbar">
+            <div class="kt-portlet__head-wrapper">
+                <div class="kt-portlet__head-actions">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="kt-portlet__body">
+        @if (ViewBag.Success == true)
+        {
+            @Html.Partial("~/Areas/Admin/Views/Shared/UcSuccess.cshtml")
+        }
+        @if (ViewBag.CustomError != null)
+        {
+            @Html.Partial("~/Areas/Admin/Views/Shared/UcCustomError.cshtml", ViewBag.CustomError as string)
+        }
+        <!--begin: Search Form -->
+        @using (Html.BeginForm("UsersLocations", "Visits", FormMethod.Get, new { @class = "kt-form kt-form--label-right kt-margin-t-20 kt-margin-b-10" }))
+        {
+            <div class="row align-items-center">
+                <div class="col-xl-8 order-2 order-xl-1">
+                    <div class="row align-items-center">
+
+                        <div class="col-md-2 kt-margin-b-20-tablet-and-mobile">
+                            <div class="kt-form__control">
+                                <label>@Cpanel.Observer</label>
+                                @Html.DropDownList("userId", ViewData["UsersLst"] as SelectList, @Amana.GlobalResources.Cpanel.ChooseOption, new { @class = "form-control" })
+                            </div>
+                        </div>
+
+                        @*<div class="col-md-2 kt-margin-b-20-tablet-and-mobile">
+                                <div class="kt-form__control">
+                                    <label>من</label>
+                                    <input id="startDate" name="startDate" type="text" class="form-control kt_datepicker_1" value="@startDate" />
+                                </div>
+                            </div>
+                            <div class="col-md-2 kt-margin-b-20-tablet-and-mobile">
+                                <div class="kt-form__control">
+                                    <label>إلى</label>
+                                    <input id="endDate" name="endDate" type="text" class="form-control kt_datepicker_1" value="@endDate" />
+                                </div>
+                            </div>*@
+                        @*<div class="col-md-1 kt-margin-b-20-tablet-and-mobile">
+                                <div class="kt-form__control">
+                                    <label>الحالة</label>
+                                </div>
+                            </div>*@
+                        <div class="col-md-1">
+                            <input type="submit" value="@Amana.GlobalResources.Cpanel.Search" class="btn btn-default kt-mt-20" />
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+        }
+
+        <!--end: Search Form -->
+        <!--begin: Datatable -->
+        <table class="table table-striped- table-bordered table-hover table-checkable">
+
+
+            @{
+                for (DateTime dt = startDate; dt <= endDate; dt = dt.AddDays(1))
+                {
+                    if (dt.DayOfWeek != DayOfWeek.Friday)
+                    {
+                        <tr>
+                            <td>
+                                <h5>@dt.ToString("dddd dd / MM / yyyy", CultureInfo.CreateSpecificCulture("ar-EG"))</h5>
+
+                            </td>
+                            <td>
+                                <table class="table table-striped- table-bordered table-hover table-checkable">
+                                    <tr>
+                                        <th>@Cpanel.Name</th>
+                                        <th>@Cpanel.Location</th>
+                                        <th>@Cpanel.Visits</th>
+                                        <th></th>
+                                    </tr>
+                                    @if (userId.HasValue)
+                                    {
+                                        userLst = userLst.Where(a => a.UserId == userId.Value).ToList();
+                                    }
+
+                                    @foreach (var user in userLst)
+                                    {
+                                        var item = userLocLst.FirstOrDefault(a => a.UserId == user.UserId && a.DayDate.Date == dt.Date);
+                                        int visitsCount = Model.Count(a => a.UserId == user.UserId && a.VisitDate.Date == dt.Date);
+                                        <tr>
+                                            <td>@user.Name</td>
+                                            <td>
+                                                @if (item != null)
+                                                {
+                                                    <text>
+                                                        @item.IdxLocations.Name
+                                                    </text>
+                                                }
+                                                else
+                                                {
+                                                    <text>
+                                                       @Cpanel.NotDefined
+                                                    </text>
+                                                }
+                                            </td>
+                                            <td>
+                                                @visitsCount
+                                            </td>
+                                            <td>
+                                                @if (visitsCount == 0)
+                                                {
+                                                    <a href="@Url.Action("EditUserLocation", new { dt=dt,userId=user.UserId })" class="btn btn-warning btn-sm mr-2">
+                                                       @Cpanel.Location
+                                                    </a>
+                                                }
+
+                                            </td>
+                                        </tr>
+
+                                    }
+                                </table>
+
+                            </td>
+                        </tr>
+                    }
+                }
+            }
+        </table>
+
+    </div>
+</div>
+
+@section sectionScripts{
+   
+    <script>
+        "use strict";
+        var KTDatatablesDataSourceHtml = function () {
+
+            var initTable1 = function () {
+                var table = $('#kt_table_1');
+
+                // begin first table
+                table.DataTable({
+                    responsive: true,
+                    pageLength: 25,
+                    columnDefs: [
+
+                    ],
+                });
+
+            };
+
+            return {
+
+                //main function to initiate the module
+                init: function () {
+                    initTable1();
+                },
+
+            };
+
+        }();
+
+        $(document).ready(function () {
+            KTDatatablesDataSourceHtml.init();
+
+            //$('.kt_datepicker_1').datepicker({
+
+            //    todayHighlight: true,
+            //    orientation: "bottom left",
+            //    format : "dd/mm/yyyy"
+            //});
+
+            $("#liVisits").addClass("kt-menu__item--open");
+
+        });
+    </script>
+}
+
+
+
+
+

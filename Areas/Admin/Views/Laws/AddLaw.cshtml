@@ -1,0 +1,143 @@
+﻿@model Amana.ViewModels.Laws.LawViewModel
+    @using Amana.GlobalResources;
+
+@{
+
+    Layout = "~/Areas/Admin/Views/Shared/_Layout2.cshtml";
+}
+@section sectionSubHeader{
+
+    <div class="kt-subheader__main">
+        <h3 class="kt-subheader__title">
+            @Cpanel.Laws
+        </h3>
+        <span class="kt-subheader__separator kt-hidden"></span>
+        <div class="kt-subheader__breadcrumbs">
+            <a href="#" class="kt-subheader__breadcrumbs-home"><i class="flaticon2-shelter"></i></a>
+            <span class="kt-subheader__breadcrumbs-separator"></span>
+            <span class="kt-subheader__breadcrumbs-link kt-subheader__breadcrumbs-link--active">@Cpanel.AddEditLaw</span>
+        </div>
+    </div>
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <!--begin::Portlet-->
+        <div class="kt-portlet">
+            <div class="kt-portlet__head">
+                <div class="kt-portlet__head-label">
+                    <h3 class="kt-portlet__head-title">
+                        @Cpanel.AddEditLaw
+                    </h3>
+                </div>
+            </div>
+
+
+            <!--begin::Form-->
+            <div class="kt-portlet__body">
+                @if (ViewBag.Success == true)
+                {
+                    @Html.Partial("~/Areas/Admin/Views/Shared/UcSuccess.cshtml")
+                }
+
+                <div class="row">
+                    <div class="col-lg-2"></div>
+                    <div class="col-lg-10">
+
+                        @using (Html.BeginForm("AddLaw", "Laws", FormMethod.Post, new { enctype = "multipart/form-data", @class = "kt-form kt-form--label-right" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            @Html.ValidationSummary(true)
+                            @Html.HiddenFor(model => model.LawId)
+
+                        <div class="kt-portlet__body">
+
+                            <div class="form-group row">
+                                <div class="col-lg-8">
+                                    <label>
+                                        @Cpanel.Title
+                                        :
+                                    </label>
+                                    @Html.TextBoxFor(model => model.Title, new {@class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.Title)
+                                </div>
+
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-lg-8">
+                                    <label>
+                                        @Cpanel.Details
+                                        :
+                                    </label>
+                                    @Html.TextAreaFor(model => model.Details, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.Details)
+                                </div>
+
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-lg-8">
+                                    <label>
+                                       @Cpanel.File
+                                        :
+                                    </label>
+                                    <input type="file" id="FileUrl" name="FileUrl" class="form-control"  />
+
+                                    @if (Model != null && !string.IsNullOrEmpty(Model.FileUrl))
+                                    {
+                                        <div class="imgContainer">
+                                            <a href="/Uploads/Laws/@Model.FileUrl" target="_blank"> @Cpanel.Download</a>
+                                        </div>
+                                    }
+                                    @Html.ValidationMessageFor(model => model.FileUrl)
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-lg-12">
+                                    <label>
+                                       @Cpanel.IsActive
+                                        :
+                                    </label>
+                                    <div class="kt-checkbox-inline">
+                                        <label class="kt-checkbox kt-checkbox--brand">
+                                            @Html.CheckBoxFor(model => model.IsActive) @Cpanel.IsActive
+                                            <span></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                            <div class="kt-portlet__foot">
+                                <div class="kt-form__actions">
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <input type="submit" value="@Amana.GlobalResources.Cpanel.Save" class="btn btn-warning" />
+                                            @Html.ActionLink(@Amana.GlobalResources.Cpanel.BackToList, "Index", null, new { @class = "btn btn-secondary" })
+
+                                        </div>
+                                        @*<div class="col-lg-6 kt-align-right">
+                                <button type="reset" class="btn btn-danger">Delete</button>
+                            </div>*@
+                                    </div>
+                                </div>
+                            </div>
+
+                        }
+
+                    </div>
+                 
+                </div>
+            </div>
+
+
+            <!--end::Form-->
+        </div>
+
+
+    </div>
+</div>
+
+
+

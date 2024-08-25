@@ -1,0 +1,75 @@
+﻿@model PagedList.IPagedList<Amana.Models.Entities.C_NodeUsers>
+@using PagedList.Mvc;
+
+@{
+    Layout = "_Layout.cshtml";
+    int langId = ViewBag.LangId;
+    var nodeId = ViewContext.RouteData.Values["id"];
+    var typeId = Request.QueryString["typeId"];
+}
+
+<h1>@ViewBag.Title</h1>
+<div class="sep100x100"></div>
+
+
+@if (ViewBag.IsRead)
+{
+    using (Html.BeginForm("Users", "C_Node", FormMethod.Get))
+    {
+        @Html.Hidden("typeId", typeId)
+        <p>@Html.TextBox("searchString", ViewBag.CurrentFilter as string, new { @class = "txtSearch" }) <input type="submit" value="@Amana.GlobalResources.Cpanel.Search" class="btnSearch" /></p>
+    }
+
+    if (Model.Count > 0)
+    {
+        <div class="table-responsive">
+            <table class="tblView">
+                <tr>
+                    <th>
+                        @Html.ActionLink(@Amana.GlobalResources.Cpanel.Name, "Users", new { sortOrder = ViewBag.TitleSortParam, currentFilter = ViewBag.CurrentFilter, typeId = typeId }, new { @class = "lnkSortCat" })
+                        <span><img src="~/Content/Admin/images/icoSort.png" /></span>
+                    </th>
+                    <th>
+                        @Html.ActionLink(@Amana.GlobalResources.Cpanel.PostDate, "Users", new { sortOrder = ViewBag.DateSortParam, currentFilter = ViewBag.CurrentFilter, typeId = typeId }, new { @class = "lnkSortCat" })
+                        <span><img src="~/Content/Admin/images/icoSort.png" /></span>
+                    </th>
+                    <th class="settings"><img src="~/Content/Admin/images/icoSettings.png" alt="" /></th>
+                </tr>
+
+                @{
+        int i = 0;
+        foreach (var item in Model)
+        {
+            <tr class="@(i % 2 == 0 ? "odd" : "even")">
+                <td>
+                    @Html.DisplayFor(modelItem => item.C_UserItems.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.C_Node.PostDate)
+                </td>
+                <td>
+                    @if (ViewBag.IsDelete)
+                    {
+                        <a href="@Url.Action("DeleteUser", new { id = item.NodeId, userId = item.UserId, typeId = typeId })" onclick="return confirm('@Amana.GlobalResources.Cpanel.ConfirmDelete');">@Amana.GlobalResources.Cpanel.Delete</a>
+                    }
+                </td>
+            </tr>
+                    i++;
+        }
+                }
+
+            </table>
+        </div>
+    }
+
+    if (Model.TotalItemCount > Model.PageSize)
+    {
+        <p style="text-align:center; margin:10px 0;">@Amana.GlobalResources.Cpanel.Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) @Amana.GlobalResources.Cpanel.Of @Model.PageCount</p>
+
+        @Html.PagedListPager(Model, page => Url.Action("Users", new {typeId = typeId, page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter, catId = "__catId__" }))
+    }
+}
+else
+{
+    @Html.Partial("UcReadPermission")
+}

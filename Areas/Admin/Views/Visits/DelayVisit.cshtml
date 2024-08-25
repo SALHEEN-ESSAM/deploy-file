@@ -1,0 +1,189 @@
+﻿@model Amana.ViewModels.VisitsAndSamples.DelayVisitViewModel
+@using Amana.GlobalResources;
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_Layout2.cshtml";
+    Amana.Models.Entities.Visits visitInfo = (Amana.Models.Entities.Visits)ViewBag.VisitInfo;
+    Amana.Models.Entities.Visits alternativeVisitInfo = (Amana.Models.Entities.Visits)ViewBag.AlternativeVisitInfo;
+    var user = (Amana.Models.Entities.C_UserItems)HttpContext.Current.Session["UserDetails"];
+
+}
+@section sectionSubHeader{
+    <div class="kt-subheader__main">
+        <h3 class="kt-subheader__title">
+            @Cpanel.Visits
+        </h3>
+        <span class="kt-subheader__separator kt-hidden"></span>
+        <div class="kt-subheader__breadcrumbs">
+            <a href="#" class="kt-subheader__breadcrumbs-home"><i class="flaticon2-shelter"></i></a>
+            @*<span class="kt-subheader__breadcrumbs-separator"></span>
+                <a href="" class="kt-subheader__breadcrumbs-link">
+                    @ctgry.SuperCategoryName
+                </a>*@
+            <span class="kt-subheader__breadcrumbs-separator"></span>
+            <span class="kt-subheader__breadcrumbs-link kt-subheader__breadcrumbs-link--active">@Cpanel.DelayVisit</span>
+        </div>
+    </div>
+}
+<div class="row">
+    <div class="col-lg-12">
+        <!--begin::Portlet-->
+        <div class="kt-portlet">
+            <div class="kt-portlet__head">
+                <div class="kt-portlet__head-label">
+                    <h3 class="kt-portlet__head-title">
+                        @Cpanel.DelayVisit
+                    </h3>
+                </div>
+            </div>
+
+            <!--begin::Form-->
+
+            @using (Html.BeginForm("DelayVisit", "Visits", FormMethod.Post, new { enctype = "multipart/form-data", @class = "kt-form kt-form--label-right", id = "frmSampleDetails" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true)
+                @Html.HiddenFor(model => model.VisitId)
+                @Html.HiddenFor(model => model.AlternativeVisitId)
+
+
+
+                <div class="kt-portlet__body">
+                    @if (ViewBag.Success == true)
+                    {
+                        @Html.Partial("~/Areas/Admin/Views/Shared/UcSuccess.cshtml")
+                    }
+                    <div class="kt-section kt-section--first">
+
+                        <div class="form-group row">
+                            <div class="col-md-2">
+                                <h5>
+                                    @Cpanel.Details
+                                </h5>
+                            </div>
+                            @if (visitInfo != null)
+                            {
+                                <div class="col-md-2">
+                                    <label>
+                                        @Cpanel.Date :
+                                    </label>
+                                    @visitInfo.VisitDate.ToString("dd/MM/yyyy")
+                                </div>
+                                <div class="col-md-3">
+                                    <label>
+                                        @Cpanel.FactoryName :
+                                    </label>
+                                    @visitInfo.Factories.Name
+                                </div>
+                                <div class="col-md-2">
+                                    <label>
+                                        @Cpanel.Location :
+                                    </label>
+                                    @visitInfo.Factories.IdxLocations.Name
+
+                                </div>
+
+                            }
+
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-2">
+                                <h5>
+                                    @Cpanel.DelayReason :
+                                </h5>
+
+                            </div>
+                            <div class="col-md-4">
+                                @Html.TextAreaFor(model => model.DelayNote, new { @class = "form-control" })
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-md-2">
+                                <h5>
+                                   @Cpanel.AlternativeVisit :
+                                </h5>
+                            </div>
+                            @if (alternativeVisitInfo != null)
+                            {
+                                <div class="col-md-2">
+                                    <label>
+                                        @Cpanel.Date :
+                                    </label>
+                                    @alternativeVisitInfo.VisitDate.ToString("dd/MM/yyyy")
+                                </div>
+                                <div class="col-md-3">
+                                    <label>
+                                        @Cpanel.FactoryName :
+                                    </label>
+                                    @alternativeVisitInfo.Factories.Name
+                                </div>
+                                <div class="col-md-2">
+                                    <label>
+                                        @Cpanel.Location :
+                                    </label>
+                                    @alternativeVisitInfo.Factories.IdxLocations.Name
+
+                                </div>
+
+                            }
+                            else
+                            {
+                                <div class="col-md-2">
+                                    <label>
+                                        @Cpanel.NoData
+                                    </label>
+
+                                </div>
+
+                            }
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+                <div class="kt-portlet__foot">
+                    <div class="kt-form__actions">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <input type="submit" value="@Amana.GlobalResources.Cpanel.Save" class="btn btn-warning" />
+
+                                @if (user.RoleId == null)
+                                {
+                                    @Html.ActionLink(@Amana.GlobalResources.Cpanel.BackToList, "Visits", new { }, new { @class = "btn btn-secondary" })
+                                }
+                                else
+                                {
+                                    @Html.ActionLink(@Amana.GlobalResources.Cpanel.Back, "TodayVisits", "Visits", new { }, new { @class = "btn btn-secondary" })
+
+                                }
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            }
+
+
+            <!--end::Form-->
+        </div>
+
+
+    </div>
+</div>
+
+
+
+<script>
+
+
+    $(document).ready(function () {
+        $("#liVisits").addClass("kt-menu__item--open");
+    });
+</script>
+
+
+

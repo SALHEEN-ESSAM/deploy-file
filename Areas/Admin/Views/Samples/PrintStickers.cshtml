@@ -1,0 +1,130 @@
+﻿@model Amana.Models.Entities.VisitsSample
+
+@{
+    Layout = null;
+
+    var user = (Amana.Models.Entities.C_UserItems)HttpContext.Current.Session["UserDetails"];
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <style>
+        .labelCard {
+            border: 1px solid #000;
+            padding: 10px;
+            width: 300px;
+            margin: 10px auto 0px auto;
+            text-align: center;
+        }
+        h3{
+            font-size:16px;
+            margin:0px;
+        }
+        p{
+            display:block;
+          margin:7px 0;
+        }
+    </style>
+</head>
+@*onload="window.print();"*@
+<body dir="rtl" onload="window.print();">
+
+    <div class="row">
+        <div class="col-lg-12">
+            <!--begin::Portlet-->
+            <div class="kt-portlet">
+             
+
+                <!--begin::Form-->
+
+
+
+                <div class="kt-portlet__body">
+                 
+
+                    <div class="kt-section">
+                        @*<h3 class="kt-section__title">
+                                حالة المصنع
+                                :
+                            </h3>*@
+
+
+                        <div class="row">
+                            <div class="col-md-4 labelCard" style="">
+                                <h3>مشروع ضبط جودة وتأكيد إنتاج مصانع الخرسانة الجاهزة</h3>
+                                <p> رقم العينة : @Model.SampleId</p>
+                                <p>  تاريخ العينة : @Model.SampleDate.ToString("dd / MM / yyyy")</p>
+                                <p>  عمر العينة : 7 يوم , رقم القالب : 1</p>
+                                <p>      تاريخ التكسير : @Model.LabBreakingDate7Day.Value.ToString("dd / MM / yyyy")</p>
+                            </div>
+                            <div class="col-md-4 labelCard">
+                                <h3>مشروع ضبط جودة وتأكيد إنتاج مصانع الخرسانة الجاهزة</h3>
+                                <p> رقم العينة : @Model.SampleId</p>
+                                <p>  تاريخ العينة : @Model.SampleDate.ToString("dd / MM / yyyy")</p>
+                                <p>  عمر العينة : 7 يوم , رقم القالب : 2</p>
+                                <p>      تاريخ التكسير : @Model.LabBreakingDate7Day.Value.ToString("dd / MM / yyyy")</p>
+                            </div>
+                            <div class="col-md-4 labelCard">
+                                <h3>مشروع ضبط جودة وتأكيد إنتاج مصانع الخرسانة الجاهزة</h3>
+                                <p> رقم العينة : @Model.SampleId</p>
+                                <p>  تاريخ العينة : @Model.SampleDate.ToString("dd / MM / yyyy")</p>
+                                <p>  عمر العينة : 7 يوم , رقم القالب : 3</p>
+                                <p>      تاريخ التكسير : @Model.LabBreakingDate7Day.Value.ToString("dd / MM / yyyy")</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4 labelCard">
+                                <h3>مشروع ضبط جودة وتأكيد إنتاج مصانع الخرسانة الجاهزة</h3>
+                                <p> رقم العينة : @Model.SampleId</p>
+                                <p>  تاريخ العينة : @Model.SampleDate.ToString("dd / MM / yyyy")</p>
+                                <p>  عمر العينة : 28 يوم , رقم القالب : 1</p>
+                                <p>      تاريخ التكسير : @Model.LabBreakingDate28Day.Value.ToString("dd / MM / yyyy")</p>
+                            </div>
+                            <div class="col-md-4 labelCard">
+                                <h3>مشروع ضبط جودة وتأكيد إنتاج مصانع الخرسانة الجاهزة</h3>
+                                <p> رقم العينة : @Model.SampleId</p>
+                                <p>  تاريخ العينة : @Model.SampleDate.ToString("dd / MM / yyyy")</p>
+                                <p>  عمر العينة : 28 يوم , رقم القالب : 2</p>
+                                <p>      تاريخ التكسير : @Model.LabBreakingDate28Day.Value.ToString("dd / MM / yyyy")</p>
+                            </div>
+                            <div class="col-md-4 labelCard">
+                                <h3>مشروع ضبط جودة وتأكيد إنتاج مصانع الخرسانة الجاهزة</h3>
+                                <p> رقم العينة : @Model.SampleId</p>
+                                <p>  تاريخ العينة : @Model.SampleDate.ToString("dd / MM / yyyy")</p>
+                                <p>  عمر العينة : 28 يوم , رقم القالب : 3</p>
+                                <p>      تاريخ التكسير : @Model.LabBreakingDate28Day.Value.ToString("dd / MM / yyyy")</p>
+                            </div>
+                        </div>
+                        @*<div class="printOnly">
+                            <div class="row">
+                                <div class="col-md-1"></div>
+                                <div class="col-md-5">اسم المراقب</div>
+                                <div class="col-md-1"></div>
+                                <div class="col-md-5">تاريخ الإستلام</div>
+                            </div>
+                            <div class="row" style="margin-top:15px;">
+                                <div class="col-md-2">التوقيع</div>
+                                <div class="col-md-4"></div>
+                                <div class="col-md-2"></div>
+                                <div class="col-md-4"></div>
+                            </div>
+                        </div>*@
+                    </div>
+                </div>
+       
+
+
+
+                <!--end::Form-->
+            </div>
+
+
+        </div>
+    </div>
+
+
+</body>
+</html>
+

@@ -1,0 +1,29 @@
+﻿@model Amana.Models.Entities.C_NodeTypeLoc
+
+@{
+    ViewBag.Title = @Amana.GlobalResources.Cpanel.Delete;
+    Layout = "_Layout.cshtml";
+}
+
+@if (ViewBag.Error == true)
+{
+    @Html.Partial("~/Areas/Admin/Views/Shared/UcDelete.cshtml")
+}
+else
+{
+    <h1>@Amana.GlobalResources.Cpanel.ConfirmDelete</h1>
+    <br />
+    <h2>@Model.Title</h2>
+}
+
+<div class="sep100x100"></div>
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+
+    <div class="form-actions no-color">
+        <input type="submit" value="@Amana.GlobalResources.Cpanel.Delete" class="lnkCreate lnkInline" /> |
+        @Html.ActionLink(@Amana.GlobalResources.Cpanel.BackToList, "Index", null, new { @class = "lnkBack" })
+    </div>
+}
+

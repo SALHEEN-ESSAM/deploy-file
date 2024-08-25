@@ -1,0 +1,28 @@
+﻿@model  Amana.ViewModels.MixDesigns.MdRequestConClsMaterialsViewModel
+@using HtmlHelpers.BeginCollectionItem;
+@using Amana.Models.Utilities;
+
+@{
+    Layout = null;
+
+}
+
+@using (Html.BeginCollectionItem("ListConClsMaterials"))
+{
+    @Html.HiddenFor(model => model.ID)
+    @Html.HiddenFor(model => model.MaterialId)
+    @Html.HiddenFor(model => model.MaterialName)
+    @Html.HiddenFor(model => model.ConcClsInfoItemId)
+
+    <tr>
+    <td>@Model.MaterialName</td>
+    <td>
+        @Html.EditorFor(model => model.CorrectedWeight, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.CorrectedWeight)
+    </td>
+    <td>
+        @Html.EditorFor(model => model.UncorrectedWeight, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.UncorrectedWeight)
+    </td></tr>
+
+}

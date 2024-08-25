@@ -1,0 +1,41 @@
+﻿@model  List<Amana.ViewModels.Reports.RptApprovalViewModel>
+    @using Amana.Models.Utilities;
+@using Amana.GlobalResources; 
+    @{
+       int reportTypeId = (int)ViewBag.ReportTypeId ;
+
+    }
+
+
+    <table class="table table-striped- table-bordered table-hover table-checkable" id="kt_table_1">
+        <tr><th colspan="2">@Cpanel.Approvals </th></tr>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.EmployeeName</td>
+                <td>
+
+                    @if (!item.IsApproved)
+                    {
+                        <span class="badge badge-danger">@Cpanel.NotApproved</span>
+                    }
+                    else
+                    {
+                        <span class="badge badge-success">@Cpanel.Approved</span>
+                    }
+                    @if (item.CanApprove && item.IsApproved==false)
+                    {
+                        <a href="@Url.Action("RptApproveReport",new {reportTypeId=reportTypeId, timePeriodId=item.TimePeriodId })" class="btn btn-warning btn-sm kt-ml-20">@Cpanel.ApproveReport</a>
+
+                    }
+                </td>
+            </tr>
+        }
+
+
+    </table>
+
+
+
+
+

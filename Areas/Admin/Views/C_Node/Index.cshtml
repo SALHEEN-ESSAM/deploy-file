@@ -1,0 +1,248 @@
+﻿@model PagedList.IPagedList<Amana.Models.Entities.C_NodeLoc>
+@using PagedList.Mvc;
+
+@{
+    Layout = "_Layout.cshtml";
+    int langId = ViewBag.LangId;
+    int typeId = int.Parse(ViewContext.RouteData.Values["id"].ToString());
+    var catId = Request.QueryString["catId"];
+    var pageNum = Request.QueryString["page"];
+    var parentId = Request.QueryString["parentId"];
+    Amana.Models.Entities.C_NodeLoc parentNode = ViewBag.ParentNode;
+    var distId = Request.QueryString["distId"];
+}
+@section sectionSubHeader{
+    <div class="kt-subheader__main">
+        <h3 class="kt-subheader__title">
+            @ViewBag.Title
+        </h3>
+        <span class="kt-subheader__separator kt-hidden"></span>
+        <div class="kt-subheader__breadcrumbs">
+            <a href="#" class="kt-subheader__breadcrumbs-home"><i class="flaticon2-shelter"></i></a>
+            @if (parentNode != null)
+            {
+                <span class="kt-subheader__breadcrumbs-separator"></span>
+                <a href="@Url.Action("Index", new { id = typeId })" class="kt-subheader__breadcrumbs-link">
+                    @parentNode.Title
+                </a>
+            }
+            else
+            {
+                <span class="kt-subheader__breadcrumbs-separator"></span>
+                @ViewBag.Title
+            }
+
+
+        </div>
+    </div>
+}
+@if (distId != null)
+{
+    @Html.Action("DistMenu", "S_Distributors", new { distId = distId })
+
+}
+
+<div class="kt-portlet kt-portlet--mobile">
+    <div class="kt-portlet__head kt-portlet__head--lg">
+        <div class="kt-portlet__head-label">
+            <span class="kt-portlet__head-icon">
+                <i class="kt-font-brand flaticon2-line-chart"></i>
+            </span>
+
+            <h3 class="kt-portlet__head-title">
+                @ViewBag.Title
+
+            </h3>
+
+        </div>
+        <div class="kt-portlet__head-toolbar">
+            <div class="kt-portlet__head-wrapper">
+                <div class="kt-portlet__head-actions">
+                    @if (ViewBag.IsInsert)
+                    {
+                        if ((typeId != 1020) || ViewBag.IsDeveloper)
+                        {
+                            @Html.ActionLink(@Amana.GlobalResources.Cpanel.Create + " »", "Create", new { typeId = typeId, page = pageNum, catId = catId, parentId = parentId, distId = distId }, new { @class = "btn btn-brand btn-elevate btn-icon-sm" })
+                        }
+                    }
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="kt-portlet__body">
+        @if (ViewBag.Success == true)
+        {
+            @Html.Partial("~/Areas/Admin/Views/Shared/UcSuccess.cshtml")
+        }
+
+
+
+
+        @if (ViewBag.IsRead)
+        {
+            <!--begin: Search Form -->
+            using (Html.BeginForm("Index", "C_Node", new { distId = distId }, FormMethod.Get, new { @class = "kt-form kt-form--label-right kt-margin-t-20 kt-margin-b-10" }))
+            {
+                <div class="row align-items-center">
+                    <div class="col-xl-8 order-2 order-xl-1">
+                        <div class="row align-items-center">
+                            @*<div class="col-md-4 kt-margin-b-20-tablet-and-mobile">
+                                    <div class="kt-form__control">
+                                        @Html.TextBox("searchString", ViewBag.CurrentFilter as string, new { @class = "txtSearch form-control", placeholder = "Search..." })
+                                    </div>
+                                </div>*@
+                            @if (ViewData["CatId"] != null)
+                            {
+
+                                <div class="col-md-4 kt-margin-b-20-tablet-and-mobile">
+                                    <label>@Amana.GlobalResources.Cpanel.Categories</label>
+                                    <div>
+                                        @Html.DropDownList("catId", ViewData["CatId"] as SelectList, @Amana.GlobalResources.Cpanel.ChooseOption, new { @onchange = "this.form.submit();", @class = "form-control" })
+                                    </div>
+                                </div>
+                                <div class="clear"></div>
+
+                            }
+                            @*<div class="col-md-4">
+                                    <input type="submit" value="@Amana.GlobalResources.Cpanel.Search" class="btn btn-success btn-sm mr-2" />
+
+                                </div>*@
+
+                        </div>
+                    </div>
+
+                </div>
+
+            }
+
+
+
+
+
+            if (Model.Count > 0)
+            {
+                using (Html.BeginForm("UpdateNum", "C_Node", new { typeId = typeId, page = pageNum, catId = catId, parentId = parentId, distId = distId }))
+                {
+
+                    <table class="table table-striped- table-bordered table-hover table-checkable" id="kt_table_1">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>
+                                    @Amana.GlobalResources.Cpanel.Title
+                                </th>
+                                @*<th>
+                                        @Amana.GlobalResources.Cpanel.Order
+                                    </th>
+                                <th>
+                                    @Amana.GlobalResources.Cpanel.PostDate
+                                </th>
+                                <th>
+                                    @Amana.GlobalResources.Cpanel.IsActive
+                                </th>*@
+                                <th class="settings">
+
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                int i = 0;
+                                foreach (var item in Model)
+                                {
+                                    <tr class="@(i % 2 == 0 ? "odd" : "even")">
+                                        <td>
+                                            @if (pageNum != null)
+                                            {
+                                                @((i + 1) + (20 * (int.Parse(pageNum) - 1)))
+                                            }
+                                            else
+                                            {
+                                                @(i + 1)
+                                            }
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Title)
+                                            <span class="notTranslated">@(!item.IsTranslated ? Amana.GlobalResources.Cpanel.NotTranslated : "")</span>
+                                        </td>
+                                        @*<td>
+                                                <input type="hidden" name="entity[@(i)].NodeId" value="@Model.ElementAt(i).NodeId" />
+                                                <input type="text" id="entity[@(i)].C_Node.NumOrder" name="entity[@(i)].C_Node.NumOrder" value="@Model.ElementAt(i).C_Node.NumOrder" class="form-control" data-val="true" data-val-required="@Amana.GlobalResources.Cpanel.Required" data-val-regex-pattern="^[\-\+]?\d+$" data-val-number="@Amana.GlobalResources.Validation.Integer" />
+                                                <div>
+                                                    @Html.ValidationMessage("entity[" + i + "].C_Node.NumOrder")
+                                                </div>
+                                            </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.C_Node.PostDate)
+                                        </td>
+                                        <td>
+                                            @Html.ActionLink(" ", "Activate", new { id = item.NodeId, typeId = typeId, page = pageNum, catId = catId, parentId = parentId, distId = distId }, new { @class = item.C_Node.IsActive ? "activated" : "notActivated" })
+                                        </td>*@
+                                        <td>
+                                            @if (ViewBag.IsUpdate)
+                                            {
+                                                @Html.ActionLink(@Amana.GlobalResources.Cpanel.Edit, "Create", new { id = item.NodeId, typeId = typeId, page = pageNum, catId = catId, parentId = parentId, distId = distId }, new { @class = "btn btn-success btn-sm mr-2" })
+                                            }
+                                            @if (ViewBag.IsDelete)
+                                            {
+                                                if ( ViewBag.IsDeveloper)
+                                                {
+                                                    @Html.ActionLink(@Amana.GlobalResources.Cpanel.Delete, "Delete", new { id = item.NodeId, typeId = typeId, page = pageNum, catId = catId, parentId = parentId, distId = distId }, new { @class = "btn btn-danger btn-sm mr-2" })
+                                                }
+                                            }
+                                        </td>
+                                    </tr>
+                                    i++;
+                                }
+                            }
+                        </tbody>
+                    </table>
+
+
+                    if (ViewBag.IsUpdate)
+                    {
+
+    @*<div class="form-group row">
+        <div class="col-md-5"></div>
+            <div class="col-md-2">
+                <input type="submit" value="Save Order" class="btn btn-warning" />
+            </div>
+        </div>*@
+        }
+        }
+        }
+
+        if (Model.TotalItemCount > Model.PageSize)
+        {
+        <p style="text-align:center; margin:10px 0;">@Amana.GlobalResources.Cpanel.Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) @Amana.GlobalResources.Cpanel.Of @Model.PageCount</p>
+
+        @Html.PagedListPager(Model, page => Url.Action("Index", new { page, catId = catId, parentId = parentId, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter, distId = distId }))
+        }
+        }
+        else
+        {
+        @Html.Partial("UcReadPermission")
+        }
+
+
+    </div>
+</div>
+
+
+
+@*<script type="text/javascript">
+        $(function () {
+            $(".lnkSortCat, ul.pagination > li > a").click(function () {
+                var url = $(this).attr('href')
+                url = url.replace('__catId__', $('#catId').val())
+                $(this).attr('href', url)
+            });
+        });
+    </script>*@
+
+
+@section sectionScripts{
+
+}

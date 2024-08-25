@@ -1,0 +1,21 @@
+﻿@model  Amana.ViewModels.Classifications.ClassificationPropertyViewModel
+@using HtmlHelpers.BeginCollectionItem;
+@using Amana.Models.Utilities;
+
+@{
+    Layout = null;
+    string name = HelperMethods.GetCategoryListName(Model.CategoryId);
+}
+
+@using (Html.BeginCollectionItem(name))
+{
+    @Html.HiddenFor(model => model.PropertyId)
+    @Html.HiddenFor(model => model.CategoryId)
+    <label class="kt-checkbox kt-checkbox--bold kt-checkbox--brand">
+        @Html.CheckBoxFor(model => model.IsSelected) @Html.DisplayFor(model => model.PropertyText)
+        <span></span>
+    </label>
+
+
+
+}

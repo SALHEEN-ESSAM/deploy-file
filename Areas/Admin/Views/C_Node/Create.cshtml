@@ -1,0 +1,396 @@
+﻿@model Amana.ViewModels.C_NodeViewModel
+@using Amana.Models.Utilities;
+
+@{
+    Layout = "_Layout.cshtml";
+    int typeId = int.Parse(Request.QueryString["typeId"]);
+    var nodeId = ViewContext.RouteData.Values["id"];
+    var catId = Request.QueryString["catId"];
+    var pageNum = Request.QueryString["page"];
+    var parentId = Request.QueryString["parentId"];
+    Amana.Models.Entities.C_NodeType nodeType = (Amana.Models.Entities.C_NodeType)ViewBag.NodeType;
+}
+@section sectionSubHeader{
+    <div class="kt-subheader__main">
+        <h3 class="kt-subheader__title">
+            @ViewBag.Title
+        </h3>
+        <span class="kt-subheader__separator kt-hidden"></span>
+        <div class="kt-subheader__breadcrumbs">
+            <a href="#" class="kt-subheader__breadcrumbs-home"><i class="flaticon2-shelter"></i></a>
+
+            <span class="kt-subheader__breadcrumbs-separator"></span>
+            <a href="@Url.Action("Index", new { id = typeId })" class="kt-subheader__breadcrumbs-link">
+                @ViewBag.Title
+            </a>
+
+            <span class="kt-subheader__breadcrumbs-separator"></span>
+            @Amana.GlobalResources.Cpanel.Create
+
+
+
+        </div>
+    </div>
+}
+
+
+
+<div class="row">
+    <div class="col-lg-12">
+        <!--begin::Portlet-->
+        <div class="kt-portlet">
+            <div class="kt-portlet__head">
+
+                <div class="kt-portlet__head-label">
+                    <span class="kt-portlet__head-icon">
+                        <i class="kt-font-brand flaticon2-line-chart"></i>
+                    </span>
+                    <h3 class="kt-portlet__head-title">
+                        @Amana.GlobalResources.Cpanel.Create
+                    </h3>
+                </div>
+            </div>
+
+            <!--begin::Form-->
+
+
+            @using (Html.BeginForm("Create", "C_Node", new { typeId = typeId, page = pageNum, catId = catId, parentId = parentId }, FormMethod.Post, new { enctype = "multipart/form-data", @class = "kt-form kt-form--label-right" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.HiddenFor(model => model.NodeId)
+
+                <div class="kt-portlet__body">
+                    @Html.ValidationSummary(true)
+
+                    @if (ViewBag.Success == true)
+                    {
+                        @Html.Partial("~/Areas/Admin/Views/Shared/UcSuccess.cshtml")
+                    }
+                    @if (ViewBag.CustomError != null)
+                    {
+                        @Html.Partial("~/Areas/Admin/Views/Shared/UcCustomError.cshtml", ViewBag.CustomError as string)
+                    }
+
+                    @if (ViewData["Categories"] != null)
+                    {
+                        <div class="form-group row">
+                            @Html.LabelFor(model => model.CatId, @Amana.GlobalResources.Cpanel.Categories, new { @class = "col-md-2 col-form-label" })
+                            <div class="col-md-8">
+                                @Html.DropDownListFor(model => model.CatId, ViewData["Categories"] as SelectList, @Amana.GlobalResources.Cpanel.ChooseOption, new Dictionary<string, object> { { "data-val", "true" }, { "data-val-required", @Amana.GlobalResources.Cpanel.Required } })
+                                @Html.ValidationMessageFor(model => model.CatId)
+                            </div>
+                        </div>
+                    }
+
+                    <div class="form-group row">
+                        @Html.LabelFor(model => model.Title, @Amana.GlobalResources.Cpanel.Title, new { @class = "col-md-2 col-form-label" })
+                        <div class="col-md-8">
+                            @Html.TextBoxFor(model => model.Title, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Title)
+                        </div>
+                    </div>
+
+                    <div class="form-group row title2Container">
+                        @Html.LabelFor(model => model.Title2, @Amana.GlobalResources.Cpanel.Title, new { @class = "col-md-2 col-form-label" })
+                        <div class="col-md-8">
+                            @Html.TextBoxFor(model => model.Title2, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Title2)
+                        </div>
+                    </div>
+                    <div class="form-group row brief2Container">
+                        @Html.LabelFor(model => model.Brief2, @Amana.GlobalResources.Cpanel.Brief, new { @class = "col-md-2 col-form-label" })
+                        <div class="col-md-8">
+                            @Html.TextAreaFor(model => model.Brief2, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Brief2)
+                        </div>
+                    </div>
+                    <div class="form-group row lnkLocContainer">
+                        @Html.LabelFor(model => model.LinkLocUrl, @Amana.GlobalResources.Cpanel.LinkLocUrl, new { @class = "col-md-2 col-form-label" })
+                        <div class="col-md-8">
+                            @Html.TextBoxFor(model => model.LinkLocUrl, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.LinkLocUrl)
+                        </div>
+                    </div>
+
+                    <div class="form-group row title3Container">
+                        @Html.LabelFor(model => model.Title3, @Amana.GlobalResources.Cpanel.Title + " 3", new { @class = "col-md-2 col-form-label" })
+                        <div class="col-md-8">
+                            @Html.TextBoxFor(model => model.Title3, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Title3)
+                        </div>
+                    </div>
+
+                    <div class="form-group row lnkContainer">
+                        @Html.LabelFor(model => model.LinkUrl, @Amana.GlobalResources.Cpanel.SiteUrl, new { @class = "col-md-2 col-form-label" })
+                        <div class="col-md-8">
+                            @Html.TextBoxFor(model => model.LinkUrl, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.LinkUrl)
+                        </div>
+                    </div>
+
+
+                    <div class="form-group row briefContainer">
+                        @Html.LabelFor(model => model.Brief, @Amana.GlobalResources.Cpanel.Brief, new { @class = "col-md-2 col-form-label" })
+                        <div class="col-md-8">
+                            @Html.TextAreaFor(model => model.Brief, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Brief)
+                        </div>
+                    </div>
+                    <div class="form-group row detailsContainer">
+                        @Html.LabelFor(model => model.Details, @Amana.GlobalResources.Cpanel.Details, new { @class = "col-md-2 col-form-label" })
+                        <div class="col-md-8">
+                            @Html.TextAreaFor(model => model.Details, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Details)
+                        </div>
+                    </div>
+                    <div class="form-group row dateContainer">
+                        @Html.LabelFor(model => model.DateCustom, @Amana.GlobalResources.Cpanel.Date, new { @class = "col-md-2 col-form-label" })
+                        <div class="col-md-8">
+                            @Html.EditorFor(model => model.DateCustom, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.DateCustom)
+                        </div>
+                    </div>
+                    <div class="form-group row details2Container">
+                        @Html.LabelFor(model => model.Details2, @Amana.GlobalResources.Cpanel.Details, new { @class = "col-md-2 col-form-label" })
+                        <div class="col-md-8">
+                            @Html.TextAreaFor(model => model.Details2, new { @class = "richText" })
+                            @Html.ValidationMessageFor(model => model.Details2)
+                        </div>
+                    </div>
+
+                    @*@if (nodeType.IsMaps)
+                        {
+                            <div class="form-group row">
+                                <label>@Amana.GlobalResources.Cpanel.GoogleMap</label>
+                                <div class="col-md-12">
+                                    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAJcqYo5FugEvQX9bAMA8PH8L9mlT5Qhiw&sensor=false"></script>
+                                    <script type="text/javascript">
+                                        $(function () {
+                                            initialize();
+                                        });
+                                        var marker;
+                                        var markersArray = [];
+                                        function initialize() {
+                                            var longitude = parseFloat(document.getElementById("txtLongitude").value);
+                                            var latitude = parseFloat(document.getElementById("txtLatitude").value);
+                                            var myLatlng;
+                                            if (latitude)
+                                                myLatlng = new google.maps.LatLng(latitude, longitude);
+                                            else
+                                                myLatlng = new google.maps.LatLng(22.43134015636061, 46.845703125);
+                                            var mapOptions;
+                                            var url = window.location.href;
+                                            mapOptions = {
+                                                center: myLatlng,
+                                                zoom: 4,
+                                                mapTypeId: google.maps.MapTypeId.ROADMAP
+                                            };
+                                            var map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
+
+                                            marker = new google.maps.Marker({
+                                                position: myLatlng,
+                                                map: map
+                                            });
+                                            markersArray.push(marker);
+
+                                            google.maps.event.addListener(map, 'click', function (event) {
+                                                //alert(event.latLng);
+                                                document.getElementById("txtLongitude").value = event.latLng.lng();
+                                                document.getElementById("txtLatitude").value = event.latLng.lat();
+                                                if (markersArray) {
+                                                    for (i in markersArray) {
+                                                        markersArray[i].setMap(null);
+                                                    }
+                                                }
+                                                marker = new google.maps.Marker({
+                                                    position: event.latLng,
+                                                    map: map
+                                                });
+                                                markersArray.push(marker);
+                                            });
+                                        }
+                                    </script>
+                                    <div id="map_canvas" style="width: 100%; height: 300px;"></div>
+                                </div>
+                                <br class="clear" />
+                                <div class="col-md-3">
+                                    @Html.TextBoxFor(model => model.Longitude, new { @id = "txtLongitude", @placeholder = "Click on map for Longitude" })
+                                    @Html.ValidationMessageFor(model => model.Longitude)
+                                </div>
+                                <div class="col-md-3">
+                                    @Html.TextBoxFor(model => model.Latitude, new { @id = "txtLatitude", @placeholder = "Click on map for Latitude" })
+                                    @Html.ValidationMessageFor(model => model.Latitude)
+                                </div>
+                                <div class="clear"></div>
+                            </div>
+                        }*@
+
+                    <div class="form-group row imageContainer">
+                        @Html.LabelFor(model => model.ImageUrl, @Amana.GlobalResources.Cpanel.MainImage, new { @class = "col-md-2 col-form-label" })
+                        <div class="col-md-8">
+                            <input type="file" id="ImageUrl" name="ImageUrl" class="text-box single-line" accept="image/*" />
+                            @Html.ValidationMessageFor(model => model.ImageUrl)
+                            @if (Model != null && !string.IsNullOrEmpty(Model.ImageUrl))
+                            {
+                                <div class="clear"></div>
+                                <div class="imgContainer">
+                                    <img src="/Uploads/Node/@Model.ImageUrl" alt="" height="75" class="img_1" />
+                                    <a href="@Url.Action("DeleteImage", new { id = Model.NodeId })" class="badge badge-pill badge-sm badge-danger badge-up rounded-circle">X</a>
+                                </div>
+                            }
+                        </div>
+
+                    </div>
+                    <div class="form-group row imageLocContainer">
+                        @Html.LabelFor(model => model.ImageLocUrl, @Amana.GlobalResources.Cpanel.TranslatedImage, new { @class = "col-md-2 col-form-label" })
+                        <div class="col-md-8">
+                            <input type="file" id="ImageLocUrl" name="ImageLocUrl" class="text-box single-line" accept="image/*" />
+                            @Html.ValidationMessageFor(model => model.ImageLocUrl)   @if (Model != null && !string.IsNullOrEmpty(Model.ImageLocUrl))
+                            {
+                                <div class="imgContainer">
+                                    <img src="/Uploads/Node/@Model.ImageLocUrl" alt="" height="75" class="img_1" />
+                                    <a href="@Url.Action("DeleteImageLoc", new { id = Model.NodeId })" class="lnkDeleteImg"></a>
+                                </div>
+                            }
+                        </div>
+
+                    </div>
+
+                    <div class="form-group row isActiveContainer">
+                        @Html.LabelFor(model => model.IsActive, @Amana.GlobalResources.Cpanel.IsActive + " ?", new { @class = "col-md-2 col-form-label" })
+                        <div class="col-md-8 col-form-label">
+                            @Html.CheckBoxFor(model => model.IsActive, new { @checked = true })
+                        </div>
+                    </div>
+                    <div class="form-group row isHomeContainer">
+                        @Html.LabelFor(model => model.IsHome, @Amana.GlobalResources.Cpanel.IsHome + " ?", new { @class = "col-md-2 col-form-label" })
+                        <div class="col-md-8 col-form-label"> @Html.CheckBoxFor(model => model.IsHome, new { @checked = true })</div>
+                    </div>
+                    <div class="form-group row seoChkContainer">
+                        @Html.Label(Amana.GlobalResources.Cpanel.SEO, new { @class = "col-md-2 col-form-label" })
+                        <div class="col-md-8 col-form-label">    @Html.CheckBox("chkSeo", new { onchange = "javascript:ShowHideSeoContainer($('#chkSeo').is(':checked'));" })</div>
+
+                    </div>
+                    <div class="seoContainer">
+                        <div class="form-group row">
+                            @Html.LabelFor(model => model.PermaLink, "SEO Url", new { @class = "col-md-2 col-form-label" })
+                            <div class="col-md-8">
+                                @Html.EditorFor(model => model.PermaLink)
+                                @Html.ValidationMessageFor(model => model.PermaLink)
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            @Html.LabelFor(model => model.MetaTitle, @Amana.GlobalResources.Cpanel.MetaTitle, new { @class = "col-md-2 col-form-label" })
+                            <div class="col-md-8">
+                                @Html.EditorFor(model => model.MetaTitle)
+                                @Html.ValidationMessageFor(model => model.MetaTitle)
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            @Html.LabelFor(model => model.MetaDescription, @Amana.GlobalResources.Cpanel.MetaDescription, new { @class = "col-md-2 col-form-label" })
+                            <div class="col-md-8">
+                                @Html.EditorFor(model => model.MetaDescription)
+                                @Html.ValidationMessageFor(model => model.MetaDescription)
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            @Html.LabelFor(model => model.MetaKeywords, @Amana.GlobalResources.Cpanel.MetaKeywords, new { @class = "col-md-2 col-form-label" })
+                            <div class="col-md-8">
+                                @Html.EditorFor(model => model.MetaKeywords)
+                                @Html.ValidationMessageFor(model => model.MetaKeywords)
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            @Html.LabelFor(model => model.MetaAlt, "ALT Tag", new { @class = "col-md-2 col-form-label" })
+                            <div class="col-md-8">
+                                @Html.EditorFor(model => model.MetaAlt)
+                                @Html.ValidationMessageFor(model => model.MetaAlt)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="kt-portlet__foot">
+                        <div class="kt-form__actions">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <input type="submit" value="@Amana.GlobalResources.Cpanel.Save" name="command" class="btn btn-primary" />
+                                    @*<input type="submit" value="@Amana.GlobalResources.Cpanel.SaveNew" name="command" class="btn btn-warning" />*@
+
+                                    @Html.ActionLink(@Amana.GlobalResources.Cpanel.BackToList, "Index", new { id = typeId, page = pageNum, catId = catId, parentId = parentId }, new { @class = "btn btn-secondary" })
+
+
+                                </div>
+                                @*<div class="col-lg-6 kt-align-right">
+                                        <button type="reset" class="btn btn-danger">Delete</button>
+                                    </div>*@
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            }
+
+            <!--end::Form-->
+        </div>
+
+
+    </div>
+</div>
+
+
+
+<style type="text/css">
+    .title2Container, .brief2Container, .details2Container, .videoContainer, .title3Container, .lnkContainer, .dateContainer, .isHomeContainer, .imageLocContainer, .seoContainer, .headerImageContainer, .lnkLocContainer, .seoChkContainer, .fileContainer, .emailContainer, .phoneContainer {
+        display: none;
+    }
+</style>
+
+@if (typeId == 1111)
+{
+    <style type="text/css">
+        .lnkContainer {
+            display: flex;
+        }
+
+        .briefContainer, .detailsContainer, .imageContainer {
+            display: none;
+        }
+    </style>
+    <script type="text/javascript">
+        $("label[for='ImageLocUrl']").text("Example");
+        $("#LinkUrl").attr("data-val", "true").attr("data-val-required", "@(Amana.GlobalResources.Validation.Required)");
+    </script>
+}
+
+
+
+@if (typeId == 17)
+{
+    <style type="text/css">
+        .briefContainer, .imageContainer, .isActiveContainer {
+            display: none;
+        }
+        #Details{
+            height:250px;
+        }
+    </style>
+    <script type="text/javascript">
+        $("label[for='Brief']").text("النص");
+    </script>
+
+}
+
+
+<script type="text/javascript">
+    $(function () {
+        ShowHideSeoContainer($("#chkSeo").is(':checked'));
+    })
+
+    function ShowHideSeoContainer(value) {
+        if (value) {
+            $(".seoContainer").css("display", "block")
+        } else {
+            $(".seoContainer").css("display", "none")
+        }
+    }
+</script>

@@ -1,0 +1,260 @@
+﻿@model Amana.ViewModels.Classifications.Cls_MixingStationsViewModel
+@using Amana.GlobalResources;
+@{
+    Layout = null;
+}
+<div class="modal-header">
+    <h1 class="modal-title">اضافة</h1>
+</div>
+@using (Html.BeginForm("AddMixingStations", "FactoryClassification", FormMethod.Post, new { enctype = "multipart/form-data", @class = "kt-form kt-form--label-right" }))
+{
+    <div class="modal-body">
+
+        @if (ViewBag.Success == true)
+        {
+            @Html.Partial("~/Areas/Admin/Views/Shared/UcSuccess.cshtml")
+        }
+        @Html.HiddenFor(model => model.StationId)
+        @Html.HiddenFor(model => model.ClassificationId)
+
+        <div class="form-group row">
+
+            <div class="col-lg-6">
+                @Html.LabelFor(model => model.MixerType, Cpanel.MixerType)
+                <div class="kt-radio-inline">
+                    <label class="kt-radio kt-radio--brand">
+                        @Html.RadioButtonFor(model => model.MixerType, 1)@Cpanel.CentralMixer
+                        <span></span>
+                    </label>
+                    <label class="kt-radio kt-radio--brand">
+                        @Html.RadioButtonFor(model => model.MixerType, 2) @Cpanel.MixingInTruck
+                        <span></span>
+                    </label>
+
+                </div>
+
+                @Html.ValidationMessageFor(model => model.MixerType)
+            </div>
+            <div class="col-lg-6">
+                @Html.LabelFor(model => model.StationNumber, Cpanel.MixStationNo)
+
+                @Html.EditorFor(model => model.StationNumber, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.StationNumber, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group row mixerTypeSelector">
+            <div class="col-lg-6">
+                @Html.LabelFor(model => model.MixerCapacity, Cpanel.MixerCapacity)
+
+                @Html.EditorFor(model => model.MixerCapacity, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.MixerCapacity, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-lg-6">
+                @Html.LabelFor(model => model.MixerPeriod,Cpanel.MixerPeriod)
+
+                @Html.EditorFor(model => model.MixerPeriod, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.MixerPeriod, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-lg-6">
+                @Html.LabelFor(model => model.WeightControlSystem,Cpanel.WeightControlSystem)
+
+                <div class="kt-radio-inline">
+                    <label class="kt-radio kt-radio--brand">
+                        @Html.RadioButtonFor(model => model.WeightControlSystem, 1) @Cpanel.Manual
+                        <span></span>
+                    </label>
+                    <label class="kt-radio kt-radio--brand">
+                        @Html.RadioButtonFor(model => model.WeightControlSystem, 2) @Cpanel.Automatic
+                        <span></span>
+                    </label>
+                    <label class="kt-radio kt-radio--brand">
+                        @Html.RadioButtonFor(model => model.WeightControlSystem, 3) @Cpanel.PartialAutomatic
+                        <span></span>
+                    </label>
+                </div>
+
+                @Html.ValidationMessageFor(model => model.WeightControlSystem, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-lg-6">
+                @Html.LabelFor(model => model.SizeControlSystem, Cpanel.SizeControlSystem)
+
+                <div class="kt-radio-inline">
+                    <label class="kt-radio kt-radio--brand">
+                        @Html.RadioButtonFor(model => model.SizeControlSystem, 1) @Cpanel.Manual
+                        <span></span>
+                    </label>
+                    <label class="kt-radio kt-radio--brand">
+                        @Html.RadioButtonFor(model => model.SizeControlSystem, 2) @Cpanel.Automatic
+                        <span></span>
+                    </label>
+
+                </div>
+                @Html.ValidationMessageFor(model => model.SizeControlSystem, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-lg-6">
+                @Html.LabelFor(model => model.IsQuantityRecordExist, Cpanel.RecordQuantitiesEquipment)
+
+                <div class="kt-checkbox-inline">
+                    <label class="kt-checkbox kt-checkbox--brand">
+                        @Html.CheckBoxFor(model => model.IsQuantityRecordExist) @Cpanel.Found
+                        <span></span>
+                    </label>
+
+                </div>
+
+                @Html.ValidationMessageFor(model => model.IsQuantityRecordExist, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-lg-6">
+                @Html.LabelFor(model => model.CanGetRecordAnyTime, Cpanel.CanGetRecordsAnytime)
+                <div class="kt-checkbox-inline">
+                    <label class="kt-checkbox kt-checkbox--brand">
+                        @Html.CheckBoxFor(model => model.CanGetRecordAnyTime) @Cpanel.Yes
+                        <span></span>
+                    </label>
+
+                </div>
+                @Html.ValidationMessageFor(model => model.CanGetRecordAnyTime, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-lg-6">
+                @Html.LabelFor(model => model.ScalesIndicator, Cpanel.ScalesIndicator)
+
+                <div class="kt-radio-inline">
+                    <label class="kt-radio kt-radio--brand">
+                        @Html.RadioButtonFor(model => model.ScalesIndicator, 1) @Cpanel.Normal
+                        <span></span>
+                    </label>
+                    <label class="kt-radio kt-radio--brand">
+                        @Html.RadioButtonFor(model => model.ScalesIndicator, 2) @Cpanel.Digital
+                        <span></span>
+                    </label>
+                    <label class="kt-radio kt-radio--brand">
+                        @Html.RadioButtonFor(model => model.ScalesIndicator, 3) @Cpanel.Mixed
+                        <span></span>
+                    </label>
+                </div>
+
+                @Html.ValidationMessageFor(model => model.ScalesIndicator, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-lg-6">
+                @Html.LabelFor(model => model.IsIndicatorsClosed, Cpanel.IndicatorsClosed)
+
+                <div class="kt-checkbox-inline">
+                    <label class="kt-checkbox kt-checkbox--brand">
+                        @Html.CheckBoxFor(model => model.IsIndicatorsClosed) @Cpanel.Yes
+                        <span></span>
+                    </label>
+
+                </div>
+                @Html.ValidationMessageFor(model => model.IsIndicatorsClosed, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-lg-6">
+                @Html.LabelFor(model => model.IsEasyRead, Cpanel.IsEasyRead)
+
+                <div class="kt-checkbox-inline">
+                    <label class="kt-checkbox kt-checkbox--brand">
+                        @Html.CheckBoxFor(model => model.IsEasyRead) @Cpanel.Yes
+                        <span></span>
+                    </label>
+
+                </div>
+
+                @Html.ValidationMessageFor(model => model.IsEasyRead, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-lg-6">
+                @Html.LabelFor(model => model.CanReadDevices, Cpanel.CanReadDevices)
+
+                <div class="kt-checkbox-inline">
+                    <label class="kt-checkbox kt-checkbox--brand">
+                        @Html.CheckBoxFor(model => model.CanReadDevices) @Cpanel.Yes
+                        <span></span>
+                    </label>
+
+                </div>
+                @Html.ValidationMessageFor(model => model.CanReadDevices, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-lg-6">
+                @Html.LabelFor(model => model.IsEveryScaleTwo, Cpanel.IsEveryScaleTwo)
+
+                <div class="kt-checkbox-inline">
+                    <label class="kt-checkbox kt-checkbox--brand">
+                        @Html.CheckBoxFor(model => model.IsEveryScaleTwo) @Cpanel.Yes
+                        <span></span>
+                    </label>
+
+                </div>
+
+                @Html.ValidationMessageFor(model => model.IsEveryScaleTwo, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-lg-6">
+                @Html.LabelFor(model => model.IsStandardWeights, Cpanel.IsStandardWeights)
+
+                <div class="kt-checkbox-inline">
+                    <label class="kt-checkbox kt-checkbox--brand">
+                        @Html.CheckBoxFor(model => model.IsStandardWeights) @Cpanel.Yes
+                        <span></span>
+                    </label>
+
+                </div>
+                @Html.ValidationMessageFor(model => model.IsStandardWeights, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+
+            </div>
+            @*<div class="col-lg-6 kt-align-right">
+                    <button type="reset" class="btn btn-danger">Delete</button>
+                </div>*@
+        </div>
+
+    </div>
+
+    <div class="modal-footer">
+        <div>
+            <input type="submit" value="@Amana.GlobalResources.Cpanel.Save" class="btn btn-warning" />
+
+            <input type="button" value="@Cpanel.Close" data-dismiss="modal" class="btn btn-danger" />
+        </div>
+    </div>
+
+    <script type="text/javascript">
+    $(document).ready(function () {
+
+     
+        var usId = $('input[name="MixerType"]:checked').val();
+        if (usId == "1") {
+            $(".mixerTypeSelector").show();
+        }
+        else {
+            $(".mixerTypeSelector").hide();
+        }
+      
+        $("input[name='MixerType']").click(function () {
+
+            if ($(this).val() == "1") {
+                $(".mixerTypeSelector").show();
+            }
+            else {
+                $(".mixerTypeSelector").hide();
+            }
+        });
+
+    });
+
+  
+
+   
+    </script>
+
+}

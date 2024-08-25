@@ -1,0 +1,148 @@
+﻿@model Amana.Models.Entities.MD_Requests
+@using Amana.Models.Helpers;
+@using Amana.Models.Enums;
+@using Amana.Models;
+
+@{
+    Layout = null;
+    var currentUser = (Amana.Models.Entities.C_UserItems)HttpContext.Current.Session["UserDetails"];
+}
+<br />
+
+<div class="row">
+    <div class="col-md-12 text-center">
+        <h3 class="kt-portlet__head-title">
+            @Model.Factories.Name
+        </h3>
+    </div>
+
+
+</div>
+<div class="row">
+    <div class="col-md-1">Date : </div>
+    <div class="col-md-4 text-right">@Model.CreatedWhen.ToString("dd / MM / yyyy")</div>
+</div>
+<br />
+<div class="row">
+    <div class="kt-portlet__body" style="width:100%">
+        <ul class="nav nav-tabs nav-fill" role="tablist">
+            <li class="nav-item">
+                <a id="lnkCls15" class="nav-link" href="@Url.Action("ResultConcClsInfo",new {id=Model.RequestId,cls=15 })">
+                    Class : 15
+                    @if (Model.IsLabC15Complete)
+                    {
+                        <i class="fa fa-check" style="color:green"></i>
+                    }
+                    else
+                    {
+                        <i class="fa fa-times" style="color:red"></i>
+                    }
+                </a>
+            </li>
+            <li class="nav-item">
+                <a  id="lnkCls25" class="nav-link" href="@Url.Action("ResultConcClsInfo",new {id=Model.RequestId,cls=25 })">
+                    Class : 25
+                    @if (Model.IsLabC25Complete)
+                    {
+                        <i class="fa fa-check" style="color:green"></i>
+                    }
+                    else
+                    {
+                        <i class="fa fa-times" style="color:red"></i>
+                    }
+                </a>
+            </li>
+            <li class="nav-item">
+                <a id="lnkCls30" class="nav-link" href="@Url.Action("ResultConcClsInfo",new {id=Model.RequestId,cls=30 })">
+                    Class : 30
+                    @if (Model.IsLabC30Complete)
+                    {
+                        <i class="fa fa-check" style="color:green"></i>
+                    }
+                    else
+                    {
+                        <i class="fa fa-times" style="color:red"></i>
+                    }
+                </a>
+            </li>
+            <li class="nav-item">
+                <a id="lnkCls35" class="nav-link" href="@Url.Action("ResultConcClsInfo",new {id=Model.RequestId,cls=35 })">
+                    Class : 35
+                    @if (Model.IsLabC35Complete)
+                    {
+                        <i class="fa fa-check" style="color:green"></i>
+                    }
+                    else
+                    {
+                        <i class="fa fa-times" style="color:red"></i>
+                    }
+                </a>
+            </li>
+            <li class="nav-item">
+                <a id="lnkGradCA" class="nav-link" href="@Url.Action("GradationCA",new {id=Model.RequestId})">
+                    Gradation (CA)
+                    @if (Model.IsLabGradCAComplete)
+                    {
+                        <i class="fa fa-check" style="color:green"></i>
+                    }
+                    else
+                    {
+                        <i class="fa fa-times" style="color:red"></i>
+                    }
+                </a>
+            </li>
+            <li class="nav-item">
+                <a id="lnkGradFA"  class="nav-link" href="@Url.Action("GradationFA",new {id=Model.RequestId})">
+                    Gradation (FA)
+                    @if (Model.IsLabGradFAComplete)
+                    {
+                        <i class="fa fa-check" style="color:green"></i>
+                    }
+                    else
+                    {
+                        <i class="fa fa-times" style="color:red"></i>
+                    }
+                </a>
+            </li>
+            <li class="nav-item">
+                
+                <a id="lnkSummCA" class="nav-link"  href="@Url.Action("SummaryCA",new {id=Model.RequestId})">
+                    Summary (CA)
+                    @if (Model.IsLabSummaryCAComplete)
+                    {
+                        <i class="fa fa-check" style="color:green"></i>
+                    }
+                    else
+                    {
+                        <i class="fa fa-times" style="color:red"></i>
+                    }
+                </a>
+            </li>
+            <li class="nav-item">
+                <a  id="lnkSummFA" class="nav-link"  href="@Url.Action("SummaryFA",new {id=Model.RequestId})">
+                    Summary (FA)
+                    @if (Model.IsLabSummaryFAComplete)
+                    {
+                        <i class="fa fa-check" style="color:green"></i>
+                    }
+                    else
+                    {
+                        <i class="fa fa-times" style="color:red"></i>
+                    }
+                </a>
+            </li>
+        </ul>
+        @*<div class="tab-content">
+                <div class="tab-pane active" id="kt_tabs_2_1" role="tabpanel">
+                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+                </div>
+                <div class="tab-pane" id="kt_tabs_2_2" role="tabpanel">
+                    It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+                </div>
+                <div class="tab-pane" id="kt_tabs_2_3" role="tabpanel">
+                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged
+                </div>
+
+            </div>*@
+    </div>
+</div>

@@ -1,0 +1,36 @@
+﻿@model  Amana.ViewModels.MixDesigns.MdRequestMaterialTestFilesViewModel
+@using HtmlHelpers.BeginCollectionItem;
+@using Amana.Models.Utilities;
+
+@{
+    Layout = null;
+
+}
+
+@using (Html.BeginCollectionItem("ListTestFiles"))
+{
+    @Html.HiddenFor(model => model.ID)
+    @Html.HiddenFor(model => model.CategoryId)
+    @Html.HiddenFor(model => model.FileId)
+    @Html.HiddenFor(model => model.FileName)
+    @Html.HiddenFor(model => model.FileUrl)
+    @Html.HiddenFor(model => model.RequestId)
+
+    <tr>
+        <td>@Model.FileName</td>
+        <td>
+            @Html.TextBoxFor(model => model.UploadedFile, new Dictionary<string, object> { { "class", "form-control" }, { "type", "file" },{ "accept" , "image/*" }, { "data-val", string.IsNullOrEmpty(Model.FileUrl) ? "true" : "false" }, { "data-val-required", string.IsNullOrEmpty(Model.FileUrl) ? Amana.GlobalResources.Validation.Required : "" } })
+            @Html.ValidationMessageFor(model => model.UploadedFile)
+        </td>
+        <td>
+            @Html.EditorFor(model => model.Notes, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Notes)
+        </td>
+        <td>@if (!string.IsNullOrEmpty(Model.FileUrl))
+        {
+            <a target="_blank" href="/Uploads/MixDesigns/@(Model.FileUrl)"><img src="/Uploads/MixDesigns/@(Model.FileUrl)" width="100" /></a>
+        }
+        </td>
+    </tr>
+
+}

@@ -1,0 +1,72 @@
+﻿@model Amana.ViewModels.C_CategoryVocabulariesViewModel
+
+@{
+    Layout = "_Layout.cshtml";
+}
+    <div class="row">
+        <div class="col-lg-12">
+            <!--begin::Portlet-->
+            <div class="kt-portlet">
+                <div class="kt-portlet__head">
+                    <div class="kt-portlet__head-label">
+                        <h3 class="kt-portlet__head-title">
+                            @Amana.GlobalResources.Cpanel.CatVocabularies - @Amana.GlobalResources.Cpanel.Create
+                        </h3>
+                    </div>
+                </div>
+
+
+                <!--begin::Form-->
+
+                @using (Html.BeginForm("Create", "C_CategoryVocabularies", FormMethod.Post, new { enctype = "multipart/form-data", @class = "kt-form kt-form--label-right" }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.HiddenFor(model => model.CatVocId)
+                    @Html.ValidationSummary(true)
+                    
+            <div class="kt-portlet__body">
+                @if (ViewBag.Success == true)
+                {
+                @Html.Partial("~/Areas/Admin/Views/Shared/UcSuccess.cshtml")
+                }
+
+                <div class="form-group row">
+                    <div class="col-lg-6">
+                        <label>
+                            @Html.LabelFor(model => model.Title, @Amana.GlobalResources.Cpanel.Title)
+                            :
+                        </label>
+                        @Html.TextBoxFor(model => model.Title, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Title)
+
+                        @*<span class="form-text text-muted">Please enter your full name</span>*@
+                    </div>
+
+                </div>
+
+            </div>
+                    <div class="kt-portlet__foot">
+                        <div class="kt-form__actions">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <input type="submit" value="@Amana.GlobalResources.Cpanel.Save" class="btn btn-warning" />
+                                    @Html.ActionLink(@Amana.GlobalResources.Cpanel.BackToList, "Index", null, new { @class = "btn btn-secondary" })
+
+                                </div>
+                                <div class="col-lg-6 kt-align-right">
+                                    <button type="reset" class="btn btn-danger">Delete</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                }
+
+
+                <!--end::Form-->
+            </div>
+
+          
+        </div>
+    </div>
+

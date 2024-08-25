@@ -1,0 +1,47 @@
+﻿@model Amana.ViewModels.C_LanguagesViewModel
+
+@{
+    Layout = "_Layout.cshtml";
+}
+
+<h1>@Amana.GlobalResources.Cpanel.Language - @Amana.GlobalResources.Cpanel.Create</h1>
+<div class="sep100x100"></div>
+
+@if (ViewBag.Success == true)
+{
+    @Html.Partial("~/Areas/Admin/Views/Shared/UcSuccess.cshtml")
+}
+
+@using (Html.BeginForm("Create", "C_Languages", FormMethod.Post, new { enctype = "multipart/form-data" })) 
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.LanguageId)
+    
+    <div>
+        @Html.ValidationSummary(true)
+        
+        <div class="form-group">
+            @Html.LabelFor(model => model.Culture, @Amana.GlobalResources.Cpanel.Language)
+            <div class="col-md-7">
+                @Html.DropDownListFor(model => model.Culture, ViewBag.Cultures as SelectList, @Amana.GlobalResources.Cpanel.ChooseOption)
+                @Html.ValidationMessageFor(model => model.Culture)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Name, @Amana.GlobalResources.Cpanel.Title)
+            <div class="col-md-7">
+                @Html.EditorFor(model => model.Name)
+                @Html.ValidationMessageFor(model => model.Name)
+            </div>
+        </div>
+
+        <div class="sep100x100"></div>
+        <div class="form-group">
+            <div>
+                <input type="submit" value="@Amana.GlobalResources.Cpanel.Save" class="lnkCreate lnkInline" /> |
+                @Html.ActionLink(@Amana.GlobalResources.Cpanel.BackToList, "Index", null, new { @class = "lnkBack" })
+            </div>
+        </div>
+    </div>
+}

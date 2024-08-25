@@ -1,0 +1,29 @@
+﻿@{
+    Layout = "~/Areas/Admin/Views/Shared/_Layout2.cshtml";
+}
+
+@section sectionHead{
+    @*<script type="text/javascript">
+            $(function () {
+                if ("@Request.QueryString["TypeId"]" != "") {
+                    var id = "@Request.QueryString["TypeId"]";
+                } else {
+                    var id = "@ViewContext.RouteData.Values["id"]";
+                }
+
+                $("li.mn-" + id + " a").addClass("active");
+            });
+        </script>*@
+    @RenderSection("sectionHead", false)
+}
+
+@section sectionSubHeader
+{
+    @RenderSection("sectionSubHeader", false)
+}
+
+@RenderBody()
+@section sectionScripts
+{
+    @RenderSection("sectionScripts", false)
+}

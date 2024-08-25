@@ -1,0 +1,43 @@
+﻿@model IEnumerable<Amana.Models.Entities.C_NodeType>
+
+@{
+    int langId = ViewBag.LangId;
+}
+
+<div>
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar2">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+    </button>
+</div>
+<div class="clear"></div>
+<div class="collapse navbar-collapse" id="myNavbar2">
+    <ul class="menuMain">
+        @foreach (var item in Model)
+        {
+            var menuTitle = "";
+            if (item.C_NodeTypeLoc.FirstOrDefault(a => a.LanguageId == langId) != null)
+            {
+                menuTitle = item.C_NodeTypeLoc.FirstOrDefault(a => a.LanguageId == langId).Title;
+            }
+            else if (item.C_NodeTypeLoc.FirstOrDefault(a => a.LanguageId == 1) != null)
+            {
+                menuTitle = item.C_NodeTypeLoc.FirstOrDefault(a => a.LanguageId == 1).Title + " - " + @Amana.GlobalResources.Cpanel.NotTranslated;
+            }
+            else
+            {
+                menuTitle = @Amana.GlobalResources.Cpanel.NotTranslated;
+            }
+
+            if (!string.IsNullOrEmpty(item.Controller))
+            {
+               <li class="mn-@item.TypeId">@Html.ActionLink(menuTitle, "Index", item.Controller, new { id = item.TypeId }, null)</li>
+            }
+            else
+            {
+                <li class="mn-@item.TypeId">@Html.ActionLink(menuTitle, "Index", "C_Node", new { id = item.TypeId }, null)</li>
+            }
+        }
+    </ul>
+</div>

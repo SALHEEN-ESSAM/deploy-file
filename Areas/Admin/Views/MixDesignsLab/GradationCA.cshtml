@@ -1,0 +1,283 @@
+﻿@model Amana.ViewModels.MixDesigns.MD_LabGradationCAViewModel
+@using Amana.Models.Helpers;
+@using Amana.GlobalResources;
+
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_Layout2.cshtml";
+    Amana.Models.Entities.MD_Requests requestItem = (Amana.Models.Entities.MD_Requests)ViewBag.RequestItem;
+}
+@section sectionSubHeader{
+
+    <div class="kt-subheader__main">
+        <h3 class="kt-subheader__title">
+            @Cpanel.MixDesigns
+        </h3>
+        <span class="kt-subheader__separator kt-hidden"></span>
+        <div class="kt-subheader__breadcrumbs">
+            <a href="#" class="kt-subheader__breadcrumbs-home"><i class="flaticon2-shelter"></i></a>
+            <span class="kt-subheader__breadcrumbs-separator"></span>
+            <span class="kt-subheader__breadcrumbs-link kt-subheader__breadcrumbs-link--active">  @Cpanel.LabResults</span>
+            <span class="kt-subheader__breadcrumbs-separator"></span>
+            <span class="kt-subheader__breadcrumbs-link kt-subheader__breadcrumbs-link--active">
+                Gradation ( Coarse Aggregate )
+            </span>
+
+        </div>
+    </div>
+}
+<style>
+    .form-control {
+        width: 75px;
+        text-align: center;
+        border-color: #ccc;
+        margin: auto;
+        font-size: 14px;
+    }
+    .badge-light
+    {
+        background-color:lightgray;
+        padding:15px 10px;
+        font-size:14px;
+    }
+    .table thead th, .table thead td {
+        vertical-align: middle;
+        text-align:center;
+        font-size:12px;
+        font-weight:bold;
+    }
+
+    .table tbody td {
+        vertical-align: middle;
+        text-align: center;
+        color:#000;
+    }
+    .kt-portlet .kt-portlet__body
+    {
+        padding:5px;
+    }
+    .kt-widget__item {
+        text-align:left;
+    }
+    .alert-text {
+        text-align: center;
+    }
+</style>
+<div class="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content" style="padding:0px;direction:ltr">
+    @Html.Partial("_ResultSideMenu", requestItem);
+    <!--Begin::App-->
+    <div class="kt-grid kt-grid--desktop kt-grid--ver kt-grid--ver-desktop kt-app">
+        @*<div class="row">
+            @if (requestItem != null)
+            {
+                <div class="col-md-2">
+                    @Html.Partial("_ResultSideMenu", requestItem);
+                </div>
+            }
+            </div>*@
+
+
+
+        <div class="row">
+            <div class="col-md-12">
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <!--begin::Portlet-->
+                        <div class="kt-portlet">
+                            @*<div class="kt-portlet__head">
+                                    <div class="kt-portlet__head-label">
+                                        <h3 class="kt-portlet__head-title">
+                                            Gradation ( Coarse Aggregate )
+
+                                        </h3>
+                                    </div>
+                                </div>*@
+
+
+                            <!--begin::Form-->
+                            <div class="kt-portlet__body" style="direction:ltr;text-align:left">
+                                @if (ViewBag.Success == true)
+                                {
+                                    @Html.Partial("~/Areas/Admin/Views/Shared/UcSuccess.cshtml")
+                                }
+
+
+                                @using (Html.BeginForm("GradationCA", "MixDesignsLab", new { id = Model.RequestId }, FormMethod.Post, new { enctype = "multipart/form-data", @class = "kt-form kt-form--label-right" }))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    @Html.ValidationSummary(true)
+                                    @Html.HiddenFor(model => model.RequestId)
+
+                                    <div class="kt-portlet__body">
+                                        <div class="kt-section kt-section--first">
+                                            <h1 class="trial-mix "> Gradation ( Coarse Aggregate )</h1>
+                                            @*<h3 class="kt-section__title">
+                                                    1.   MIX Requirements :
+                                                </h3>*@
+                                            <table class="table table-striped- table-bordered table-hover table-checkable" id="kt_table_1">
+                                                <thead>
+                                                    <tr>
+                                                        <th colspan="6">Grain Size Analysis Of Coarse AggtsMax Size (3/4)</th>
+                                                        <th colspan="4">Grain Size Analysis Of Coarse AggtsMax Size (3/8)</th>
+                                                        <th colspan="6" rowspan="4">Blending Of Coarse Agg</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th colspan="3">Weight of wet sample (g)</th>
+                                                        <th colspan="3">
+                                                            @Html.EditorFor(model => model.CA_34Wet, new { htmlAttributes = new { @class = "form-control" } })
+                                                        </th>
+                                                        <th colspan="3">Weight of wet sample (g)</th>
+                                                        <th>
+                                                            @Html.EditorFor(model => model.CA_38Wet, new { htmlAttributes = new { @class = "form-control" } })
+                                                        </th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th colspan="3">Oven dry weight (g)</th>
+                                                        <th colspan="3">
+                                                            @Html.EditorFor(model => model.CA_34Dry, new { htmlAttributes = new { @class = "form-control" } })
+                                                        </th>
+                                                        <th colspan="3">Oven dry weight (g)</th>
+                                                        <th>
+                                                            @Html.EditorFor(model => model.CA_38Dry, new { htmlAttributes = new { @class = "form-control" } })
+                                                        </th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th colspan="3">Wash oven dry weight (g)</th>
+                                                        <th colspan="3">
+                                                            @Html.EditorFor(model => model.CA_34OvenDry, new { htmlAttributes = new { @class = "form-control" } })
+                                                        </th>
+                                                        <th colspan="3">Wash oven dry weight (g)</th>
+                                                        <th>
+                                                            @Html.EditorFor(model => model.CA_38OvenDry, new { htmlAttributes = new { @class = "form-control" } })
+                                                        </th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>mm</th>
+                                                        <th>inch</th>
+                                                        <th>Mass retaind</th>
+                                                        <th>Cummulative Mass Retained</th>
+                                                        <th>Wt. Retained accumulative Total Wt of aggregate</th>
+                                                        <th>Perent Passing</th>
+                                                        <th>Mass Retaind</th>
+                                                        <th>Cummulative Mass Retaind</th>
+                                                        <th>Wt. Retained accumulative Total Wt of aggregate</th>
+                                                        <th>Perent Passing</th>
+                                                        <th>
+                                                            Max Size Coarse Aggt (A)
+                                                            @Html.EditorFor(model => model.CA_34MaxSize, new { htmlAttributes = new { @class = "form-control", @style = "width:45px;" } })
+                                                        </th>
+                                                        <th>
+                                                            Max Size Coarse Aggt (B)
+                                                            @Html.EditorFor(model => model.CA_38MaxSize, new { htmlAttributes = new { @class = "form-control", @style = "width:45px;" } })
+                                                        </th>
+                                                        <th>Blended Gradion (A+B)</th>
+                                                        <th>Min</th>
+                                                        <th>Max</th>
+                                                        <th>Result</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach (var item in Model.ListGradSettings)
+                                                    {
+                                                        Html.RenderPartial("_GradSettingItem", item);
+                                                    }
+                                                    <tr>
+                                                        <td colspan="2"><b>PAN</b></td>
+                                                        <td>
+                                                            @Html.EditorFor(model => model.CA_34PanMassRetained, new { htmlAttributes = new { @class = "form-control" } })
+                                                        </td>
+                                                        <td colspan="3"></td>
+                                                        <td>  @Html.EditorFor(model => model.CA_38PanMassRetained, new { htmlAttributes = new { @class = "form-control" } })</td>
+                                                        <td colspan="3"></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="2"><b>total weight (g)</b></td>
+                                                        <td>
+                                                            @if (Model.CA_34PanMassRetained.HasValue)
+                                                            {
+                                                                @(Model.ListGradSettings.Sum(a=> a.MassRetainedVal1_Input)+ Model.CA_34PanMassRetained.Value)
+                                                            }
+                                                        </td>
+                                                        <td colspan="3"></td>
+                                                        <td>
+                                                            @if (Model.CA_38PanMassRetained.HasValue)
+                                                            {
+                                                                @(Model.ListGradSettings.Sum(a=> a.MassRetainedVal2_Input)+ Model.CA_38PanMassRetained.Value)
+                                                            }
+                                                        </td>
+                                                        <td colspan="3"></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+
+
+
+
+                                        </div>
+
+
+
+
+
+
+                                    </div>
+                                    <div class="kt-portlet__foot">
+                                        <div class="kt-form__actions">
+                                            <div class="row">
+                                                <div class="col-lg-6">
+                                                    <input type="submit" value="@Amana.GlobalResources.Cpanel.Save" class="btn btn-warning" />
+                                                    @*<a class="btn btn-danger" href="@Url.Action("ResultConcClsInfo",new {id=requestItem.RequestId,cls=15 })">رجوع</a>*@
+
+                                                </div>
+                                                @*<div class="col-lg-6 kt-align-right">
+                                                        <button type="reset" class="btn btn-danger">Delete</button>
+                                                    </div>*@
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                }
+
+
+                            </div>
+
+
+                            <!--end::Form-->
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!--End::App-->
+</div>
+@section sectionScripts{
+    <script>
+        $(document).ready(function () {
+
+            $("#lnkGradCA").addClass("active");
+        });
+
+    </script>
+}
+
+
+
+
+

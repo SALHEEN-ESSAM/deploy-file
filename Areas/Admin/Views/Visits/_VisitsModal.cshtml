@@ -1,0 +1,95 @@
+﻿@model  List<Amana.Models.Entities.Visits>
+@using Amana.GlobalResources;
+@{
+    Layout = null;
+}
+<div class="modal-header">
+    <h1 class="modal-title">@Cpanel.Visits</h1>
+</div>
+
+<div class="modal-body">
+
+    @if (Model.Count > 0)
+    {
+        <table class="table table-striped- table-bordered table-hover table-checkable">
+            <thead>
+                <tr>
+
+                    <th>@Cpanel.VisitNo</th>
+                    <th>@Cpanel.VisitDate</th>
+                    <th>@Cpanel.Observer</th>
+                    <th>@Cpanel.IsVisitDone</th>
+                   
+                    <th>
+                        
+
+                    </th>
+
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int i = 0;
+                    foreach (var item in Model)
+                    {
+                        i++;
+                                <tr>
+                                    <td>
+                                        @item.VisitId
+                                    </td>
+                                    <td>
+                                        @item.VisitDate.ToString("dd / MM / yyyy")
+                                    </td>
+
+                                    <td>
+                                        @item.C_UserItems.Name
+                                    </td>
+                                    <td>
+                                        @if (item.IsVisitDone == true)
+                                        {
+                                            <span class="btn btn-bold btn-sm btn-font-sm  btn-label-success">@Cpanel.Yes</span>
+                                        }
+                                        else
+                                        {
+                                    <span class="btn btn-sm btn-label-danger btn-bold">@Cpanel.No</span>
+                                        }
+                                    </td>
+
+                                    <td nowrap>
+                                        @if (!item.IsVisitDone)
+                                        {
+                                            <a href="@Url.Action("Create", new { id = item.VisitId })" class="btn btn-success btn-sm mr-2">
+                                                @Cpanel.Edit
+                                            </a>
+                                        }
+                                        else
+                                        {
+                                        @*<button type="button" class="btn btn-bold btn-label-brand btn-sm" onclick="ShowFormsModal('@Url.Action("VisitDetails",new {id= item.VisitId})')">بيانات الزيارة</button>*@
+                                        <a href="@Url.Action("SampleDetails", new { id = item.VisitId })" class="btn btn-warning btn-sm mr-2">
+                                            @Cpanel.Details
+                                        </a>
+                                    }
+
+                                    </td>
+                                </tr>
+                    }
+                }
+
+            </tbody>
+        </table>
+
+        <!--end: Datatable -->
+    }
+
+
+
+</div>
+
+    <div class="modal-footer">
+        <div>
+            @*<input type="submit" value="@Amana.GlobalResources.Cpanel.Save" class="btn btn-warning" />*@
+
+            <input type="button" value="@Cpanel.Close" data-dismiss="modal" class="btn btn-danger" />
+        </div>
+    </div>
+

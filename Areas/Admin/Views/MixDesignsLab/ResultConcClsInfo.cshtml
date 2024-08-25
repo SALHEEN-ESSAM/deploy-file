@@ -1,0 +1,569 @@
+﻿@model Amana.ViewModels.MixDesigns.MD_RequestLabConcTrialMixViewModel
+@using Amana.Models.Helpers;
+@using Amana.GlobalResources; 
+
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_Layout2.cshtml";
+    double constVal = 0.035;
+    Amana.Models.Entities.MD_Requests requestItem = (Amana.Models.Entities.MD_Requests)ViewBag.RequestItem;
+}
+@section sectionSubHeader{
+
+    <div class="kt-subheader__main">
+        <h3 class="kt-subheader__title">
+             @Cpanel.MixDesigns
+        </h3>
+        <span class="kt-subheader__separator kt-hidden"></span>
+        <div class="kt-subheader__breadcrumbs">
+            <a href="#" class="kt-subheader__breadcrumbs-home"><i class="flaticon2-shelter"></i></a>
+            <span class="kt-subheader__breadcrumbs-separator"></span>
+            <span class="kt-subheader__breadcrumbs-link kt-subheader__breadcrumbs-link--active"> @Cpanel.LabResults</span>
+            <span class="kt-subheader__breadcrumbs-separator"></span>
+            <span class="kt-subheader__breadcrumbs-link kt-subheader__breadcrumbs-link--active">
+                Concrete Class : @Model.ConcClsId
+            </span>
+
+        </div>
+    </div>
+}
+<style>
+    .form-control {
+        width: 60px;
+        text-align: center;
+        border-color: #ccc;
+        margin: auto;
+        font-size: 14px;
+    }
+    .badge-light
+    {
+        background-color:lightgray;
+        padding:15px 10px;
+        font-size:14px;
+    }
+</style>
+<div class="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content" style="padding:0px;direction:ltr">
+    @if (requestItem != null)
+    {
+            @Html.Partial("_ResultSideMenu", requestItem);
+    }
+    <!--Begin::App-->
+    <div class="kt-grid kt-grid--desktop kt-grid--ver kt-grid--ver-desktop kt-app">
+
+
+        <div class="col-md-12">
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <!--begin::Portlet-->
+                    <div class="kt-portlet">
+                        <div class="kt-portlet__head">
+                            <div class="kt-portlet__head-label">
+                                <h3 class="kt-portlet__head-title">
+                                    Concrete Class : @Model.ConcClsId
+
+                                </h3>
+                            </div>
+                        </div>
+
+
+                        <!--begin::Form-->
+                        <div class="kt-portlet__body" style="direction:ltr;text-align:left">
+                            @if (ViewBag.Success == true)
+                            {
+                                @Html.Partial("~/Areas/Admin/Views/Shared/UcSuccess.cshtml")
+                            }
+
+
+                            @using (Html.BeginForm("ResultConcClsInfo", "MixDesignsLab", new { id = Model.RequestId, cls = Model.ConcClsId }, FormMethod.Post, new { enctype = "multipart/form-data", @class = "kt-form kt-form--label-right" }))
+                            {
+                                @Html.AntiForgeryToken()
+                                @Html.ValidationSummary(true)
+                                @Html.HiddenFor(model => model.ItemId)
+                                @Html.HiddenFor(model => model.RequestId)
+                                @Html.HiddenFor(model => model.ConcClsId)
+
+                                <div class="kt-portlet__body">
+                                    <div class="kt-section kt-section--first">
+                                        <h1 class="trial-mix ">Concrete Mix Design</h1>
+                                        <h3 class="kt-section__title">
+                                            1.   MIX Requirements :
+                                        </h3>
+                                        <table class="table table-striped- table-bordered table-hover table-checkable" id="kt_table_1">
+                                            <tbody>
+                                                <tr>
+                                                    <td>Characteristic Compressive Strength at 28 days</td>
+                                                    <td>
+                                                        @Html.EditorFor(model => model.MD_ReqCompStrength, new { htmlAttributes = new { @class = "form-control" } })
+                                                    </td>
+                                                    <td>N/mm2</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Cement Content</td>
+                                                    <td>
+                                                        @Html.EditorFor(model => model.MD_ReqCementContent, new { htmlAttributes = new { @class = "form-control" } })
+                                                    </td>
+                                                    <td>kg</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Slumb at site</td>
+                                                    <td>
+                                                        @Html.EditorFor(model => model.MD_ReqSlumbAtSite, new { htmlAttributes = new { @class = "form-control" } })
+                                                    </td>
+                                                    <td>mm</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Admixture Type</td>
+                                                    <td>
+                                                        @Html.EditorFor(model => model.MD_ReqAdmixtureType, new { htmlAttributes = new { @class = "form-control" } })
+                                                    </td>
+                                                    <td>mm</td>
+                                                </tr>
+
+                                            </tbody>
+                                        </table>
+                                        <h3 class="kt-section__title">
+                                            2.   Aggregate Properties :
+                                        </h3>
+                                        <table class="table table-striped- table-bordered table-hover table-checkable" id="kt_table_1">
+                                            <thead>
+                                                <tr>
+                                                    <th colspan="3">
+                                                        Fine aggregate
+                                                    </th>
+                                                    <th colspan="3">
+                                                        Coarse Aggregate
+                                                    </th>
+                                                </tr>
+
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>Crushed Sand</td>
+                                                    <td>
+                                                        @Html.EditorFor(model => model.MD_AggFACrushedSand, new { htmlAttributes = new { @class = "form-control" } })
+                                                    </td>
+                                                    <td>%</td>
+                                                    <td>3/4</td>
+                                                    <td>
+                                                        @Html.EditorFor(model => model.MD_AggCA34, new { htmlAttributes = new { @class = "form-control" } })
+                                                    </td>
+                                                    <td>%</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Dune Sand</td>
+                                                    <td>
+                                                        @Html.EditorFor(model => model.MD_AggFADuneSand, new { htmlAttributes = new { @class = "form-control" } })
+                                                    </td>
+                                                    <td>%</td>
+                                                    <td>3/8</td>
+                                                    <td>
+                                                        @Html.EditorFor(model => model.MD_AggCA38, new { htmlAttributes = new { @class = "form-control" } })
+                                                    </td>
+                                                    <td>%</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Average Fineness Modulus</td>
+                                                    <td>
+                                                        @Html.EditorFor(model => model.MD_AggFAAvgFineness, new { htmlAttributes = new { @class = "form-control" } })
+                                                    </td>
+                                                    <td></td>
+                                                    <td>Dry Rodded Unit Weight</td>
+                                                    <td>
+                                                        @Html.EditorFor(model => model.MD_AggCADryRodded, new { htmlAttributes = new { @class = "form-control" } })
+                                                    </td>
+                                                    <td>kg/m3</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Average Bulk Specific Gravity(dry)</td>
+                                                    <td>
+                                                        @Html.EditorFor(model => model.MD_AggCAAvgBulk, new { htmlAttributes = new { @class = "form-control" } })
+                                                    </td>
+                                                    <td></td>
+                                                    <td>Average Bulk Specific Gravity(dry)</td>
+                                                    <td>
+                                                        @Html.EditorFor(model => model.MD_AggFAAvgBulk, new { htmlAttributes = new { @class = "form-control" } })
+                                                    </td>
+                                                    <td></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+
+                                        <h3 class="kt-section__title">
+                                            3.   Mix Proportions :
+                                        </h3>
+                                        <table class="table table-striped- table-bordered table-hover table-checkable" id="kt_table_1">
+                                            <thead>
+                                                <tr>
+                                                    <th colspan="6">
+                                                        Batch Weights per/m3
+                                                    </th>
+
+                                                </tr>
+
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>Cement = </td>
+                                                    <td>
+                                                        @Html.EditorFor(model => model.MD_MixPropCement, new { htmlAttributes = new { @class = "form-control" } })
+                                                    </td>
+                                                    <td>kg</td>
+                                                    <td>3/4 size (dry) = </td>
+                                                    <td>
+                                                        @Html.EditorFor(model => model.MD_MixProp34Size, new { htmlAttributes = new { @class = "form-control" } })
+                                                    </td>
+                                                    <td>kg</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Water (Free) = </td>
+                                                    <td>
+                                                        @Html.EditorFor(model => model.MD_MixPropWater, new { htmlAttributes = new { @class = "form-control" } })
+                                                    </td>
+                                                    <td>lit</td>
+                                                    <td>3/8 size (dry) = </td>
+                                                    <td>
+                                                        @Html.EditorFor(model => model.MD_MixProp38Size, new { htmlAttributes = new { @class = "form-control" } })
+                                                    </td>
+                                                    <td>kg</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Admixture (Rd+Sp) = </td>
+                                                    <td>
+                                                        @Html.EditorFor(model => model.MD_MixPropAdmixture1, new { htmlAttributes = new { @class = "form-control" } })
+                                                        @Html.EditorFor(model => model.MD_MixPropAdmixture2, new { htmlAttributes = new { @class = "form-control" } })
+                                                    </td>
+                                                    <td>lit</td>
+                                                    <td>Crushed Sand (dry) = </td>
+                                                    <td>
+                                                        @Html.EditorFor(model => model.MD_MixPropCrushedSand, new { htmlAttributes = new { @class = "form-control" } })
+                                                    </td>
+                                                    <td>kg</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>W/C Ratio = </td>
+                                                    <td>
+                                                        @Html.EditorFor(model => model.MD_MixPropWCRatio, new { htmlAttributes = new { @class = "form-control" } })
+                                                    </td>
+                                                    <td></td>
+                                                    <td>Dune Sand (dry) = </td>
+                                                    <td>
+                                                        @Html.EditorFor(model => model.MD_MixPropDuneSand, new { htmlAttributes = new { @class = "form-control" } })
+                                                    </td>
+                                                    <td>kg</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+
+
+
+                                    </div>
+                                    <div class="kt-section kt-section--first">
+                                        <h1 class="trial-mix">Concrete Trial Mix</h1>
+                                        @*<h3 class="kt-section__title">
+                                                1.   MIX Requirements :
+                                            </h3>*@
+                                        <table class="table table-striped- table-bordered table-hover table-checkable" id="kt_table_1">
+                                            <thead>
+                                                <tr>
+                                                    <th>Material</th>
+                                                    <th>Absorption %</th>
+                                                    <th>Moisture Content %</th>
+                                                    <th colspan="2">Corrected Weight</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td rowspan="2">Cement (kg)</td>
+                                                    <td rowspan="2">
+                                                    </td>
+                                                    <td rowspan="2"></td>
+                                                    <td class="text-center"><b>(1m3)</b></td>
+                                                    <td class="text-center"><b>0.035m3</b></td>
+
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        @Html.EditorFor(model => model.TM_CementCW, new { htmlAttributes = new { @class = "form-control" } })
+                                                    </td>
+                                                    <td>
+                                                        @if (Model.TM_CementCW.HasValue)
+                                                        {
+                                                            <span class="badge badge-light">@(Model.TM_CementCW* constVal)</span>
+                                                        }
+
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="5"><b style="text-decoration:underline">Coarse Aggregate</b></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>3/4 size (kg)</td>
+                                                    <td>
+                                                        @Html.EditorFor(model => model.TM_34SizeAbs, new { htmlAttributes = new { @class = "form-control" } })
+                                                    </td>
+                                                    <td>
+                                                        @Html.EditorFor(model => model.TM_34SizeMC, new { htmlAttributes = new { @class = "form-control" } })
+                                                    </td>
+                                                    <td>
+                                                        @Html.EditorFor(model => model.TM_34SizeCW, new { htmlAttributes = new { @class = "form-control" } })
+                                                    </td>
+                                                    <td>
+                                                        @if (Model.TM_34SizeCW.HasValue)
+                                                        {
+                                                            <span class="badge badge-light">@(Model.TM_34SizeCW * constVal)</span>
+                                                        }
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>3/8 size (kg)</td>
+                                                    <td>
+                                                        @Html.EditorFor(model => model.TM_38SizeAbs, new { htmlAttributes = new { @class = "form-control" } })
+                                                    </td>
+                                                    <td>
+                                                        @Html.EditorFor(model => model.TM_38SizeMC, new { htmlAttributes = new { @class = "form-control" } })
+                                                    </td>
+                                                    <td>
+                                                        @Html.EditorFor(model => model.TM_38SizeCW, new { htmlAttributes = new { @class = "form-control" } })
+                                                    </td>
+                                                    <td>
+                                                        @if (Model.TM_38SizeCW.HasValue)
+                                                        {
+                                                            <span class="badge badge-light">@(Model.TM_38SizeCW * constVal)</span>
+                                                        }
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="5"><b style="text-decoration:underline">Fine Aggregate</b></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Crushed Sand (kg)</td>
+                                                    <td>
+                                                        @Html.EditorFor(model => model.TM_CrushedSandAbs, new { htmlAttributes = new { @class = "form-control" } })
+                                                    </td>
+                                                    <td>
+                                                        @Html.EditorFor(model => model.TM_CrushedSandMC, new { htmlAttributes = new { @class = "form-control" } })
+                                                    </td>
+                                                    <td>
+                                                        @Html.EditorFor(model => model.TM_CrushedSandCW, new { htmlAttributes = new { @class = "form-control" } })
+                                                    </td>
+                                                    <td>
+                                                        @if (Model.TM_CrushedSandCW.HasValue)
+                                                        {
+                                                            <span class="badge badge-light">@(Model.TM_CrushedSandCW * constVal)</span>
+                                                        }
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Dune Sand (kg)</td>
+                                                    <td>
+                                                        @Html.EditorFor(model => model.TM_DuneSandAbs, new { htmlAttributes = new { @class = "form-control" } })
+                                                    </td>
+                                                    <td>
+                                                        @Html.EditorFor(model => model.TM_DuneSandMC, new { htmlAttributes = new { @class = "form-control" } })
+                                                    </td>
+                                                    <td>
+                                                        @Html.EditorFor(model => model.TM_DuneSandCW, new { htmlAttributes = new { @class = "form-control" } })
+                                                    </td>
+                                                    <td>
+                                                        @if (Model.TM_DuneSandCW.HasValue)
+                                                        {
+                                                            <span class="badge badge-light">@(Model.TM_DuneSandCW * constVal)</span>
+                                                        }
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Water (lit)</td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td>
+                                                        @Html.EditorFor(model => model.TM_WaterCW, new { htmlAttributes = new { @class = "form-control" } })
+
+                                                    </td>
+                                                    <td>
+                                                        @if (Model.TM_WaterCW.HasValue)
+                                                        {
+                                                            <span class="badge badge-light">@(Model.TM_WaterCW * constVal)</span>
+                                                        }
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>Admixture (lit)</td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td>
+                                                        @Html.EditorFor(model => model.TM_Admixture1CW, new { htmlAttributes = new { @class = "form-control" } })
+                                                        @Html.EditorFor(model => model.TM_Admixture2CW, new { htmlAttributes = new { @class = "form-control" } })
+
+                                                    </td>
+                                                    <td></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <h3 class="kt-section__title">
+                                            Trial Mix Results :
+                                        </h3>
+                                        <table class="table table-striped- table-bordered table-hover table-checkable" id="kt_table_1">
+
+                                            <tbody>
+                                                <tr>
+                                                    <td>Air Temp.</td>
+                                                    <td>
+                                                        @Html.EditorFor(model => model.TM_AirTemp, new { htmlAttributes = new { @class = "form-control" } })
+                                                    </td>
+                                                    <td>c</td>
+
+                                                </tr>
+                                                <tr>
+                                                    <td>Mix Temp.</td>
+                                                    <td>
+                                                        @Html.EditorFor(model => model.TM_MixTemp, new { htmlAttributes = new { @class = "form-control" } })
+                                                    </td>
+                                                    <td>c</td>
+
+                                                </tr>
+                                                <tr>
+                                                    <td>Air Content</td>
+                                                    <td>
+                                                        @Html.EditorFor(model => model.TM_AirContent, new { htmlAttributes = new { @class = "form-control" } })
+                                                    </td>
+                                                    <td>%</td>
+
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="2"><b style="text-decoration:underline">Slump</b></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>&#64; initial = </td>
+                                                    <td>
+                                                        @Html.EditorFor(model => model.TM_SlumbInitial, new { htmlAttributes = new { @class = "form-control" } })
+                                                    </td>
+                                                    <td>(mm)</td>
+
+                                                </tr>
+                                                <tr>
+                                                    <td>&#64; 30 Minutes = </td>
+                                                    <td>
+                                                        @Html.EditorFor(model => model.TM_Slumb30Min, new { htmlAttributes = new { @class = "form-control" } })
+                                                    </td>
+                                                    <td>(mm)</td>
+
+                                                </tr>
+                                                <tr>
+                                                    <td>&#64; 60 Minutes = </td>
+                                                    <td>
+                                                        @Html.EditorFor(model => model.TM_Slumb60Min, new { htmlAttributes = new { @class = "form-control" } })
+                                                    </td>
+                                                    <td>(mm)</td>
+
+                                                </tr>
+                                                <tr>
+                                                    <td>&#64; 90 Minutes = </td>
+                                                    <td>
+                                                        @Html.EditorFor(model => model.TM_Slumb90Min, new { htmlAttributes = new { @class = "form-control" } })
+                                                    </td>
+                                                    <td>(mm)</td>
+
+                                                </tr>
+                                                <tr>
+                                                    <td>Density Of Fresh Concrete</td>
+                                                    <td>
+                                                        @Html.EditorFor(model => model.TM_DensityOfConcrete, new { htmlAttributes = new { @class = "form-control" } })
+                                                    </td>
+                                                    <td>(kg/m3)</td>
+
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="2"><b style="text-decoration:underline">Comp Strength</b></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>After 7 Days</td>
+                                                    <td>
+                                                        @Html.EditorFor(model => model.TM_CompStrength7Days1, new { htmlAttributes = new { @class = "form-control" } })
+                                                        @Html.EditorFor(model => model.TM_CompStrength7Days2, new { htmlAttributes = new { @class = "form-control" } })
+                                                        @Html.EditorFor(model => model.TM_CompStrength7Days3, new { htmlAttributes = new { @class = "form-control" } })
+                                                    </td>
+                                                    <td>
+                                                        @if (Model.TM_CompStrength7DaysAvg.HasValue)
+                                                        {
+                                                            <span class="badge badge-light">@Model.TM_CompStrength7DaysAvg</span>
+                                                        }&nbsp;
+                                                        (N/mm2)
+                                                    </td>
+
+                                                </tr>
+                                                <tr>
+                                                    <td>After 28 Days</td>
+                                                    <td>
+                                                        @Html.EditorFor(model => model.TM_CompStrength28Days1, new { htmlAttributes = new { @class = "form-control" } })
+                                                        @Html.EditorFor(model => model.TM_CompStrength28Days2, new { htmlAttributes = new { @class = "form-control" } })
+                                                        @Html.EditorFor(model => model.TM_CompStrength28Days3, new { htmlAttributes = new { @class = "form-control" } })
+                                                    </td>
+                                                    <td>
+                                                        @if (Model.TM_CompStrength28DaysAvg.HasValue)
+                                                        {
+                                                            <span class="badge badge-light">@Model.TM_CompStrength28DaysAvg</span>
+                                                        }&nbsp;
+                                                        (N/mm2)
+                                                    </td>
+
+                                                </tr>
+                                            </tbody>
+                                        </table>
+
+
+
+                                    </div>
+
+
+
+
+
+                                </div>
+                                <div class="kt-portlet__foot">
+                                    <div class="kt-form__actions">
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <input type="submit" value="@Amana.GlobalResources.Cpanel.Save" class="btn btn-warning" />
+
+                                            </div>
+                                            @*<div class="col-lg-6 kt-align-right">
+                                                    <button type="reset" class="btn btn-danger">Delete</button>
+                                                </div>*@
+                                        </div>
+                                    </div>
+                                </div>
+
+                            }
+
+
+                        </div>
+
+
+                        <!--end::Form-->
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+    <!--End::App-->
+</div>
+@section sectionScripts{
+    <script>
+        $(document).ready(function () {
+            //$("#lnkReqConcCls@(Model.ConcClsId)").addClass("kt-widget__item--active");
+            $("#lnkCls@(Model.ConcClsId)").addClass("active");
+        });
+
+    </script>
+}
+
+
+
+
+

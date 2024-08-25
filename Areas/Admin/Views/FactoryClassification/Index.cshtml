@@ -1,0 +1,166 @@
+﻿@model List<Amana.Models.Entities.Cls_FactoryClassifications>
+@using Amana.Models.Helpers;
+@using Amana.GlobalResources;
+
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_Layout2.cshtml";
+    var fId = Request.QueryString["factoryId"];
+    //var pId = Request.QueryString["periodId"];
+    var pId = ViewBag.CurrentPeriodId;
+    Amana.Models.Entities.StngTimePeriods currentPeriod = ViewBag.CurrentPeriodInfo;
+}
+@section sectionSubHeader{
+
+    <div class="kt-subheader__main">
+        <h3 class="kt-subheader__title">
+            @Cpanel.Classification
+        </h3>
+        <span class="kt-subheader__separator kt-hidden"></span>
+        <div class="kt-subheader__breadcrumbs">
+            <a href="#" class="kt-subheader__breadcrumbs-home"><i class="flaticon2-shelter"></i></a>
+            <span class="kt-subheader__breadcrumbs-separator"></span>
+            <span class="kt-subheader__breadcrumbs-link kt-subheader__breadcrumbs-link--active">  @Cpanel.FactoryDataEntry</span>
+        </div>
+    </div>
+}
+<div class="kt-portlet kt-portlet--mobile">
+    <div class="kt-portlet__head kt-portlet__head--lg">
+        <div class="kt-portlet__head-label">
+            <span class="kt-portlet__head-icon">
+                <i class="kt-font-brand flaticon2-line-chart"></i>
+            </span>
+
+            <h3 class="kt-portlet__head-title">
+                @Cpanel.Classification
+            </h3>
+
+        </div>
+        <div class="kt-portlet__head-toolbar">
+            <div class="kt-portlet__head-wrapper">
+                <div class="kt-portlet__head-actions">
+                    @*<a onclick="@Url.Action("AddFactory")" href="javascript:void();" class="btn btn-brand btn-elevate btn-icon-sm">
+                            <i class="la la-plus"></i>
+                            إضافة
+                        </a>*@
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="kt-portlet__body">
+        @if (ViewBag.Success == true)
+                {
+        @Html.Partial("~/Areas/Admin/Views/Shared/UcSuccess.cshtml")
+                }
+        @using (Html.BeginForm("Index", "FactoryClassification", FormMethod.Get, new { enctype = "multipart/form-data", @class = "kt-form kt-form--label-right" }))
+{
+
+            <div class="form-group row">
+                <div class="col-md-6">
+                    <label>
+                        @Cpanel.CurrentPeriod
+                        :
+                    </label>
+                    @*@Html.DropDownList("periodId", ViewData["PeriodsLst"] as SelectList, @Amana.GlobalResources.Cpanel.ChooseOption, new { @class = "form-control", @onchange = "this.form.submit();" })*@
+                    @if (currentPeriod != null)
+                    {
+                        <label>@currentPeriod.Title</label>
+                    }
+                </div>
+            </div>
+
+
+            <div class="form-group row">
+                <div class="col-md-2">
+                    <label>
+                        @Cpanel.Location
+                        :
+                    </label>
+                    @Html.DropDownList("ddlLocations", ViewData["LocationsLst"] as SelectList, @Amana.GlobalResources.Cpanel.ChooseOption, new { @class = "form-control" })
+                </div>
+                <div class="col-md-4">
+                    <label>
+                        @Cpanel.FactoryName
+                        :
+                    </label>
+                    @Html.DropDownList("factoryId", ViewData["FactoriesLst"] as SelectList, @Amana.GlobalResources.Cpanel.ChooseOption, new { @class = "form-control select2control", @onchange = "this.form.submit();" })
+                </div>
+
+            </div>
+
+
+            if (Model.Count == 0)
+            {
+                if (!string.IsNullOrEmpty(fId))
+                {
+                    <div class="kt-portlet__foot">
+                        <div class="kt-form__actions">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <span>@Cpanel.NoData  </span>
+                                    <a class="btn btn-primary" href="@Url.Action("AddClassification", new {factoryId= fId,periodId=pId})">@Cpanel.AddClassification</a>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+
+
+}
+
+
+    </div>
+</div>
+<div class="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content" style="padding:0px;">
+
+    <!--Begin::App-->
+    <div class="kt-grid kt-grid--desktop kt-grid--ver kt-grid--ver-desktop kt-app">
+        @if (Model.Count > 0)
+{
+            foreach (var item in Model)
+            {
+                <div class="col-md-4">
+                    @Html.Partial("_ClassificationItem", item);
+                </div>
+            }
+}
+
+
+
+
+    </div>
+
+    <!--End::App-->
+</div>
+@section sectionScripts{
+    <script>
+        $(function () {
+
+            $('#ddlLocations').change(function () {
+                $.ajax({
+                    type: "post",
+                    url: "/ar/Admin/Factorys/GetFactoriesByLocation",
+                    data: { locationId: $('#ddlLocations').val() },
+                    datatype: "json",
+                    traditional: true,
+                    success: function (data) {
+                        var district = "<select id='FactoryId'>";
+                        district = district + '<option value="">--اختر--</option>';
+                        for (var i = 0; i < data.length; i++) {
+                            district = district + '<option value=' + data[i].Value + '>' + data[i].Text + '</option>';
+                        }
+                        district = district + '</select>';
+                        $('#factoryId').html(district);
+                    }
+                });
+            });
+        });
+    </script>
+}
+
+
+
+
+

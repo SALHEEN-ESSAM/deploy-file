@@ -1,0 +1,114 @@
+﻿@model Amana.ViewModels.C_NodeTypeViewModel
+
+@{
+    Layout = "_Layout.cshtml";
+}
+
+<h1>@Amana.GlobalResources.Cpanel.NodeType - @Amana.GlobalResources.Cpanel.Create</h1>
+<div class="sep100x100"></div>
+
+@if (ViewBag.Success == true)
+{
+    @Html.Partial("~/Areas/Admin/Views/Shared/UcSuccess.cshtml")
+}
+
+@using (Html.BeginForm("Create", "C_NodeType", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.TypeId)
+
+    <div>
+        @Html.ValidationSummary(true)
+
+        <div style="@(ViewBag.IsDeveloper ? "" : "display: none;")">
+            <div class="form-group">
+                @Html.LabelFor(model => model.CatVocId, @Amana.GlobalResources.Cpanel.CatVocabularies)
+                <div class="col-md-7">
+                    @Html.DropDownList("CatVocId", @Amana.GlobalResources.Cpanel.ChooseOption)
+                    @Html.ValidationMessageFor(model => model.CatVocId)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.Controller, @Amana.GlobalResources.Cpanel.Controller)
+                <div class="col-md-7">
+                    @Html.EditorFor(model => model.Controller)
+                    @Html.ValidationMessageFor(model => model.Controller)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.IsMaps, @Amana.GlobalResources.Cpanel.GoogleMap + " ?")
+                @Html.CheckBoxFor(model => model.IsMaps)
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.IsAlbum, @Amana.GlobalResources.Cpanel.Albums + " ?")
+                @Html.CheckBoxFor(model => model.IsAlbum)
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Title, @Amana.GlobalResources.Cpanel.Title)
+            <div class="col-md-7">
+                @Html.EditorFor(model => model.Title)
+                @Html.ValidationMessageFor(model => model.Title)
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.PermaLink, "SEO Url")
+            <div class="col-md-7">
+                @Html.EditorFor(model => model.PermaLink)
+                @Html.ValidationMessageFor(model => model.PermaLink)
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.MetaTitle, @Amana.GlobalResources.Cpanel.MetaTitle)
+            <div class="col-md-7">
+                @Html.EditorFor(model => model.MetaTitle)
+                @Html.ValidationMessageFor(model => model.MetaTitle)
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.MetaDescription, @Amana.GlobalResources.Cpanel.MetaDescription)
+            <div class="col-md-7">
+                @Html.EditorFor(model => model.MetaDescription)
+                @Html.ValidationMessageFor(model => model.MetaDescription)
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.MetaKeywords, @Amana.GlobalResources.Cpanel.MetaKeywords)
+            <div class="col-md-7">
+                @Html.EditorFor(model => model.MetaKeywords)
+                @Html.ValidationMessageFor(model => model.MetaKeywords)
+            </div>
+        </div>
+        <div style="@(ViewBag.IsDeveloper ? "" : "display: none;")">
+            <div class="form-group">
+                @Html.LabelFor(model => model.IsActive, @Amana.GlobalResources.Cpanel.IsActive + " ?")
+                @Html.CheckBoxFor(model => model.IsActive, new { @checked = true })
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.IsWidget, @Amana.GlobalResources.Cpanel.IsWidget + " ?")
+                @Html.CheckBoxFor(model => model.IsWidget)
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.IsMenu, @Amana.GlobalResources.Cpanel.IsMenu + " ?")
+                @Html.CheckBoxFor(model => model.IsMenu, new { @checked = true })
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.IsShowToSite, "IsShowToSite ?")
+                @Html.CheckBoxFor(model => model.IsShowToSite, new { @checked = true })
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.IsSeo, "SEO ?")
+                @Html.CheckBoxFor(model => model.IsSeo, new { @checked = true })
+            </div>
+        </div>
+
+        <div class="sep100x100"></div>
+        <div class="form-group">
+            <div>
+                <input type="submit" value="@Amana.GlobalResources.Cpanel.Save" name="command" class="lnkCreate lnkInline" /> |
+                <input type="submit" value="@Amana.GlobalResources.Cpanel.SaveNew" name="command" class="lnkCreate lnkInline saveNew" /> |
+                @Html.ActionLink(@Amana.GlobalResources.Cpanel.BackToList, "Index", null, new { @class = "lnkBack" })
+            </div>
+        </div>
+    </div>
+}

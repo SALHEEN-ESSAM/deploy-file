@@ -1,0 +1,109 @@
+﻿@model Amana.ViewModels.Classifications.QCConcreteTestingViewModel
+@using Amana.Models.Helpers;
+
+@{
+    Layout = null;
+}
+
+@using (Html.BeginForm("LabQCConcreteTestingForm", "FactoryClassification", FormMethod.Post, new { enctype = "multipart/form-data", @class = "kt-form" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    @Html.HiddenFor(model => model.ClassificationId)
+
+    <div class="kt-portlet__body">
+        <div class="kt-section kt-section--first">
+
+            <h3 class="kt-section__title">
+                Test Of Concrete
+            </h3>
+            <div class="kt-checkbox-list">
+                @foreach (var item in Model.ListLabProp28)
+                {
+                    Html.RenderPartial("_ClsLabProperty", item);
+                }
+
+            </div>
+            <div class="kt-separator kt-separator--border-dashed kt-separator--space-lg kt-separator--portlet-fit"></div>
+            <h3 class="kt-section__title">
+                Laboratory Testing Practice
+                :
+            </h3>
+            <div class="form-group row kt-padding-t-20">
+                <div class="col-lg-12">
+
+                    <div class="kt-checkbox-inline">
+                        <label class="kt-checkbox kt-checkbox--brand">
+                            @Html.CheckBoxFor(model => model.IsProperProtection)
+                            Proper Protection , Handling and storage of samples
+                            <span></span>
+                        </label>
+
+                    </div>
+                </div>
+
+            </div>
+            <div class="form-group row">
+                <div class="col-lg-12">
+                    <h3 class="kt-section__title">
+                        Method of Curing of concrete samples
+                        :
+                    </h3>
+                    <div class="kt-checkbox-inline">
+                        <label class="kt-checkbox kt-checkbox--brand">
+                            @Html.CheckBoxFor(model => model.CuringConcreteSamplesA)
+                            a-Use of lime saturated water
+                            <span></span>
+                        </label>
+                        <label class="kt-checkbox kt-checkbox--brand">
+                            @Html.CheckBoxFor(model => model.CuringConcreteSamplesB)
+                            b-Controlling the temperature of curing tank
+
+                            <span></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-lg-12">
+                    <h3 class="kt-section__title">
+                        Method of Testing the concrete for compressive strength
+                        :
+                    </h3>
+                    <div class="kt-checkbox-inline">
+                        <label class="kt-checkbox kt-checkbox--brand">
+                            @Html.CheckBoxFor(model => model.CompressiveStrengthA)
+                            a-Surface of the testing specimens is in moist condition
+                            <span></span>
+                        </label>
+                        <label class="kt-checkbox kt-checkbox--brand">
+                            @Html.CheckBoxFor(model => model.CompressiveStrengthB)
+                            b-Proper control of rate loading
+                            <span></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+
+
+
+    </div>
+    <div class="kt-portlet__foot">
+        <div class="kt-form__actions">
+            <div class="row">
+                <div class="col-lg-6">
+                    <input type="submit" value="@Amana.GlobalResources.Cpanel.Save" class="btn btn-warning" />
+
+                </div>
+                @*<div class="col-lg-6 kt-align-right">
+                        <button type="reset" class="btn btn-danger">Delete</button>
+                    </div>*@
+            </div>
+        </div>
+    </div>
+
+}

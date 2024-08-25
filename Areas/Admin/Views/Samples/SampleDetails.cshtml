@@ -1,0 +1,968 @@
+﻿@model Amana.ViewModels.VisitsAndSamples.SampleViewModel
+@using Amana.Models.Enums;
+@using Amana.GlobalResources;
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_Layout2.cshtml";
+    bool canEdit = ViewBag.CanEdit;
+    var user = (Amana.Models.Entities.C_UserItems)HttpContext.Current.Session["UserDetails"];
+
+}
+@section sectionSubHeader{
+
+    <div class="kt-subheader__main">
+        <h3 class="kt-subheader__title">
+            @Cpanel.Samples
+        </h3>
+        <span class="kt-subheader__separator kt-hidden"></span>
+        <div class="kt-subheader__breadcrumbs">
+            <a href="#" class="kt-subheader__breadcrumbs-home"><i class="flaticon2-shelter"></i></a>
+            @*<span class="kt-subheader__breadcrumbs-separator"></span>
+                <a href="" class="kt-subheader__breadcrumbs-link">
+                    @ctgry.SuperCategoryName
+                </a>*@
+            <span class="kt-subheader__breadcrumbs-separator"></span>
+            <span class="kt-subheader__breadcrumbs-link kt-subheader__breadcrumbs-link--active"> @Cpanel.SampleDetails</span>
+        </div>
+    </div>
+}
+<div class="row">
+    <div class="col-lg-12">
+        <!--begin::Portlet-->
+        <div class="kt-portlet">
+            <div class="kt-portlet__head">
+                <div class="kt-portlet__head-label">
+                    <h3 class="kt-portlet__head-title">
+                        @Cpanel.SampleDetails
+                    </h3>
+                </div>
+            </div>
+
+            <!--begin::Form-->
+
+            @using (Html.BeginForm("SampleDetails", "Samples", FormMethod.Post, new { enctype = "multipart/form-data", @class = "kt-form kt-form--label-right", id = "frmSampleDetails" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true)
+                @Html.HiddenFor(model => model.VisitId)
+                @Html.HiddenFor(model => model.SampleId)
+                @Html.HiddenFor(model => model.SampleStatus)
+                @Html.HiddenFor(model => model.CurrentLocationLat)
+                @Html.HiddenFor(model => model.CurrentLocationLong)
+
+                <div class="kt-portlet__body">
+                    @if (ViewBag.Success == true)
+                    {
+                        @Html.Partial("~/Areas/Admin/Views/Shared/UcSuccess.cshtml")
+                    }
+                    <div class="kt-section kt-section--first">
+                        <h3 class="kt-section__title">
+                            بيانات عامة
+                            :
+                        </h3>
+                        <div class="form-group row">
+                            <div class="col-md-4">
+                                <label>
+                                    @Html.LabelFor(model => model.ReportNo, "رقم التقرير")
+                                </label>
+                                @Html.TextBoxFor(model => model.ReportNo, new { @class = "form-control", disabled = "disabled" })
+                                @Html.ValidationMessageFor(model => model.ReportNo)
+                            </div>
+                            <div class="col-md-4">
+                                <label>
+                                    @Html.LabelFor(model => model.VisitDate, "تاريخ التقرير")
+                                </label>
+                                @Html.TextBoxFor(model => model.VisitDate, new { @class = "form-control", disabled = "disabled" })
+                            </div>
+                            <div class="col-md-4">
+                                <label>
+                                    @Html.LabelFor(model => model.FactoryName, "اسم المصنع")
+                                </label>
+                                @Html.TextBoxFor(model => model.FactoryName, new { @class = "form-control", disabled = "disabled" })
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-4">
+                                <label>
+                                    @Html.LabelFor(model => model.FactoryLocation, "موقع المصنع")
+                                </label>
+                                @Html.TextBoxFor(model => model.FactoryLocation, new { @class = "form-control", disabled = "disabled" })
+                            </div>
+                            <div class="col-md-4">
+                                <label>
+                                    @Html.LabelFor(model => model.VisitDate, "إحداثيات المصنع")
+                                </label>
+                                <div class="form-group row">
+                                    <div class="col-md-4">
+                                        @Model.FactoryLat
+                                    </div>
+                                    <div class="col-md-4">
+                                        @Model.FactoryLong
+                                    </div>
+                                    <div class="col-md-4">
+                                        <a onclick="window.open('@Url.Action("ShowLocation","Factorys",new {latitude=Model.FactoryLat, longitude=Model.FactoryLong})', '', 'toolbar=yes,scrollbars=no,resizable=no,top=200,left=400,width=600,height=350')" href="javascript:;" title="عرض على الخريطة"> <img src="/Content/assets/media/map-marker.png" /></a>
+
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-4">
+                                <label>
+                                    @Html.LabelFor(model => model.CurrentLocationLat, "إحداثيات المراقب")
+                                </label>
+                                <div class="form-group row">
+                                    <div class="col-md-4">
+                                        @Model.CurrentLocationLat
+                                    </div>
+                                    <div class="col-md-4">
+                                        @Model.CurrentLocationLong
+                                    </div>
+                                    <div class="col-md-4">
+                                        <a onclick="window.open('@Url.Action("ShowLocation","Factorys",new {latitude=Model.CurrentLocationLat, longitude=Model.CurrentLocationLong})', '', 'toolbar=yes,scrollbars=no,resizable=no,top=200,left=400,width=600,height=350')" href="javascript:;" title="عرض على الخريطة"> <img src="/Content/assets/media/map-marker.png" /></a>
+
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <label>
+                                    @Html.LabelFor(model => model.MixerNo, "رقم الخلاطة")
+                                </label>
+                                @Html.TextBoxFor(model => model.MixerNo, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.MixerNo)
+                            </div>
+                            <div class="col-md-3">
+                                <label>
+                                    @Html.LabelFor(model => model.VisitId, "رقم زيارة المصنع")
+                                </label>
+                                <br />
+                                <span class="badge badge-info">@ViewBag.FactoryVisitNo</span>
+
+
+                                @Html.TextBoxFor(model => model.VisitId, new { @class = "form-control", disabled = "disabled", style = "display:none" })
+                                @Html.ValidationMessageFor(model => model.VisitId)
+                            </div>
+                            <div class="col-md-3">
+                                <label>
+                                    @Html.LabelFor(model => model.SampleId, "رقم العينة")
+                                </label>
+                                @Html.TextBoxFor(model => model.SampleId, new { @class = "form-control", disabled = "disabled" })
+
+                            </div>
+                            <div class="col-md-3">
+                                <label>
+                                    @Html.LabelFor(model => model.SampleTime, "وقت العينة")
+                                </label>
+                                @Html.TextBoxFor(model => model.SampleTime, new { @class = "form-control", disabled = "disabled" })
+
+                                @*<div class="row">
+                                        @Html.TextBoxFor(model => model.SampleDateDay, new { @class = "form-control col-md-2", placeholder = "اليوم" })
+                                        @Html.DropDownListFor(model => model.SampleDateMonth, new List<SelectListItem>
+                                    {
+                                        new SelectListItem{ Text= "يناير", Value = "1"  },
+                                        new SelectListItem{ Text= "فبراير", Value = "2" },
+                                        new SelectListItem{ Text= "مارس", Value = "3"},
+                                        new SelectListItem{ Text= "إبريل", Value = "4"},
+                                        new SelectListItem{ Text= "مايو", Value = "5"},
+                                        new SelectListItem{ Text= "يونيو", Value =  "6"},
+                                        new SelectListItem{ Text= "يوليو", Value =  "7"},
+                                        new SelectListItem{ Text= "أغسطس", Value = "8"},
+                                        new SelectListItem{ Text= "سبتمبر", Value =  "9"},
+                                        new SelectListItem{ Text= "أكتوبر", Value =  "10"},
+                                        new SelectListItem{ Text= "نوفمبر", Value =  "11"},
+                                        new SelectListItem{ Text= "ديسمبر", Value =  "12"},
+                                    }, new { @class = "form-control col-md-4" })
+                                        @Html.TextBoxFor(model => model.SampleDateYear, new { @class = "form-control col-md-3", placeholder = "السنة" })
+                                    </div>*@
+
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-4">
+                                <label>
+                                    @Html.LabelFor(model => model.TruckNo, "رقم الشاحنة")
+                                </label>
+                                @Html.TextBoxFor(model => model.TruckNo, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.TruckNo)
+                            </div>
+                            <div class="col-md-2">
+                                <label>
+                                    @Html.LabelFor(model => model.InvoiceNumber, "رقم الفاتورة")
+                                </label>
+                                @Html.TextBoxFor(model => model.InvoiceNumber, new { @class = "form-control" })
+
+                                @Html.ValidationMessageFor(model => model.InvoiceNumber)
+                            </div>
+                            <div class="col-md-2">
+                                <label> </label>
+                                <div class="kt-avatar kt-avatar--outline kt-avatar--circle">
+                                    <div class="kt-avatar__holder" style="background-image:url(@(string.IsNullOrEmpty(Model.InvoicePhotoUrl) ? "/Content/assets/media/defPhoto.jpg" : "/Uploads/Samples/"+ Model.InvoicePhotoUrl));width:90px;height:90px;background-size: cover;"></div>
+                                    <label class="kt-avatar__upload" data-toggle="kt-tooltip" title="" data-original-title="اختر صورة">
+                                        <i class="fa fa-pen"></i>
+                                        <input type="file" name="InvoicePhotoUrl" id="InvoicePhotoUrl" accept="image/*">
+                                    </label>
+                                    <span class="kt-avatar__cancel" data-toggle="kt-tooltip" title="" data-original-title="Cancel avatar">
+                                        <i class="fa fa-times"></i>
+                                    </span>
+                                </div>
+                                @Html.ValidationMessageFor(model => model.InvoicePhotoUrl)
+                            </div>
+                            <div class="col-md-4">
+                                <label>
+                                    @Html.LabelFor(model => model.ClientName, "اسم العميل")
+                                </label>
+                                @Html.TextBoxFor(model => model.ClientName, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.ClientName)
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="kt-section">
+                        <h3 class="kt-section__title">
+                            عينة الخرسانة
+                            :
+                        </h3>
+                        <div class="form-group row">
+                            <div class="col-md-4">
+                                <label>
+                                    @Html.LabelFor(model => model.SampleType, "نوع العينة")
+                                </label>
+                                <div class="form-group row">
+                                    <div class="col-md-4">
+                                        <label class="kt-radio kt-radio--bold kt-radio--brand">
+                                            @Html.RadioButtonFor(model => model.SampleType, "0")  إسطوانة
+                                            <span></span>
+                                        </label>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="kt-radio kt-radio--bold kt-radio--brand">
+                                            @Html.RadioButtonFor(model => model.SampleType, "1")  مكعب
+                                            <span></span>
+                                        </label>
+                                    </div>
+
+
+                                </div>
+                                @Html.ValidationMessageFor(model => model.SampleType)
+                            </div>
+                            <div class="col-md-4">
+                                <label>
+                                    @Html.LabelFor(model => model.ConcreteClass, "رتبة الخرسانة (نيوتن/مم2) MPa")
+                                </label>
+                                @Html.DropDownListFor(model => model.ConcreteClass, ViewData["ConcreteClassList"] as List<SelectListItem>, @Amana.GlobalResources.Cpanel.ChooseOption, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.ConcreteClass)
+                            </div>
+                            <div class="col-md-4 otherConcreteClass" style="display:none">
+                                <label>
+                                    @Html.LabelFor(model => model.ConcreteClassOther, "رقم الرتبة")
+                                </label>
+                                @Html.TextBoxFor(model => model.ConcreteClassOther, new { @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-4">
+                                <label>
+                                    @Html.LabelFor(model => model.ConcreteTemperture, "درجة حرارة الخرسانة (م)")
+                                </label>
+                                @Html.TextBoxFor(model => model.ConcreteTemperture, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.ConcreteTemperture)
+                            </div>
+                            <div class="col-md-2">
+                                <label> </label>
+                                <div class="kt-avatar kt-avatar--outline kt-avatar--circle">
+
+                                    <div class="kt-avatar__holder" style="background-image:url(@(string.IsNullOrEmpty(Model.ConcreteTemperturePhotoUrl) ? "/Content/assets/media/defPhoto.jpg" : "/Uploads/Samples/"+ Model.ConcreteTemperturePhotoUrl));width:90px;height:90px;background-size: cover;"></div>
+                                    <label class="kt-avatar__upload" data-toggle="kt-tooltip" title="" data-original-title="اختر صورة">
+                                        <i class="fa fa-pen"></i>
+                                        <input type="file" name="ConcreteTemperturePhotoUrl" id="ConcreteTemperturePhotoUrl" accept="image/*">
+                                    </label>
+                                    <span class="kt-avatar__cancel" data-toggle="kt-tooltip" title="" data-original-title="Cancel avatar">
+                                        <i class="fa fa-times"></i>
+                                    </span>
+                                </div>
+                                @Html.ValidationMessageFor(model => model.InvoicePhotoUrl)
+                            </div>
+                            <div class="col-md-4">
+                                <label>
+                                    @Html.LabelFor(model => model.WaterTemperture, "درجة حرارة الماء (م)")
+                                </label>
+                                @Html.TextBoxFor(model => model.WaterTemperture, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.WaterTemperture)
+                            </div>
+                            @*<div class="col-md-2">
+                                    <label> </label>
+                                    <div class="kt-avatar kt-avatar--outline kt-avatar--circle">
+                                        <div class="kt-avatar__holder" style="background-image:url(@(string.IsNullOrEmpty(Model.WaterTemperturePhotoUrl) ? "/Content/assets/media/defPhoto.jpg" : "/Uploads/Samples/"+ Model.WaterTemperturePhotoUrl));width:90px;height:90px;background-size: cover;"></div>
+                                        <label class="kt-avatar__upload" data-toggle="kt-tooltip" title="" data-original-title="اختر صورة">
+                                            <i class="fa fa-pen"></i>
+                                            <input type="file" name="WaterTemperturePhotoUrl" id="WaterTemperturePhotoUrl" accept="image/*">
+                                        </label>
+                                        <span class="kt-avatar__cancel" data-toggle="kt-tooltip" title="" data-original-title="Cancel avatar">
+                                            <i class="fa fa-times"></i>
+                                        </span>
+                                    </div>
+                                    @Html.ValidationMessageFor(model => model.WaterTemperturePhotoUrl)
+                                </div>*@
+
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-md-4">
+                                <label>
+                                    @Html.LabelFor(model => model.WeatherTemperture, "درجة حرارة الجو (م)")
+                                </label>
+                                @Html.TextBoxFor(model => model.WeatherTemperture, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.WeatherTemperture)
+                            </div>
+                            @*<div class="col-md-2">
+                                    <label> </label>
+                                    <div class="kt-avatar kt-avatar--outline kt-avatar--circle">
+                                        <div class="kt-avatar__holder" style="background-image:url(@(string.IsNullOrEmpty(Model.WeatherTemperturePhotoUrl) ? "/Content/assets/media/defPhoto.jpg" : "/Uploads/Samples/"+ Model.WeatherTemperturePhotoUrl));width:90px;height:90px;background-size: cover;"></div>
+                                        <label class="kt-avatar__upload" data-toggle="kt-tooltip" title="" data-original-title="اختر صورة">
+                                            <i class="fa fa-pen"></i>
+                                            <input type="file" name="WeatherTemperturePhotoUrl" id="WeatherTemperturePhotoUrl" accept="image/*">
+                                        </label>
+                                        <span class="kt-avatar__cancel" data-toggle="kt-tooltip" title="" data-original-title="Cancel avatar">
+                                            <i class="fa fa-times"></i>
+                                        </span>
+                                    </div>
+                                    @Html.ValidationMessageFor(model => model.WeatherTemperturePhotoUrl)
+                                </div>*@
+                            <div class="col-md-4">
+                                <label>
+                                    @Html.LabelFor(model => model.SlumpValue, "قيمة الهبوط (مم)")
+                                </label>
+                                @Html.TextBoxFor(model => model.SlumpValue, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.SlumpValue)
+                            </div>
+                            <div class="col-md-2">
+                                <label> </label>
+                                <div class="kt-avatar kt-avatar--outline kt-avatar--circle">
+                                    <div class="kt-avatar__holder" style="background-image:url(@(string.IsNullOrEmpty(Model.SlumpPhotoUrl) ? "/Content/assets/media/defPhoto.jpg" : "/Uploads/Samples/"+ Model.SlumpPhotoUrl));width:90px;height:90px;background-size: cover;"></div>
+                                    <label class="kt-avatar__upload" data-toggle="kt-tooltip" title="" data-original-title="اختر صورة">
+                                        <i class="fa fa-pen"></i>
+                                        <input type="file" name="SlumpPhotoUrl" id="SlumpPhotoUrl" accept="image/*">
+                                    </label>
+                                    <span class="kt-avatar__cancel" data-toggle="kt-tooltip" title="" data-original-title="Cancel avatar">
+                                        <i class="fa fa-times"></i>
+                                    </span>
+                                </div>
+                                @Html.ValidationMessageFor(model => model.SlumpPhotoUrl)
+                            </div>
+
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-6">
+                                <label>
+                                    @Html.LabelFor(model => model.ConcreteType, "نوع الأسمنت")
+                                </label>
+                                @Html.DropDownListFor(model => model.ConcreteType, new List<SelectListItem>
+                                                                {
+                                                                    new SelectListItem{ Text= "OPC", Value = "OPC"  },
+                                                                    new SelectListItem{ Text= "SRC", Value = "SRC" }
+                                                                }, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.ConcreteType)
+
+                            </div>
+                            <div class="col-md-6">
+                                <label>
+                                    @Html.LabelFor(model => model.ConcreteSourceId, "مصدر الأسمنت")
+                                </label>
+                                @Html.DropDownListFor(model => model.ConcreteSourceId, ViewData["ConcreteSourceList"] as SelectList, @Amana.GlobalResources.Cpanel.ChooseOption, new { @class = "form-control" })
+
+                                @Html.ValidationMessageFor(model => model.ConcreteSourceId)
+                            </div>
+
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <label>
+                                    @Html.LabelFor(model => model.AdditionTypes, " نوع الإضافات (1)")
+                                </label>
+
+                                @Html.DropDownListFor(model => model.AdditionTypes, ViewData["AdditionTypesList"] as SelectList, @Amana.GlobalResources.Cpanel.ChooseOption, new { @class = "form-control" })
+                                @*@Html.TextBoxFor(model => model.AdditionTypes, new { @class = "form-control" })*@
+                                @Html.ValidationMessageFor(model => model.AdditionTypes)
+                            </div>
+                            <div class="col-md-3 otherAdditionType" style="display:none">
+                                <label>
+                                    @Html.LabelFor(model => model.AdditionTypesOther, "أكتب النوع")
+                                </label>
+                                @Html.TextBoxFor(model => model.AdditionTypesOther, new { @class = "form-control" })
+                            </div>
+                            <div class="col-md-6">
+                                <label>
+                                    @Html.LabelFor(model => model.AdditionAmount, " كمية الإضافات (1)")
+                                </label>
+                                @Html.TextBoxFor(model => model.AdditionAmount, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.AdditionAmount)
+                            </div>
+
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <label>
+                                    @Html.LabelFor(model => model.AdditionTypes2, " نوع الإضافات (2)")
+                                </label>
+
+                                @Html.DropDownListFor(model => model.AdditionTypes2, ViewData["AdditionTypesList2"] as SelectList, @Amana.GlobalResources.Cpanel.ChooseOption, new { @class = "form-control" })
+                                @*@Html.TextBoxFor(model => model.AdditionTypes, new { @class = "form-control" })*@
+                                @Html.ValidationMessageFor(model => model.AdditionTypes2)
+                            </div>
+                            <div class="col-md-3 otherAdditionType2" style="display:none">
+                                <label>
+                                    @Html.LabelFor(model => model.AdditionTypesOther2, "أكتب النوع")
+                                </label>
+                                @Html.TextBoxFor(model => model.AdditionTypesOther2, new { @class = "form-control" })
+                            </div>
+                            <div class="col-md-6">
+                                <label>
+                                    @Html.LabelFor(model => model.AdditionAmount2, " كمية الإضافات (2)")
+                                </label>
+                                @Html.TextBoxFor(model => model.AdditionAmount2, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.AdditionAmount2)
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                    <div class="kt-section">
+                        <div class="form-group row">
+                            <div class="col-md-2">
+                                <h3 class="kt-section__title">
+                                    بيانات الخلطة
+                                    :
+                                </h3>
+                            </div>
+                            <div class="col-md-2">
+                                <label> </label>
+                                <div class="kt-avatar kt-avatar--outline kt-avatar--circle">
+                                    <div class="kt-avatar__holder" style="background-image:url(@(string.IsNullOrEmpty(Model.DesignMixturePhotoUrl) ? "/Content/assets/media/defPhoto.jpg" : "/Uploads/Samples/"+ Model.DesignMixturePhotoUrl));width:90px;height:90px;background-size: cover;"></div>
+                                    <label class="kt-avatar__upload" data-toggle="kt-tooltip" title="" data-original-title="اختر صورة">
+                                        <i class="fa fa-pen"></i>
+                                        <input type="file" name="DesignMixturePhotoUrl" id="DesignMixturePhotoUrl" accept="image/*">
+                                    </label>
+                                    <span class="kt-avatar__cancel" data-toggle="kt-tooltip" title="" data-original-title="Cancel avatar">
+                                        <i class="fa fa-times"></i>
+                                    </span>
+                                </div>
+                                @Html.ValidationMessageFor(model => model.DesignMixturePhotoUrl)
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-6">
+                                <label>
+                                    @Html.LabelFor(model => model.ConcreteWeight, "وزن الأسمنت (كجم)")
+                                </label>
+                                @Html.TextBoxFor(model => model.ConcreteWeight, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.ConcreteWeight)
+                            </div>
+                            <div class="col-md-6">
+                                <label>
+                                    @Html.LabelFor(model => model.WaterWeight, "وزن الماء (كجم)")
+                                </label>
+                                @Html.TextBoxFor(model => model.WaterWeight, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.WaterWeight)
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-6">
+                                <label>
+                                    @Html.LabelFor(model => model.WashedSand, "الرمل المغسول (كجم)")
+                                </label>
+                                @Html.TextBoxFor(model => model.WashedSand, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.WashedSand)
+                            </div>
+                            <div class="col-md-6">
+                                <label>
+                                    @Html.LabelFor(model => model.WhiteSand, "الرمل الأبيض (كجم)")
+                                </label>
+                                @Html.TextBoxFor(model => model.WhiteSand, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.WhiteSand)
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-md-6">
+                                <label>
+                                    @Html.LabelFor(model => model.Rokam3By4, "الركام 4/3 (كجم)")
+                                </label>
+                                @Html.TextBoxFor(model => model.Rokam3By4, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.Rokam3By4)
+                            </div>
+                            <div class="col-md-6">
+                                <label>
+                                    @Html.LabelFor(model => model.Rokam3By8, "الركام 8/3 (كجم)")
+                                </label>
+                                @Html.TextBoxFor(model => model.Rokam3By8, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.Rokam3By8)
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="kt-section">
+                        <h3 class="kt-section__title">
+                            استخدام الخرسانة
+                            :
+                        </h3>
+                        <div class="form-group row">
+                            <div class="col-md-1  kt-padding-t-10">
+                                <label class="kt-radio kt-radio--bold kt-radio--brand">
+                                    @Html.RadioButtonFor(model => model.ConcreteUsage, "1")  نظافة
+                                    <span></span>
+                                </label>
+                            </div>
+                            <div class="col-md-1 kt-padding-t-10">
+                                <label class="kt-radio kt-radio--bold kt-radio--brand">
+                                    @Html.RadioButtonFor(model => model.ConcreteUsage, "2")  أساسات
+                                    <span></span>
+                                </label>
+                            </div>
+                            <div class="col-md-1 kt-padding-t-10">
+                                <label class="kt-radio kt-radio--bold kt-radio--brand">
+                                    @Html.RadioButtonFor(model => model.ConcreteUsage, "3")  أعمدة
+                                    <span></span>
+                                </label>
+                            </div>
+                            <div class="col-md-1 kt-padding-t-10">
+                                <label class="kt-radio kt-radio--bold kt-radio--brand">
+                                    @Html.RadioButtonFor(model => model.ConcreteUsage, "4")  أسقف
+                                    <span></span>
+                                </label>
+                            </div>
+                            <div class="col-md-1 kt-padding-t-10">
+                                <label class="kt-radio kt-radio--bold kt-radio--brand">
+                                    @Html.RadioButtonFor(model => model.ConcreteUsage, "6")  قواعد
+                                    <span></span>
+                                </label>
+                            </div>
+                            <div class="col-md-2 kt-padding-t-10">
+                                <label class="kt-radio kt-radio--bold kt-radio--brand">
+                                    @Html.RadioButtonFor(model => model.ConcreteUsage, "7")  رقاب الاعمدة
+                                    <span></span>
+                                </label>
+                            </div>
+                            <div class="col-md-1 kt-padding-t-10">
+                                <label class="kt-radio kt-radio--bold kt-radio--brand">
+                                    @Html.RadioButtonFor(model => model.ConcreteUsage, "8")  ميد
+                                    <span></span>
+                                </label>
+                            </div>
+                            <div class="col-md-1 kt-padding-t-10">
+                                <label class="kt-radio kt-radio--bold kt-radio--brand">
+                                    @Html.RadioButtonFor(model => model.ConcreteUsage, "5")  أخرى
+                                    <span></span>
+                                </label>
+                            </div>
+                            <div class="col-md-2 concreteUsageOther" style="display:none">
+                                @*@Html.DropDownListFor(model => model.ConcreteUsageOther, new List<SelectListItem>
+                                    {
+                                        new SelectListItem{ Text= "قواعد", Value = "6"  },
+                                        new SelectListItem{ Text= "رقاب الاعمدة", Value = "7" },
+                                        new SelectListItem{ Text= "ميد", Value = "8" }
+                                    }, "-- اختر --", new { @class = "form-control" })*@
+                                @Html.TextBoxFor(model => model.ConcreteUsageOther, new { @class = "form-control", placeholder = "أخرى" })
+                                @Html.ValidationMessageFor(model => model.ConcreteUsageOther)
+                            </div>
+
+                            @Html.ValidationMessageFor(model => model.ConcreteUsage)
+
+                        </div>
+
+
+                    </div>
+
+                    <div class="kt-section">
+                        <h3 class="kt-section__title">
+                            حالة المصنع
+                            :
+                        </h3>
+
+                        <div class="kt-checkbox-list">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <label class="kt-checkbox kt-checkbox--bold kt-checkbox--brand" style="margin-top:20px;">
+                                        @Html.CheckBoxFor(model => model.IsCleanLocation)  جودة نظافة الموقع
+                                        <span></span>
+                                    </label>
+                                </div>
+                                <div class="col-md-2">
+                                    <label> </label>
+                                    <div class="kt-avatar kt-avatar--outline kt-avatar--circle">
+
+                                        <div class="kt-avatar__holder" style="background-image:url(@(string.IsNullOrEmpty(Model.IsCleanLocationPhotoUrl) ? "/Content/assets/media/defPhoto.jpg" : "/Uploads/Samples/"+ Model.IsCleanLocationPhotoUrl));width:60px;height:60px;background-size: cover;"></div>
+                                        <label class="kt-avatar__upload" data-toggle="kt-tooltip" title="" data-original-title="اختر صورة">
+                                            <i class="fa fa-pen"></i>
+                                            <input type="file" name="IsCleanLocationPhotoUrl" id="IsCleanLocationPhotoUrl" accept="image/*">
+                                        </label>
+                                        <span class="kt-avatar__cancel" data-toggle="kt-tooltip" title="" data-original-title="Cancel avatar">
+                                            <i class="fa fa-times"></i>
+                                        </span>
+                                    </div>
+                                    @Html.ValidationMessageFor(model => model.IsCleanLocationPhotoUrl)
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <label class="kt-checkbox kt-checkbox--bold kt-checkbox--brand" style="margin-top:20px;">
+                                        @Html.CheckBoxFor(model => model.IsDustControlInStation)  جودة التحكم فى الغبار المتطاير من الخلاطة
+                                        <span></span>
+                                    </label>
+                                </div>
+                                <div class="col-md-2">
+                                    <label> </label>
+                                    <div class="kt-avatar kt-avatar--outline kt-avatar--circle">
+                                        <div class="kt-avatar__holder" style="background-image:url(@(string.IsNullOrEmpty(Model.IsDustControlInStationPhotoUrl) ? "/Content/assets/media/defPhoto.jpg" : "/Uploads/Samples/"+ Model.IsDustControlInStationPhotoUrl));width:60px;height:60px;background-size: cover;"></div>
+                                        <label class="kt-avatar__upload" data-toggle="kt-tooltip" title="" data-original-title="اختر صورة">
+                                            <i class="fa fa-pen"></i>
+                                            <input type="file" name="IsDustControlInStationPhotoUrl" id="IsDustControlInStationPhotoUrl" accept="image/*">
+                                        </label>
+                                        <span class="kt-avatar__cancel" data-toggle="kt-tooltip" title="" data-original-title="Cancel avatar">
+                                            <i class="fa fa-times"></i>
+                                        </span>
+                                    </div>
+                                    @Html.ValidationMessageFor(model => model.IsDustControlInStationPhotoUrl)
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <label class="kt-checkbox kt-checkbox--bold kt-checkbox--brand" style="margin-top:20px;">
+                                        @Html.CheckBoxFor(model => model.IsRokamSummar)  رش الركام فى فصل الصيف
+                                        <span></span>
+                                    </label>
+                                </div>
+                                @*<div class="col-md-2">
+                                        <label> </label>
+                                        <div class="kt-avatar kt-avatar--outline kt-avatar--circle">
+                                            <div class="kt-avatar__holder" style="background-image:url(@(string.IsNullOrEmpty(Model.IsRokamSummarPhotoUrl) ? "/Content/assets/media/defPhoto.jpg" : "/Uploads/Samples/"+ Model.IsRokamSummarPhotoUrl));width:60px;height:60px;background-size: cover;"></div>
+                                            <label class="kt-avatar__upload" data-toggle="kt-tooltip" title="" data-original-title="اختر صورة">
+                                                <i class="fa fa-pen"></i>
+                                                <input type="file" name="IsRokamSummarPhotoUrl" id="IsRokamSummarPhotoUrl" accept="image/*">
+                                            </label>
+                                            <span class="kt-avatar__cancel" data-toggle="kt-tooltip" title="" data-original-title="Cancel avatar">
+                                                <i class="fa fa-times"></i>
+                                            </span>
+                                        </div>
+                                        @Html.ValidationMessageFor(model => model.IsRokamSummarPhotoUrl)
+                                    </div>*@
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <label class="kt-checkbox kt-checkbox--bold kt-checkbox--brand" style="margin-top:20px;">
+                                        @Html.CheckBoxFor(model => model.IsLabEngineer)  تواجد مهندس المختبر
+                                        <span></span>
+                                    </label>
+                                </div>
+                                @*<div class="col-md-2">
+                                        <label> </label>
+                                        <div class="kt-avatar kt-avatar--outline kt-avatar--circle">
+                                            <div class="kt-avatar__holder" style="background-image:url(@(string.IsNullOrEmpty(Model.IsLabEngineerPhotoUrl) ? "/Content/assets/media/defPhoto.jpg" : "/Uploads/Samples/"+ Model.IsLabEngineerPhotoUrl));width:60px;height:60px;background-size: cover;"></div>
+                                            <label class="kt-avatar__upload" data-toggle="kt-tooltip" title="" data-original-title="اختر صورة">
+                                                <i class="fa fa-pen"></i>
+                                                <input type="file" name="IsLabEngineerPhotoUrl" id="IsLabEngineerPhotoUrl" accept="image/*">
+                                            </label>
+                                            <span class="kt-avatar__cancel" data-toggle="kt-tooltip" title="" data-original-title="Cancel avatar">
+                                                <i class="fa fa-times"></i>
+                                            </span>
+                                        </div>
+                                        @Html.ValidationMessageFor(model => model.IsLabEngineerPhotoUrl)
+                                    </div>*@
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <label class="kt-checkbox kt-checkbox--bold kt-checkbox--brand" style="margin-top:20px;">
+                                        @Html.CheckBoxFor(model => model.IsMoldanatInTrunks)  وجود ملدنات فى سيارة نقل الخرسانة
+                                        <span></span>
+                                    </label>
+                                </div>
+                                <div class="col-md-2">
+                                    <label> </label>
+                                    <div class="kt-avatar kt-avatar--outline kt-avatar--circle">
+                                        <div class="kt-avatar__holder" style="background-image:url(@(string.IsNullOrEmpty(Model.IsMoldanatInTrunksPhotoUrl) ? "/Content/assets/media/defPhoto.jpg" : "/Uploads/Samples/"+ Model.IsMoldanatInTrunksPhotoUrl));width:60px;height:60px;background-size: cover;"></div>
+                                        <label class="kt-avatar__upload" data-toggle="kt-tooltip" title="" data-original-title="اختر صورة">
+                                            <i class="fa fa-pen"></i>
+                                            <input type="file" name="IsMoldanatInTrunksPhotoUrl" id="IsMoldanatInTrunksPhotoUrl" accept="image/*">
+                                        </label>
+                                        <span class="kt-avatar__cancel" data-toggle="kt-tooltip" title="" data-original-title="Cancel avatar">
+                                            <i class="fa fa-times"></i>
+                                        </span>
+                                    </div>
+                                    @Html.ValidationMessageFor(model => model.IsMoldanatInTrunksPhotoUrl)
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <label class="kt-checkbox kt-checkbox--bold kt-checkbox--brand" style="margin-top:20px;">
+                                        @Html.CheckBoxFor(model => model.IsPeopleSafety) إلتزام العاملين بالمصنع بلبس الكمامات
+                                        <span></span>
+                                    </label>
+                                </div>
+                                @*<div class="col-md-2">
+                                        <label> </label>
+                                        <div class="kt-avatar kt-avatar--outline kt-avatar--circle">
+                                            <div class="kt-avatar__holder" style="background-image:url(@(string.IsNullOrEmpty(Model.IsPeopleSafetyPhotoUrl) ? "/Content/assets/media/defPhoto.jpg" : "/Uploads/Samples/"+ Model.IsPeopleSafetyPhotoUrl));width:60px;height:60px;background-size: cover;"></div>
+                                            <label class="kt-avatar__upload" data-toggle="kt-tooltip" title="" data-original-title="اختر صورة">
+                                                <i class="fa fa-pen"></i>
+                                                <input type="file" name="IsPeopleSafetyPhotoUrl" id="IsPeopleSafetyPhotoUrl" accept="image/*">
+                                            </label>
+                                            <span class="kt-avatar__cancel" data-toggle="kt-tooltip" title="" data-original-title="Cancel avatar">
+                                                <i class="fa fa-times"></i>
+                                            </span>
+                                        </div>
+                                        @Html.ValidationMessageFor(model => model.IsPeopleSafetyPhotoUrl)
+                                    </div>*@
+                            </div>
+                        </div>
+                        <br />
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <label>
+                                    @Html.LabelFor(model => model.IsFactorySamplePrepared, "هل تم تحضير عينة خاصة بالمصنع ؟")
+                                </label>
+                                <div class="form-group row">
+                                    <div class="col-md-4">
+                                        <label class="kt-radio kt-radio--bold kt-radio--brand">
+                                            @Html.RadioButtonFor(model => model.IsFactorySamplePrepared, "true")  نعم
+                                            <span></span>
+                                        </label>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="kt-radio kt-radio--bold kt-radio--brand">
+                                            @Html.RadioButtonFor(model => model.IsFactorySamplePrepared, "false")  لا
+                                            <span></span>
+                                        </label>
+                                    </div>
+
+
+                                </div>
+                                @Html.ValidationMessageFor(model => model.IsFactorySamplePrepared)
+                            </div>
+                            <div class="col-md-3">
+                                <label> </label>
+                                <div class="kt-avatar kt-avatar--outline kt-avatar--circle">
+                                    <div class="kt-avatar__holder" style="background-image:url(@(string.IsNullOrEmpty(Model.IsFactorySamplePreparedPhotoUrl) ? "/Content/assets/media/defPhoto.jpg" : "/Uploads/Samples/"+ Model.IsFactorySamplePreparedPhotoUrl));width:90px;height:90px;background-size: cover;"></div>
+                                    <label class="kt-avatar__upload" data-toggle="kt-tooltip" title="" data-original-title="صورة العينة">
+                                        <i class="fa fa-pen"></i>
+                                        <input type="file" name="IsFactorySamplePreparedPhotoUrl" id="IsFactorySamplePreparedPhotoUrl" accept="image/*">
+                                    </label>
+                                    <span class="kt-avatar__cancel" data-toggle="kt-tooltip" title="" data-original-title="Cancel avatar">
+                                        <i class="fa fa-times"></i>
+                                    </span>
+                                </div>
+                                @Html.ValidationMessageFor(model => model.IsFactorySamplePreparedPhotoUrl)
+                            </div>
+                            <div class="col-md-6">
+                                <label>
+                                    @Html.LabelFor(model => model.GeneralNotes, "ملاحظات")
+                                </label>
+                                @Html.TextAreaFor(model => model.GeneralNotes, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.GeneralNotes)
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="kt-portlet__foot">
+                    <div class="kt-form__actions">
+                        <div class="row">
+                            <div class="col-md-6">
+                                @if (canEdit == true)
+                                {
+                                    <input type="submit" value="@Amana.GlobalResources.Cpanel.Save" class="btn btn-warning" />
+
+                                }
+                                @if (user.RoleId == 1005 && Model.SampleStatus == (int)SampleStatusEnum.RevisingByEngineer)//مهندس المواد
+                                {
+                                    <a href="@Url.Action("ChangeStatus",new {id= Model.VisitId , status = 5 })" class="btn btn-success">الموافقة على العينة</a>
+                                    <a href="@Url.Action("ChangeStatus",new {id= Model.VisitId , status = 0 })" class="btn btn-danger">ارسال للمراقب للمراجعة</a>
+
+                                }
+                                @if (user.RoleId == 1004 && Model.SampleStatus == (int)SampleStatusEnum.InReception)//الاستقبال
+                                {
+                                    <a href="@Url.Action("ChangeStatus",new {id= Model.VisitId , status = 3 })" class="btn btn-success">ارسال الى المختبر</a>
+
+                                }
+                                @*@if (user.RoleId == 1004 && Model.SampleStatus == 3)//الاستقبال
+                                    {
+                                        <a onclick="window.print();" href="javascript:;" class="btn btn-warning btn-sm kt-mt-20">
+                                            <img src="/Content/assets/media/icons/svg/Devices/Printer.svg" />
+                                            طباعة
+                                        </a>
+                                    }*@
+                                @if (user.RoleId == null)
+                                {
+                                    @Html.ActionLink(@Amana.GlobalResources.Cpanel.BackToList, "Index", new { }, new { @class = "btn btn-secondary" })
+                                }
+                                else
+                                {
+                                    @Html.ActionLink(@Amana.GlobalResources.Cpanel.Back, "Index", "Home", new { }, new { @class = "btn btn-secondary" })
+
+                                }
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            }
+
+
+            <!--end::Form-->
+        </div>
+
+
+    </div>
+</div>
+
+@if (canEdit == false)
+{
+
+    <script>
+        $(document).ready(function () {
+
+            $('#frmSampleDetails input').attr("disabled", "disabled");
+        });
+    </script>
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        showConcreteClassOther();
+        $("#ConcreteClass").change(function () {
+            showConcreteClassOther();
+        });
+
+        showAdditionTypeOther();
+        $("#AdditionTypes").change(function () {
+            showAdditionTypeOther();
+        });
+
+        showAdditionTypeOther2();
+        $("#AdditionTypes2").change(function () {
+            showAdditionTypeOther2();
+        });
+
+
+        var usId = $('input[name="ConcreteUsage"]:checked').val();
+        if (usId == "5") {
+
+            $(".concreteUsageOther").show();
+            //$("#ConcreteUsageOther").focus();
+
+        }
+        else {
+
+            $(".concreteUsageOther").hide();
+
+        }
+
+        $("input[name='ConcreteUsage']").click(function () {
+
+            if ($(this).val() == "5") {
+
+                $(".concreteUsageOther").show();
+                $("#ConcreteUsageOther").focus();
+
+            }
+            else {
+
+                $(".concreteUsageOther").hide();
+
+            }
+        });
+
+    });
+
+    function showConcreteClassOther() {
+        var val = $("#ConcreteClass").val();
+        if (val == "0") {
+            $(".otherConcreteClass").show();
+            $("#ConcreteClassOther").focus();
+        }
+        else {
+            $(".otherConcreteClass").hide();
+        }
+    }
+    function showAdditionTypeOther() {
+        var val = $("#AdditionTypes").val();
+        if (val == "0") {
+            $(".otherAdditionType").show();
+            $("#AdditionTypesOther").focus();
+        }
+        else {
+            $(".otherAdditionType").hide();
+        }
+    }
+    function showAdditionTypeOther2() {
+        var val = $("#AdditionTypes2").val();
+        if (val == "0") {
+            $(".otherAdditionType2").show();
+            $("#AdditionTypesOther2").focus();
+        }
+        else {
+            $(".otherAdditionType2").hide();
+        }
+    }
+    //function showConcreteUsageOther() {
+    //    var val = $("#ConcreteUsage").val();
+    //    if (val == "5") {
+    //        $(".concreteUsageOther").show();
+    //        $("#ConcreteUsageOther").focus();
+    //    }
+    //    else {
+    //        $(".concreteUsageOther").hide();
+    //    }
+    //}
+
+    $("#liSamples").addClass("kt-menu__item--open");
+
+    function getLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                position.coords.latitude;
+                position.coords.longitude;
+                //alert(position.coords.latitude);
+                $("#CurrentLocationLat").val(position.coords.latitude);
+                $("#CurrentLocationLong").val(position.coords.longitude);
+                // You can use this in the client
+                // or send it to the server using AJAX.
+            });
+        } else {
+            // Geolocation is not supported by this browser.
+            // This is when you will have to use the IP address.
+        }
+    }
+</script>
+
+@if (!Model.SampleId.HasValue)
+{
+
+    <script>
+        $(document).ready(function () {
+            $('input[type=file]').attr("required", "required");
+            //$(".field-validation-error").find("span").text("هذا الحقل مطلوب");
+        });
+
+        getLocation();
+    </script>
+}
+
+
+
+
+
+
+
+

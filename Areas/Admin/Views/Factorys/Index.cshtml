@@ -1,0 +1,214 @@
+﻿@model List<Amana.Models.Entities.Factories>
+@using Amana.Models.Enums;
+@using Amana.GlobalResources;
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_Layout2.cshtml";
+    var factoryTypeId = Request["factoryType"];
+    var close = Request["close"];
+}
+@section sectionSubHeader{
+
+    <div class="kt-subheader__main">
+        <h3 class="kt-subheader__title">
+            @Cpanel.Factories
+        </h3>
+        <span class="kt-subheader__separator kt-hidden"></span>
+        <div class="kt-subheader__breadcrumbs">
+            <a href="#" class="kt-subheader__breadcrumbs-home"><i class="flaticon2-shelter"></i></a>
+            @*<span class="kt-subheader__breadcrumbs-separator"></span>
+                <a href="" class="kt-subheader__breadcrumbs-link">
+                    قائمة المصانع
+                </a>*@
+            <span class="kt-subheader__breadcrumbs-separator"></span>
+            <span class="kt-subheader__breadcrumbs-link kt-subheader__breadcrumbs-link--active">  @Cpanel.Factories</span>
+
+        </div>
+    </div>
+}
+<div class="kt-portlet kt-portlet--mobile">
+    <div class="kt-portlet__head kt-portlet__head--lg">
+        <div class="kt-portlet__head-label">
+            <span class="kt-portlet__head-icon">
+                <i class="kt-font-brand flaticon2-line-chart"></i>
+            </span>
+
+            <h3 class="kt-portlet__head-title">
+                @Cpanel.Factories
+            </h3>
+
+        </div>
+        <div class="kt-portlet__head-toolbar">
+            <div class="kt-portlet__head-wrapper">
+                <div class="kt-portlet__head-actions">
+                    <a href="@Url.Action("AddFactory")" class="btn btn-brand btn-elevate btn-icon-sm">
+                        <i class="la la-plus"></i>
+                        @Cpanel.Create
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="kt-portlet__body">
+        @if (ViewBag.Success == true)
+        {
+            @Html.Partial("~/Areas/Admin/Views/Shared/UcSuccess.cshtml")
+        }
+        @if (close != "1")
+        {
+            using (Html.BeginForm("Index", "Factorys", new { close = close }, FormMethod.Get, new { @class = "kt-form kt-form--label-right kt-margin-t-20 kt-margin-b-10" }))
+            {
+                <div class="row align-items-center">
+                    <div class="col-xl-8 order-2 order-xl-1">
+                        <div class="row align-items-center">
+                            <div class="col-md-3 kt-margin-b-20-tablet-and-mobile">
+                                <div class="kt-form__control">
+                                    <label>@Cpanel.Type</label>
+                                    @Html.DropDownList("factoryType", new List<SelectListItem>
+                                {
+                                    new SelectListItem{ Text= Cpanel.All, Value = "" , Selected= (factoryTypeId=="") },
+                                    new SelectListItem{ Text= Cpanel.Concrete2, Value = "0" , Selected= (factoryTypeId=="0") },
+                                    new SelectListItem{ Text=Cpanel.Block, Value = "1", Selected= (factoryTypeId=="1") }
+                                }, new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="col-md-3 kt-margin-b-20-tablet-and-mobile">
+                                <div class="kt-form__control">
+                                    <label>@Cpanel.Location</label>
+                                    @Html.DropDownList("locationId", ViewData["LocationsLst"] as SelectList, Cpanel.All, new { @class = "form-control" })
+                                </div>
+                            </div>
+
+                            @*<div class="col-md-1 kt-margin-b-20-tablet-and-mobile">
+                                    <div class="kt-form__control">
+                                        <label>الحالة</label>
+                                    </div>
+                                </div>*@
+                            <div class="col-md-1">
+                                <input type="submit" value="@Amana.GlobalResources.Cpanel.Search" class="btn btn-default kt-mt-20" />
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+            }
+
+        }
+
+        <!--begin: Datatable -->
+        @if (Model.Count > 0)
+        {
+
+            <table class="table table-striped- table-bordered table-hover table-checkable" id="kt_table_1">
+                <thead>
+                    <tr>
+                        <th>@Cpanel.FactoryCode</th>
+                        <th>@Cpanel.FactoryName</th>
+                        <th>@Cpanel.Type</th>
+                        <th>@Cpanel.Location</th>
+                        <th></th>
+                        @if (close != "1")
+                        {
+                            <th>
+
+
+                            </th>
+                        }
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        int i = 0;
+                        foreach (var item in Model)
+                        {
+                            i++;
+                            <tr>
+                                <td>
+                                    @item.CodeNo
+                                </td>
+                                <td>
+                                    @item.Name
+                                </td>
+                                <td>
+                                    @(item.FactoryType==(int) FactoryTypesEnum.Concrete ? Cpanel.Concrete2 : Cpanel.Block)
+                                </td>
+                                <td style="@(item.IdxLocations ==null? "color:red;font-weight:bold" : "")">
+                                    @(item.IdxLocations ==null ? Cpanel.NotDefined :item.IdxLocations.Name)
+                                </td>
+                                <td>
+                                    @if (item.IsTemporaryClosed == true)
+                                    {
+                                        <span class="btn btn-bold btn-sm btn-font-sm  btn-label-danger">@Cpanel.ClosedFactory</span>
+                                    }
+                                    @if (item.IsIntensiveVisits == true)
+                                    {
+                                        <span class="btn btn-sm btn-label-warning btn-bold">@Cpanel.IntenseMonitoring</span>
+                                    }
+                                    @if (close == "1")
+                                    {
+                                        if (item.IsTemporaryClosed == false)
+                                        {
+                                            <a href="@Url.Action("OpenCloseFactory", new { id = item.ID, redirectToIndex = true })" class="btn btn-danger btn-sm mr-2" onclick="return confirm('سيتم إغلاق المصنع, هل أنت متاكد ؟');">@Cpanel.CloseFactory</a>
+                                        }
+                                        if (item.IsIntensiveVisits == false)
+                                        {
+                                            <a href="@Url.Action("ToggleIntensiveVisits", new { id = item.ID, redirectToIndex = true })" class="btn btn-warning btn-sm mr-2" onclick="return confirm('سيتم نقل المصنع للمراقبة المكثفة , هل أنت متاكد ؟');">@Cpanel.IntenseMonitoring</a>
+                                        }
+                                    }
+                                </td>
+                                @if (close != "1")
+                                {
+                                    <td nowrap>
+
+
+                                        <a href="@Url.Action("AddFactory", new { id = item.ID })" class="btn btn-success btn-sm mr-2">
+
+                                            @Cpanel.Edit
+                                        </a>
+
+
+                                        <a href="@Url.Action("DeleteFactory", new { id = item.ID,factoryType=factoryTypeId,locationId=Request["locationId"] })" class="btn btn-danger btn-sm mr-2" onclick="return confirm('سيتم الحذف, هل أنت متاكد ؟');">@Amana.GlobalResources.Cpanel.Delete</a>
+
+                                    </td>
+                                }
+
+                            </tr>
+                        }
+                    }
+
+                </tbody>
+            </table>
+
+            <!--end: Datatable -->
+        }
+    </div>
+</div>
+
+@section sectionScripts{
+
+
+
+    
+    @if (close != "1")
+    {
+        <script>
+            $("#liFactories").addClass("kt-menu__item--open");
+        </script>
+
+    }
+    else
+    {
+        <script>
+            $("#liManagement").addClass("kt-menu__item--open");
+            $("#liClosedFactories").addClass("kt-menu__item--open");
+        </script>
+    }
+}
+
+
+
+
+

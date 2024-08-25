@@ -1,0 +1,73 @@
+﻿@model Amana.ViewModels.Classifications.QCLaboratoryRecordsViewModel
+@using Amana.Models.Helpers;
+
+@{
+    Layout = null;
+}
+
+@using (Html.BeginForm("LabQCLaboratoryRecordsForm", "FactoryClassification", FormMethod.Post, new { enctype = "multipart/form-data", @class = "kt-form" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    @Html.HiddenFor(model => model.ClassificationId)
+
+    <div class="kt-portlet__body">
+        <div class="kt-section kt-section--first">
+
+            <h3 class="kt-section__title">
+                Lab Records Info :
+            </h3>
+            <div class="kt-checkbox-list">
+                @foreach (var item in Model.ListProp29)
+                {
+                    Html.RenderPartial("_ClsProperty", item);
+                }
+
+            </div>
+            <div class="kt-separator kt-separator--border-dashed kt-separator--space-lg kt-separator--portlet-fit"></div>
+            <h3 class="kt-section__title">
+                Lab report info
+                :
+            </h3>
+            <div class="kt-checkbox-list">
+                @foreach (var item in Model.ListProp30)
+                {
+                    Html.RenderPartial("_ClsProperty", item);
+                }
+
+            </div>
+            <div class="kt-separator kt-separator--border-dashed kt-separator--space-lg kt-separator--portlet-fit"></div>
+            <h3 class="kt-section__title">
+                Evaluation and Reliability
+                :
+            </h3>
+            <div class="kt-checkbox-list">
+                @foreach (var item in Model.ListProp31)
+                {
+                    Html.RenderPartial("_ClsProperty", item);
+                }
+
+            </div>
+        
+         
+        </div>
+
+
+
+
+    </div>
+    <div class="kt-portlet__foot">
+        <div class="kt-form__actions">
+            <div class="row">
+                <div class="col-lg-6">
+                    <input type="submit" value="@Amana.GlobalResources.Cpanel.Save" class="btn btn-warning" />
+
+                </div>
+                @*<div class="col-lg-6 kt-align-right">
+                        <button type="reset" class="btn btn-danger">Delete</button>
+                    </div>*@
+            </div>
+        </div>
+    </div>
+
+}

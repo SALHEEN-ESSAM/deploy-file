@@ -1,0 +1,231 @@
+﻿@model Amana.Models.Entities.MD_Requests
+@using Amana.Models.Helpers;
+@using Amana.Models.Enums;
+@using Amana.Models;
+@using Amana.GlobalResources;
+
+@{
+    Layout = null;
+    var currentUser = (Amana.Models.Entities.C_UserItems)HttpContext.Current.Session["UserDetails"];
+}
+<div class="kt-grid__item" id="kt_user_profile_aside" style="opacity: 1;">
+    <!--begin:: Widgets/Applications/User/Profile1-->
+    <div class="kt-portlet kt-portlet--height-fluid-">
+        <div class="kt-portlet__head  kt-portlet__head--noborder">
+            <div class="kt-portlet__head-label">
+                <h3 class="kt-portlet__head-title">
+                    @Model.Factories.Name
+                </h3>
+            </div>
+        </div>
+        <div class="kt-portlet__body kt-portlet__body--fit-y">
+
+            <!--begin::Widget -->
+            <div class="kt-widget kt-widget--user-profile-1">
+
+                <div class="kt-widget__body">
+                    <div class="kt-widget__content" style="padding:10px;">
+                        @*<div class="kt-widget__info">
+                                <div class="col-md-4">الفترة : </div>
+                                <div class="col-md-8"> @Model.StngTimePeriods.Title</div>
+
+                            </div>*@
+                        <div class="kt-widget__info">
+                            <div class="col-md-4">@Cpanel.RequestDate : </div>
+                            <div class="col-md-8">@Model.CreatedWhen.ToString("dd / MM / yyyy")</div>
+
+                        </div>
+
+                        @*<div class="kt-widget12__progress kt-padding-t-10">
+                                <div class="progress kt-progress--sm">
+
+                                    <div class="progress-bar kt-bg-brand" role="progressbar" style="width:@Html.ClsProgressBar(Model)%;" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                                <span class="kt-widget12__stat">
+                                    @Html.ClsProgressBar(Model)%
+                                </span>
+                            </div>*@
+                    </div>
+                    <div class="kt-widget__items">
+                        @*kt-widget__item--active*@
+                        <a id="lnkReqConcCls15" href="@Url.Action("CreateRequestConcClsInfo",new {id=Model.RequestId,cls=15 })" class="kt-widget__item ">
+                            <span class="kt-widget__section">
+                                <span class="kt-widget__icon">
+                                    <span class="kt-widget__icon">
+                                        <i class="fa fa-arrow-left"></i>
+                                    </span>
+                                </span>
+                                <span class="kt-widget__desc">
+                                    @Cpanel.ConcreteClass : 15
+                                </span>
+                            </span>
+                            @if (Model.IsC15Complete)
+                            {
+                                <span class="kt-badge kt-badge--unified-success kt-badge--sm kt-badge--rounded kt-badge--bolder"><i class="fa fa-check"></i></span>
+                            }
+                            else
+                            {
+                                <span class="kt-badge kt-badge--unified-danger kt-badge--sm kt-badge--rounded kt-badge--bolder"><i class="fa fa-times"></i></span>
+                            }
+                        </a>
+                        <a id="lnkReqConcCls25" href="@Url.Action("CreateRequestConcClsInfo",new {id=Model.RequestId,cls=25 })" class="kt-widget__item ">
+                            <span class="kt-widget__section">
+                                <span class="kt-widget__icon">
+                                    <span class="kt-widget__icon">
+                                        <i class="fa fa-arrow-left"></i>
+                                    </span>
+                                </span>
+                                <span class="kt-widget__desc">
+                                    @Cpanel.ConcreteClass  : 25
+                                </span>
+                            </span>
+                            @if (Model.IsC25Complete)
+                            {
+                                <span class="kt-badge kt-badge--unified-success kt-badge--sm kt-badge--rounded kt-badge--bolder"><i class="fa fa-check"></i></span>
+                            }
+                            else
+                            {
+                                <span class="kt-badge kt-badge--unified-danger kt-badge--sm kt-badge--rounded kt-badge--bolder"><i class="fa fa-times"></i></span>
+                            }
+                        </a>
+                        <a id="lnkReqConcCls30" href="@Url.Action("CreateRequestConcClsInfo",new {id=Model.RequestId,cls=30 })" class="kt-widget__item ">
+                            <span class="kt-widget__section">
+                                <span class="kt-widget__icon">
+                                    <span class="kt-widget__icon">
+                                        <i class="fa fa-arrow-left"></i>
+                                    </span>
+                                </span>
+                                <span class="kt-widget__desc">
+                                    @Cpanel.ConcreteClass  : 30
+                                </span>
+                            </span>
+                            @if (Model.IsC30Complete)
+                            {
+                                <span class="kt-badge kt-badge--unified-success kt-badge--sm kt-badge--rounded kt-badge--bolder"><i class="fa fa-check"></i></span>
+                            }
+                            else
+                            {
+                                <span class="kt-badge kt-badge--unified-danger kt-badge--sm kt-badge--rounded kt-badge--bolder"><i class="fa fa-times"></i></span>
+                            }
+                        </a>
+                        <a id="lnkReqConcCls35" href="@Url.Action("CreateRequestConcClsInfo",new {id=Model.RequestId,cls=35 })" class="kt-widget__item ">
+                            <span class="kt-widget__section">
+                                <span class="kt-widget__icon">
+                                    <span class="kt-widget__icon">
+                                        <i class="fa fa-arrow-left"></i>
+                                    </span>
+                                </span>
+                                <span class="kt-widget__desc">
+                                    @Cpanel.ConcreteClass  : 35
+                                </span>
+                            </span>
+                            @if (Model.IsC35Complete)
+                            {
+                                <span class="kt-badge kt-badge--unified-success kt-badge--sm kt-badge--rounded kt-badge--bolder"><i class="fa fa-check"></i></span>
+                            }
+                            else
+                            {
+                                <span class="kt-badge kt-badge--unified-danger kt-badge--sm kt-badge--rounded kt-badge--bolder"><i class="fa fa-times"></i></span>
+                            }
+                        </a>
+                        <a id="lnkReqFiles" href="@Url.Action("CreateRequestFiles",new {id=Model.RequestId })" class="kt-widget__item ">
+                            <span class="kt-widget__section">
+                                <span class="kt-widget__icon">
+                                    <i class="fa fa-arrow-left"></i>
+                                </span>
+                                <span class="kt-widget__desc">
+                                    @Cpanel.MaterialResultsFiles
+                                </span>
+                            </span>
+                            @if (Model.IsFilesUploadComplete)
+                            {
+                                <span class="kt-badge kt-badge--unified-success kt-badge--sm kt-badge--rounded kt-badge--bolder"><i class="fa fa-check"></i></span>
+                            }
+                            else
+                            {
+                                <span class="kt-badge kt-badge--unified-danger kt-badge--sm kt-badge--rounded kt-badge--bolder"><i class="fa fa-times"></i></span>
+                            }
+                        </a>
+
+
+
+                        <br />
+                        <div class="kt-portlet__foot">
+                            <div class="row">
+                                <div class="col-md-12 text-center">@Cpanel.RequestStatus : @Html.Raw(Html.MixDesignStatusBadge(Model.RequestStatus))</div>
+                                <div class="col-md-12 text-center" style="padding-top:10px;">
+                                    @if (currentUser.RoleId.HasValue)
+                                    {
+                                        switch ((UserRolesEnum)currentUser.RoleId)
+                                        {
+                                            case UserRolesEnum.ProjectManager:
+                                                if (Model.RequestStatus == (int)MixDesignStatusEnum.AtManager)
+                                                {
+                                                    <a class="btn btn-danger" href="@Url.Action("ChangeRequestStatus",new { id=Model.RequestId , status=(int)MixDesignStatusEnum.RevisingByEngineer })">@Cpanel.ReceiptTransferToEngineer</a>
+                                                }
+                                                break;
+                                            case UserRolesEnum.Observers:
+                                                break;
+                                            case UserRolesEnum.Consultants:
+                                                break;
+                                            case UserRolesEnum.MaterialEngineers:
+                                                if (Model.RequestStatus == (int)MixDesignStatusEnum.RevisingByEngineer)
+                                                {
+                                                    <a class="btn btn-danger btn-sm col-md-12 mt-1" href="@Url.Action("ChangeRequestStatus",new { id=Model.RequestId , status=(int)MixDesignStatusEnum.AtObserver })">@Cpanel.TransferToObserver</a>
+                                                    <a class="btn btn-danger btn-sm col-md-12 mt-1" href="@Url.Action("ChangeRequestStatus",new { id=Model.RequestId , status=(int)MixDesignStatusEnum.Declined })">@Cpanel.FinalRejection</a>
+                                                    <a class="btn btn-danger btn-sm col-md-12 mt-1" href="@Url.Action("ChangeRequestStatus",new { id=Model.RequestId , status=(int)MixDesignStatusEnum.DeclinedWithNotes })">@Cpanel.RejectAndTransferToFactory</a>
+                                                }
+                                                else if (Model.RequestStatus == (int)MixDesignStatusEnum.AtObserver)
+                                                {
+                                                    <a class="btn btn-danger" href="@Url.Action("ChangeRequestStatus",new { id=Model.RequestId , status=(int)MixDesignStatusEnum.InReception })">@Cpanel.TransferToReception</a>
+                                                }
+                                                else if (Model.RequestStatus == (int)MixDesignStatusEnum.LabFinished)
+                                                {
+                                                    <a class="btn btn-success btn-sm col-md-12 mt-1" href="@Url.Action("ChangeRequestStatus",new { id=Model.RequestId , status=(int)MixDesignStatusEnum.Approved })">@Cpanel.ApproveSample</a>
+                                                    <a class="btn btn-danger btn-sm col-md-12 mt-1" href="@Url.Action("ChangeRequestStatus",new { id=Model.RequestId , status=(int)MixDesignStatusEnum.Declined })">@Cpanel.FinalRejection</a>
+                                                    <a class="btn btn-danger btn-sm col-md-12 mt-1" href="@Url.Action("ChangeRequestStatus",new { id=Model.RequestId , status=(int)MixDesignStatusEnum.DeclinedWithNotes })">@Cpanel.RejectAndTransferToFactory</a>
+                                                }
+                                                break;
+                                            case UserRolesEnum.ReceptionEmployees:
+                                                if (Model.RequestStatus == (int)MixDesignStatusEnum.InReception)
+                                                {
+                                                    <a class="btn btn-danger" href="@Url.Action("ChangeRequestStatus",new { id=Model.RequestId , status=(int)MixDesignStatusEnum.InLab })">@Cpanel.ReceiptTransferToLab</a>
+                                                }
+                                                break;
+                                            case UserRolesEnum.LabEmployees:
+                                                if (Model.RequestStatus == (int)MixDesignStatusEnum.InLab)
+                                                {
+                                <a class="btn btn-danger" href="@Url.Action("ChangeRequestStatus",new { id=Model.RequestId , status=(int)MixDesignStatusEnum.LabFinished })">@Cpanel.ReceiptTransferToEngineer</a>
+                                                }
+                                                break;
+                                            case UserRolesEnum.AmanaEmployees:
+                                                if (currentUser.UserId == AppSettings.ProjectSupervisorId && Model.RequestStatus == (int)MixDesignStatusEnum.AtSupervisor)
+                                                {
+                                                    <a class="btn btn-danger" href="@Url.Action("ChangeRequestStatus",new { id=Model.RequestId , status=(int)MixDesignStatusEnum.AtManager })">@Cpanel.ReceiptTransferToManager</a>
+                                                }
+                                                break;
+                                            case UserRolesEnum.Factories:
+                                                break;
+                                            default:
+                                                break;
+                                        }
+                                    }
+
+
+
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!--end::Widget -->
+        </div>
+    </div>
+
+    <!--end:: Widgets/Applications/User/Profile1-->
+</div>

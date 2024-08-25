@@ -1,0 +1,29 @@
+﻿@model Amana.ViewModels.C_UserItemsViewModel
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout2.cshtml";
+}
+
+<script type="text/javascript">
+    $(function () {
+        $("li.mnUserAccount a").addClass("active");
+    });
+</script>
+
+<h1>@Amana.GlobalResources.Users.MyAccount</h1>
+<div class="sep100x100"></div>
+
+@if (ViewBag.CustomSuccess != null)
+{
+    @Html.Partial("~/Views/Shared/UcCustomSuccess.cshtml", ViewBag.CustomSuccess as string)
+}
+
+@if (ViewBag.CustomError != null)
+{
+    @Html.Partial("~/Views/Shared/UcCustomError.cshtml", ViewBag.CustomError as string)
+}
+
+@Html.Action("AccountInformation")
+<div class="sep100x100"></div>
+@Html.Action("AccountPassword")

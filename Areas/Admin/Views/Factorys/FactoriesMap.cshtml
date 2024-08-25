@@ -1,0 +1,106 @@
+﻿@model List<Amana.Models.Entities.Factories>
+@using Amana.GlobalResources;
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_Layout2.cshtml";
+
+}
+@section sectionSubHeader{
+
+    <div class="kt-subheader__main">
+        <h3 class="kt-subheader__title">
+            @Cpanel.Factories
+        </h3>
+        <span class="kt-subheader__separator kt-hidden"></span>
+        <div class="kt-subheader__breadcrumbs">
+            <a href="#" class="kt-subheader__breadcrumbs-home"><i class="flaticon2-shelter"></i></a>
+            @*<span class="kt-subheader__breadcrumbs-separator"></span>
+                <a href="" class="kt-subheader__breadcrumbs-link">
+                    قائمة المصانع
+                </a>*@
+            <span class="kt-subheader__breadcrumbs-separator"></span>
+            <span class="kt-subheader__breadcrumbs-link kt-subheader__breadcrumbs-link--active"> @Cpanel.FactoriesOnMap</span>
+
+        </div>
+    </div>
+}
+<div class="kt-portlet kt-portlet--mobile">
+    <div class="kt-portlet__head kt-portlet__head--lg">
+        <div class="kt-portlet__head-label">
+            <span class="kt-portlet__head-icon">
+                <i class="kt-font-brand flaticon2-line-chart"></i>
+            </span>
+
+            <h3 class="kt-portlet__head-title">
+              @Cpanel.FactoriesOnMap
+            </h3>
+
+        </div>
+
+    </div>
+
+    <div class="kt-portlet__body">
+
+        <!--begin: Datatable -->
+        @if (Model.Count > 0)
+        {
+            <div class="form-group row">
+                <div id="map" style="width: 100%; height:600px;"></div>
+                <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBMMpfFDCKmx8ZwhotaWBjRN6GJBFefD_4&sensor=false"></script>
+
+                <script type="text/javascript">
+                var locations = [
+                    @foreach(var item in Model)
+                    {
+                        if(item.Lat.HasValue && item.Lang.HasValue)
+                        {
+                         <text>['@item.Name', @item.Lat, @item.Lang, 4],</text>
+                        }
+
+                    }
+                    ];
+
+                var map = new google.maps.Map(document.getElementById('map'), {
+                    zoom: 7,
+                    center: new google.maps.LatLng(22.43134015636061, 46.845703125),
+                    mapTypeId: google.maps.MapTypeId.ROADMAP
+                });
+
+                var infowindow = new google.maps.InfoWindow();
+
+                var marker, i;
+
+                for (i = 0; i < locations.length; i++) {
+                    marker = new google.maps.Marker({
+                        position: new google.maps.LatLng(locations[i][1], locations[i][2]),
+                        map: map,
+                        label: locations[i][0]
+                    });
+
+                    google.maps.event.addListener(marker, 'click', (function (marker, i) {
+                        return function () {
+                            infowindow.setContent(locations[i][0]);
+                            infowindow.open(map, marker);
+                        }
+                    })(marker, i));
+                }
+                </script>
+            </div>
+
+            <!--end: Datatable -->
+        }
+    </div>
+</div>
+
+@section sectionScripts{
+    <script>
+
+
+        $("#liFactories").addClass("kt-menu__item--open");
+    </script>
+
+}
+
+
+
+
+

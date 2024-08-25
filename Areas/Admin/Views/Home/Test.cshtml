@@ -1,0 +1,302 @@
+﻿@{
+    Layout = "~/Areas/Admin/Views/Shared/_Layout2.cshtml";
+}
+<div class="alert alert-light alert-elevate" role="alert">
+    <div class="alert-icon"><i class="flaticon-warning kt-font-brand"></i></div>
+    <div class="alert-text">
+        The Metronic Datatable component supports initialization from HTML table. It also defines the schema model of the data source. In addition to the visualization, the Datatable
+        provides built-in support for operations over data such
+        as sorting, filtering and paging performed in user browser(frontend).
+    </div>
+</div>
+<div class="kt-portlet kt-portlet--mobile">
+    <div class="kt-portlet__head kt-portlet__head--lg">
+        <div class="kt-portlet__head-label">
+            <span class="kt-portlet__head-icon">
+                <i class="kt-font-brand flaticon2-line-chart"></i>
+            </span>
+            <h3 class="kt-portlet__head-title">
+                HTML Table
+                <small>Datatable initialized from HTML table</small>
+            </h3>
+        </div>
+        <div class="kt-portlet__head-toolbar">
+            <div class="kt-portlet__head-wrapper">
+                <div class="kt-portlet__head-actions">
+                    <div class="dropdown dropdown-inline">
+                        <button type="button" class="btn btn-default btn-icon-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="la la-download"></i> Export
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <ul class="kt-nav">
+                                <li class="kt-nav__section kt-nav__section--first">
+                                    <span class="kt-nav__section-text">Choose an option</span>
+                                </li>
+                                <li class="kt-nav__item">
+                                    <a href="#" class="kt-nav__link">
+                                        <i class="kt-nav__link-icon la la-print"></i>
+                                        <span class="kt-nav__link-text">Print</span>
+                                    </a>
+                                </li>
+                                <li class="kt-nav__item">
+                                    <a href="#" class="kt-nav__link">
+                                        <i class="kt-nav__link-icon la la-copy"></i>
+                                        <span class="kt-nav__link-text">Copy</span>
+                                    </a>
+                                </li>
+                                <li class="kt-nav__item">
+                                    <a href="#" class="kt-nav__link">
+                                        <i class="kt-nav__link-icon la la-file-excel-o"></i>
+                                        <span class="kt-nav__link-text">Excel</span>
+                                    </a>
+                                </li>
+                                <li class="kt-nav__item">
+                                    <a href="#" class="kt-nav__link">
+                                        <i class="kt-nav__link-icon la la-file-text-o"></i>
+                                        <span class="kt-nav__link-text">CSV</span>
+                                    </a>
+                                </li>
+                                <li class="kt-nav__item">
+                                    <a href="#" class="kt-nav__link">
+                                        <i class="kt-nav__link-icon la la-file-pdf-o"></i>
+                                        <span class="kt-nav__link-text">PDF</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    &nbsp;
+                    <a href="#" class="btn btn-brand btn-elevate btn-icon-sm">
+                        <i class="la la-plus"></i>
+                        New Record
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="kt-portlet__body">
+
+        <!--begin: Search Form -->
+        <div class="kt-form kt-form--label-right kt-margin-t-20 kt-margin-b-10">
+            <div class="row align-items-center">
+                <div class="col-xl-8 order-2 order-xl-1">
+                    <div class="row align-items-center">
+                        <div class="col-md-4 kt-margin-b-20-tablet-and-mobile">
+                            <div class="kt-input-icon kt-input-icon--left">
+                                <input type="text" class="form-control" placeholder="Search..." id="generalSearch">
+                                <span class="kt-input-icon__icon kt-input-icon__icon--left">
+                                    <span><i class="la la-search"></i></span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-4 kt-margin-b-20-tablet-and-mobile">
+                            <div class="kt-form__group kt-form__group--inline">
+                                <div class="kt-form__label">
+                                    <label>Status:</label>
+                                </div>
+                                <div class="kt-form__control">
+                                    <select class="form-control bootstrap-select" id="kt_form_status">
+                                        <option value="">All</option>
+                                        <option value="1">Pending</option>
+                                        <option value="2">Delivered</option>
+                                        <option value="3">Canceled</option>
+                                        <option value="4">Success</option>
+                                        <option value="5">Info</option>
+                                        <option value="6">Danger</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 kt-margin-b-20-tablet-and-mobile">
+                            <div class="kt-form__group kt-form__group--inline">
+                                <div class="kt-form__label">
+                                    <label>Type:</label>
+                                </div>
+                                <div class="kt-form__control">
+                                    <select class="form-control bootstrap-select" id="kt_form_type">
+                                        <option value="">All</option>
+                                        <option value="1">Online</option>
+                                        <option value="2">Retail</option>
+                                        <option value="3">Direct</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-4 order-1 order-xl-2 kt-align-right">
+                    <a href="#" class="btn btn-default kt-hidden">
+                        <i class="la la-cart-plus"></i> New Order
+                    </a>
+                    <div class="kt-separator kt-separator--border-dashed kt-separator--space-lg d-xl-none"></div>
+                </div>
+            </div>
+        </div>
+
+        <!--end: Search Form -->
+    </div>
+    <div class="kt-portlet__body kt-portlet__body--fit">
+
+        <!--begin: Datatable -->
+        <table class="kt-datatable" id="html_table" width="100%">
+            <thead>
+                <tr>
+                    <th title="Field #1">Order ID</th>
+                    <th title="Field #2">Car Make</th>
+                    <th title="Field #3">Car Model</th>
+                    <th title="Field #4">Color</th>
+                    <th title="Field #5">Deposit Paid</th>
+                    <th title="Field #6">Order Date</th>
+                    <th title="Field #7">Status</th>
+                    <th title="Field #8">Type</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>0006-3629</td>
+                    <td>Land Rover</td>
+                    <td>Range Rover</td>
+                    <td>Orange</td>
+                    <td>$22672.60</td>
+                    <td>2016-11-28</td>
+                    <td align="right">3</td>
+                    <td align="right">3</td>
+                </tr>
+                <tr>
+                    <td>66403-315</td>
+                    <td>GMC</td>
+                    <td>Jimmy</td>
+                    <td>Goldenrod</td>
+                    <td>$55141.29</td>
+                    <td>2017-04-29</td>
+                    <td align="right">3</td>
+                    <td align="right">2</td>
+                </tr>
+                <tr>
+                    <td>54868-5055</td>
+                    <td>Ford</td>
+                    <td>Club Wagon</td>
+                    <td>Goldenrod</td>
+                    <td>$70991.52</td>
+                    <td>2017-03-16</td>
+                    <td align="right">6</td>
+                    <td align="right">1</td>
+                </tr>
+                <tr>
+                    <td>44924-112</td>
+                    <td>GMC</td>
+                    <td>Envoy</td>
+                    <td>Indigo</td>
+                    <td>$42615.31</td>
+                    <td>2016-09-04</td>
+                    <td align="right">2</td>
+                    <td align="right">1</td>
+                </tr>
+                <tr>
+                    <td>0378-0357</td>
+                    <td>Saab</td>
+                    <td>9-5</td>
+                    <td>Teal</td>
+                    <td>$74919.63</td>
+                    <td>2017-09-21</td>
+                    <td align="right">4</td>
+                    <td align="right">2</td>
+                </tr>
+              
+            </tbody>
+        </table>
+
+        <!--end: Datatable -->
+    </div>
+</div>
+@section sectionScripts{
+    <script>
+        "use strict";
+        // Class definition
+
+        var KTDatatableHtmlTableDemo = function () {
+            // Private functions
+
+            // demo initializer
+            var demo = function () {
+
+                var datatable = $('.kt-datatable').KTDatatable({
+                    data: {
+                        saveState: { cookie: false },
+                    },
+                    search: {
+                        input: $('#generalSearch'),
+                    },
+                    columns: [
+                        {
+                            field: 'DepositPaid',
+                            type: 'number',
+                        },
+                        {
+                            field: 'OrderDate',
+                            type: 'date',
+                            format: 'YYYY-MM-DD',
+                        }, {
+                            field: 'Status',
+                            title: 'Status',
+                            autoHide: false,
+                            // callback function support for column rendering
+                            template: function (row) {
+                                var status = {
+                                    1: { 'title': 'Pending', 'class': 'kt-badge--brand' },
+                                    2: { 'title': 'Delivered', 'class': ' kt-badge--danger' },
+                                    3: { 'title': 'Canceled', 'class': ' kt-badge--primary' },
+                                    4: { 'title': 'Success', 'class': ' kt-badge--success' },
+                                    5: { 'title': 'Info', 'class': ' kt-badge--info' },
+                                    6: { 'title': 'Danger', 'class': ' kt-badge--danger' },
+                                    7: { 'title': 'Warning', 'class': ' kt-badge--warning' },
+                                };
+                                return '<span class="kt-badge ' + status[row.Status].class + ' kt-badge--inline kt-badge--pill">' + status[row.Status].title + '</span>';
+                            },
+                        }, {
+                            field: 'Type',
+                            title: 'Type',
+                            autoHide: false,
+                            // callback function support for column rendering
+                            template: function (row) {
+                                var status = {
+                                    1: { 'title': 'Online', 'state': 'danger' },
+                                    2: { 'title': 'Retail', 'state': 'primary' },
+                                    3: { 'title': 'Direct', 'state': 'success' },
+                                };
+                                return '<span class="kt-badge kt-badge--' + status[row.Type].state + ' kt-badge--dot"></span>&nbsp;<span class="kt-font-bold kt-font-' + status[row.Type].state + '">' + status[row.Type].title + '</span>';
+                            },
+                        },
+                    ],
+                });
+
+                $('#kt_form_status').on('change', function () {
+                    datatable.search($(this).val().toLowerCase(), 'Status');
+                });
+
+                $('#kt_form_type').on('change', function () {
+                    datatable.search($(this).val().toLowerCase(), 'Type');
+                });
+
+                $('#kt_form_status,#kt_form_type').selectpicker();
+
+            };
+
+            return {
+                // Public functions
+                init: function () {
+                    // init dmeo
+                    demo();
+                },
+            };
+        }();
+
+        jQuery(document).ready(function () {
+            KTDatatableHtmlTableDemo.init();
+        });
+    </script>
+}
+
+
+
+

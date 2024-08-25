@@ -1,0 +1,56 @@
+﻿@model PagedList.IPagedList<Amana.Models.Entities.C_Languages>
+@using PagedList.Mvc;
+
+@{
+    Layout = "_Layout.cshtml";
+}
+
+<h1>@Amana.GlobalResources.Cpanel.Language</h1>
+<div class="sep100x100"></div>
+
+@Html.ActionLink(@Amana.GlobalResources.Cpanel.Create + " »", "Create", null, new { @class = "lnkCreate" })
+
+@if (Model.Count > 0)
+{
+    <div class="table-responsive">
+        <table class="tblView">
+            <tr>
+                <th>
+                    @Html.ActionLink(@Amana.GlobalResources.Cpanel.Title, "Index", new { sortOrder = ViewBag.TitleSortParam, currentFilter = ViewBag.CurrentFilter }) <span><img src="~/Content/Admin/images/icoSort.png" /></span>
+                </th>
+                <th></th>
+                <th class="settings"><img src="~/Content/Admin/images/icoSettings.png" alt="" /></th>
+            </tr>
+
+            @{
+    int i = 0;
+    foreach (var item in Model)
+    {
+        i++;
+        <tr class="@(i % 2 == 0 ? "even" : "odd")">
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Culture)
+            </td>
+            <td>
+                @Html.ActionLink(@Amana.GlobalResources.Cpanel.Edit, "Create", new { id = item.LanguageId }) |
+                @Html.ActionLink(@Amana.GlobalResources.Cpanel.Delete, "Delete", new { id = item.LanguageId })
+            </td>
+        </tr>
+    }
+            }
+
+        </table>
+    </div>
+}
+
+
+@if (Model.TotalItemCount > Model.PageSize)
+{
+    <p style="text-align:center; margin:10px 0;">@Amana.GlobalResources.Cpanel.Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) @Amana.GlobalResources.Cpanel.Of @Model.PageCount</p>
+
+    @Html.PagedListPager(Model, page => Url.Action("Index",
+        new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+}

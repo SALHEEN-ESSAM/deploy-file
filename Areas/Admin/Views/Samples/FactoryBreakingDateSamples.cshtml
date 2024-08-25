@@ -1,0 +1,149 @@
+﻿@model  List<Amana.Models.Entities.VisitsSample>
+@using Amana.Models.Utilities;
+@using Amana.Models.Helpers;
+@using Amana.GlobalResources;
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_Layout2.cshtml";
+}
+@section sectionSubHeader{
+
+    <div class="kt-subheader__main">
+        <h3 class="kt-subheader__title">
+            @Cpanel.Samples
+        </h3>
+        <span class="kt-subheader__separator kt-hidden"></span>
+        <div class="kt-subheader__breadcrumbs">
+            <a href="#" class="kt-subheader__breadcrumbs-home"><i class="flaticon2-shelter"></i></a>
+            @*<span class="kt-subheader__breadcrumbs-separator"></span>
+                <a href="" class="kt-subheader__breadcrumbs-link">
+                    قائمة
+                </a>*@
+            <span class="kt-subheader__breadcrumbs-separator"></span>
+            <span class="kt-subheader__breadcrumbs-link kt-subheader__breadcrumbs-link--active"> @Cpanel.AttendCrushingSamples  </span>
+
+        </div>
+    </div>
+}
+<div class="kt-portlet kt-portlet--mobile">
+    <div class="kt-portlet__head kt-portlet__head--lg">
+        <div class="kt-portlet__head-label">
+            <span class="kt-portlet__head-icon">
+                <i class="kt-font-brand flaticon2-line-chart"></i>
+            </span>
+
+            <h3 class="kt-portlet__head-title">
+                حضور تكسير عينات 28 يوم
+            </h3>
+
+        </div>
+        @*<div class="kt-portlet__head-toolbar">
+                <div class="kt-portlet__head-wrapper">
+                    <div class="kt-portlet__head-actions">
+                        <a href="@Url.Action("Create")" class="btn btn-brand btn-elevate btn-icon-sm">
+                            <i class="la la-plus"></i>
+                            إضافة
+                        </a>
+                    </div>
+                </div>
+            </div>*@
+    </div>
+
+    <div class="kt-portlet__body">
+        @if (Model != null)
+        {
+            if (Model.Count > 0)
+            {
+                <table class="table table-striped- table-bordered table-hover table-checkable" id="kt_table_1">
+                    <thead>
+                        <tr>
+                            <th>@Cpanel.SampleNo</th>
+                            <th>@Cpanel.SampleDate</th>
+                            <th>@Cpanel.FactoryType</th>
+                            <th>@Cpanel.Location</th>
+                            @*<th>تاريخ تكسير 7 يوم</th>*@
+                        <th>@Cpanel.Day28CrushingDate</th>
+                            @*<th>حالة العينة</th>*@
+                            <th>
+                                
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            int i = 0;
+                            foreach (var item in Model)
+                            {
+                                i++;
+                                <tr>
+                                    <td>
+                                        @item.SampleId
+                                    </td>
+                                    <td>
+                                        @(item.Visits.VisitDate.ToString("dd / MM / yyyy"))
+                                    </td>
+                                    <td>
+                                        @(item.Visits.Factories.Name)
+                                    </td>
+                                    <td>
+                                        @(item.Visits.Factories.IdxLocations.Name)
+                                    </td>
+                                    @*<td>
+                                            @(item.LabBreakingDate7Day.HasValue? item.LabBreakingDate7Day.Value.ToString("dd / MM / yyyy") : "")
+                                        </td>*@
+                                    <td>
+                                        @(item.FactoryBreakingDate28Day.HasValue ? item.FactoryBreakingDate28Day.Value.ToString("dd / MM / yyyy") : "")
+                                    </td>
+                                    @*<td>
+                                            @Html.Raw(Html.SampleStatusBadge(item.SampleStatus))
+
+                                        </td>*@
+                                    <td nowrap>
+                                        @if (item.FactoryResist28days.HasValue)
+                                        {
+                                            <a href="@Url.Action("FactoryLabSampleDetails", new { id = item.VisitId })" class="btn btn-info btn-sm mr-2">
+                                                إستعراض نتيجة العينة
+                                            </a>
+                                        }
+                                        else
+                                        {
+                                            <a href="@Url.Action("FactoryLabSampleDetails", new { id = item.VisitId })" class="btn btn-warning btn-sm mr-2">
+                                                إدخال نتيجة العينة
+                                            </a>
+                                        }
+
+                                    </td>
+                                </tr>
+                            }
+                        }
+
+                    </tbody>
+                </table>
+
+                <!--end: Datatable -->
+            }
+            else
+            {
+                <p>لا توجد بيانات</p>
+            }
+        }
+        else
+        {
+            <p>لا توجد بيانات</p>
+        }
+    </div>
+
+
+
+</div>
+
+@section sectionScripts{
+    <script>
+        $("#liLab").addClass("kt-menu__item--open");
+
+    </script>
+}
+
+
+
+
+

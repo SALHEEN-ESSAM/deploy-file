@@ -1,0 +1,98 @@
+﻿@model PagedList.IPagedList<Amana.Models.Entities.C_NodeTypeLoc>
+@using PagedList.Mvc;
+
+@{
+    Layout = "_Layout.cshtml";
+    int langId = ViewBag.LangId;
+    var pageNum = Request.QueryString["page"];
+}
+
+<h1>@Amana.GlobalResources.Cpanel.NodeType</h1>
+<div class="sep100x100"></div>
+
+@if (ViewBag.IsDeveloper)
+{
+    @Html.ActionLink(@Amana.GlobalResources.Cpanel.Create + " »", "Create", null, new { @class = "lnkCreate" })
+}
+
+@if (Model.Count > 0)
+{
+    using (Html.BeginForm("UpdateNum", "C_NodeType"))
+    {
+        <div class="table-responsive">
+            <table class="tblView">
+                <tr>
+                    <th>
+                        @Html.ActionLink(@Amana.GlobalResources.Cpanel.Title, "Index", new { sortOrder = ViewBag.TitleSortParam, currentFilter = ViewBag.CurrentFilter }) <span><img src="~/Content/Admin/images/icoSort.png" /></span>
+                    </th>
+                    <th>
+                        @Amana.GlobalResources.Cpanel.Order
+                    </th>
+                    @if (ViewBag.IsDeveloper)
+                    {
+                        <th>
+                            @Html.ActionLink(@Amana.GlobalResources.Cpanel.IsActive + " ?", "Index", new { sortOrder = ViewBag.ActiveSortParam, currentFilter = ViewBag.CurrentFilter }) <span><img src="~/Content/Admin/images/icoSort.png" /></span>
+                        </th>
+                    }
+                    <th>
+                        @Amana.GlobalResources.Cpanel.Type
+                    </th>
+                    <th class="settings"><img src="~/Content/Admin/images/icoSettings.png" alt="" /></th>
+                </tr>
+
+                @{
+        int i = 0;
+        foreach (var item in Model)
+        {
+            <tr class="@(i % 2 == 0 ? "odd" : "even")">
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title) <span class="notTranslated">@(!item.IsTranslated ? Amana.GlobalResources.Cpanel.NotTranslated : "")</span>
+                </td>
+                <td>
+                    <input type="hidden" name="entity[@(i)].TypeId" value="@Model.ElementAt(i).TypeId" />
+                    <input type="text" id="entity[@(i)].C_NodeType.NumOrder" name="entity[@(i)].C_NodeType.NumOrder" value="@Model.ElementAt(i).C_NodeType.NumOrder" class="txt-table-small" data-val="true" data-val-required="@Amana.GlobalResources.Cpanel.Required" data-val-regex-pattern="^[\-\+]?\d+$" data-val-number="@Amana.GlobalResources.Validation.Integer" />
+                    <div>
+                        @Html.ValidationMessage("entity[" + i + "].NumOrder")
+                    </div>
+                </td>
+                @if (ViewBag.IsDeveloper)
+                {
+                    <td>
+                        @Html.ActionLink(" ", "Activate", new { id = item.TypeId, page = pageNum }, new { @class = item.C_NodeType.IsActive ? "activated" : "notActivated" })
+                    </td>
+                }
+                <td>
+                    @(item.C_NodeType.IsWidget ? Amana.GlobalResources.Cpanel.Widget : Amana.GlobalResources.Cpanel.Content)
+                </td>
+                <td>
+                    @Html.ActionLink(@Amana.GlobalResources.Cpanel.Edit, "Create", new { id = item.TypeId })
+                    @if (ViewBag.IsDeveloper)
+                    {
+                    <text> | </text> @Html.ActionLink(@Amana.GlobalResources.Cpanel.Delete, "Delete", new { id = item.TypeId })
+                    }
+                </td>
+            </tr>
+                    i++;
+        }
+                }
+
+            </table>
+        </div>
+    
+        <div class="sep100x100"></div>
+        <div class="form-group">
+            <div>
+                <input type="submit" value="@Amana.GlobalResources.Cpanel.Save" class="lnkCreate" />
+            </div>
+        </div>
+    }
+}
+
+
+@if (Model.TotalItemCount > Model.PageSize)
+{
+    <p style="text-align:center; margin:10px 0;">@Amana.GlobalResources.Cpanel.Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) @Amana.GlobalResources.Cpanel.Of @Model.PageCount</p>
+
+    @Html.PagedListPager(Model, page => Url.Action("Index",
+        new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+}

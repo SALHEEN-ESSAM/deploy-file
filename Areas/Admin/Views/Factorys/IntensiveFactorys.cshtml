@@ -1,0 +1,133 @@
+﻿@model List<Amana.Models.Entities.Factories>
+@using Amana.Models.Enums;
+@using Amana.GlobalResources;
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_Layout2.cshtml";
+    var factoryTypeId = Request["factoryType"];
+}
+@section sectionSubHeader{
+
+    <div class="kt-subheader__main">
+        <h3 class="kt-subheader__title">
+            @Cpanel.Factories
+        </h3>
+        <span class="kt-subheader__separator kt-hidden"></span>
+        <div class="kt-subheader__breadcrumbs">
+            <a href="#" class="kt-subheader__breadcrumbs-home"><i class="flaticon2-shelter"></i></a>
+            @*<span class="kt-subheader__breadcrumbs-separator"></span>
+                <a href="" class="kt-subheader__breadcrumbs-link">
+                    قائمة المصانع
+                </a>*@
+            <span class="kt-subheader__breadcrumbs-separator"></span>
+            <span class="kt-subheader__breadcrumbs-link kt-subheader__breadcrumbs-link--active"> @Cpanel.IntenseMonitoringFactories</span>
+
+        </div>
+    </div>
+}
+<div class="kt-portlet kt-portlet--mobile">
+    <div class="kt-portlet__head kt-portlet__head--lg">
+        <div class="kt-portlet__head-label">
+            <span class="kt-portlet__head-icon">
+                <i class="kt-font-brand flaticon2-line-chart"></i>
+            </span>
+
+            <h3 class="kt-portlet__head-title">
+               @Cpanel.IntenseMonitoringFactories
+            </h3>
+
+        </div>
+
+    </div>
+
+    <div class="kt-portlet__body">
+        @if (ViewBag.Success == true)
+        {
+            @Html.Partial("~/Areas/Admin/Views/Shared/UcSuccess.cshtml")
+        }
+
+        <!--begin: Datatable -->
+        @if (Model.Count > 0)
+        {
+
+            <table class="table table-striped- table-bordered table-hover table-checkable" id="kt_table_1">
+                <thead>
+                    <tr>
+                        <th>@Cpanel.FactoryCode</th>
+                        <th>@Cpanel.FactoryName</th>
+                        <th>@Cpanel.Type</th>
+                        <th>@Cpanel.Location</th>
+                        <th></th>
+                        <th>
+                            
+                        </th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        int i = 0;
+                        foreach (var item in Model)
+                        {
+                            i++;
+                            <tr>
+                                <td>
+                                    @item.CodeNo
+                                </td>
+                                <td>
+                                    @item.Name
+                                </td>
+                                <td>
+                                    @(item.FactoryType==(int) FactoryTypesEnum.Concrete ? Cpanel.Concrete2 : Cpanel.Block)
+                                </td>
+                                <td style="@(item.IdxLocations ==null? "color:red;font-weight:bold" : "")">
+                                    @(item.IdxLocations ==null ? Cpanel.NotDefined :item.IdxLocations.Name)
+                                </td>
+                                <td>
+                                    @if (item.IsTemporaryClosed == true)
+                                    {
+                                        <span class="btn btn-bold btn-sm btn-font-sm  btn-label-danger">@Cpanel.ClosedFactory</span>
+                                    }
+                                    @if (item.IsIntensiveVisits == true)
+                                    {
+                                        <span class="btn btn-sm btn-label-warning btn-bold">@Cpanel.IntenseMonitoring</span>
+                                    }
+                                </td>
+                                <td nowrap>
+                                    @if (item.IsIntensiveVisits == true)
+                                    {
+                                        <a href="@Url.Action("ToggleIntensiveVisits", new { id = item.ID })" class="btn btn-success btn-sm mr-2" onclick="return confirm('سيتم نقل المصنع للمراقبة العادية , هل أنت متاكد ؟');">@Cpanel.ApplyNormalMonitoring</a>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    }
+
+                </tbody>
+            </table>
+
+            <!--end: Datatable -->
+        }
+        else
+        {
+            <p>@Cpanel.NoData</p>
+        }
+    </div>
+</div>
+
+@section sectionScripts{
+    
+
+    <script>
+    
+        $(document).ready(function () {
+
+            $("#liManagement").addClass("kt-menu__item--open");
+            $("#liClosedFactories").addClass("kt-menu__item--open");
+        });
+    </script>
+}
+
+
+
+
+

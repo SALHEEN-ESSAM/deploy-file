@@ -1,0 +1,56 @@
+﻿.kt-menu__item--open
+{
+    background-color:#000;
+}
+
+
+.kt-aside-menu .kt-menu__nav > .kt-menu__item.kt-menu__item--open > .kt-menu__link .kt-menu__link-text, .kt-aside-menu .kt-menu__nav > .kt-menu__item .kt-menu__submenu .kt-menu__item.kt-menu__item--open > .kt-menu__link .kt-menu__link-text {
+    color: #92a1e9;
+}
+.btn-default {
+    color: #000 !important;
+    background-color: lightgray !important;
+    border-color: gray !important;
+}
+h1.trial-mix {
+    font-size: 26px;
+    text-align: center;
+    padding: 10px;
+    border: 1px solid #cccccc;
+    width: 50%;
+    margin: auto;
+    margin-bottom: 15px;
+}
+.nav-pills .nav-item .nav-link, .nav-tabs .nav-item .nav-link
+{
+    font-weight:bold;
+}
+.nav-link.active i{
+  color:#fff !important;
+}
+.table thead th {
+    border-bottom: 2px solid #ccc;
+}
+.table-bordered th, .table-bordered td {
+    border: 1px solid #ccc;
+}
+
+.dataTables_wrapper .dataTable th, .dataTables_wrapper .dataTable td {
+    color: #000;
+}
+body {
+    color:#000;
+    font-weight:500;
+}
+.table {
+    color: #000 !important;
+}
+.accordion.accordion-toggle-arrow .card .card-header .card-title.collapsed {
+    color: #000 !important;
+}
+
+@media (max-width: 1024px) {
+    .kt-login__content {
+        display:none !important;
+    }
+}

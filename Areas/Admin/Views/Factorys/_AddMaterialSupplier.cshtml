@@ -1,0 +1,81 @@
+﻿@model Amana.ViewModels.Factories.FactoryMaterialSupplierViewModel
+@using Amana.GlobalResources;
+@{
+    Layout = null;
+}
+<div class="modal-header">
+    <h1 class="modal-title">اضافة</h1>
+</div>
+@using (Html.BeginForm("AddMaterialSupplier", "Factorys", FormMethod.Post, new { enctype = "multipart/form-data", @class = "kt-form kt-form--label-right" }))
+{
+<div class="modal-body">
+
+    @if (ViewBag.Success == true)
+    {
+        @Html.Partial("~/Areas/Admin/Views/Shared/UcSuccess.cshtml")
+    }
+    @Html.HiddenFor(model => model.ID)
+    @Html.HiddenFor(model => model.FactoryId)
+
+    <div class="form-group row">
+        <div class="col-lg-6">
+            @Html.LabelFor(model => model.MaterialTypeId, Cpanel.MaterialTypes)
+            @Html.DropDownListFor(model => model.MaterialTypeId, ViewData["MaterialTypes"] as SelectList, @Amana.GlobalResources.Cpanel.ChooseOption, new Dictionary<string, object> { { "data-val", "true" }, { "data-val-required", @Amana.GlobalResources.Cpanel.Required }, { "class", "form-control" } })
+            @Html.ValidationMessageFor(model => model.MaterialTypeId)
+        </div>
+        <div class="col-lg-6">
+            @Html.LabelFor(model => model.Name, Cpanel.Supplier_Name)
+
+            @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-lg-6">
+            @Html.LabelFor(model => model.Telephone, Cpanel.Phone)
+
+            @Html.EditorFor(model => model.Telephone, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Telephone, "", new { @class = "text-danger" })
+        </div>
+        <div class="col-lg-6">
+            @Html.LabelFor(model => model.Fax, Cpanel.Fax)
+
+            @Html.EditorFor(model => model.Fax, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Fax, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-lg-6">
+            @Html.LabelFor(model => model.Location, Cpanel.Location)
+
+            @Html.EditorFor(model => model.Location, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Location, "", new { @class = "text-danger" })
+        </div>
+        <div class="col-lg-6">
+            @Html.LabelFor(model => model.TypeofMaterial, Cpanel.MaterialType)
+
+            @Html.EditorFor(model => model.TypeofMaterial, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.TypeofMaterial, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-6">
+
+        </div>
+        @*<div class="col-lg-6 kt-align-right">
+                <button type="reset" class="btn btn-danger">Delete</button>
+            </div>*@
+    </div>
+
+</div>
+
+    <div class="modal-footer">
+        <div>
+            <input type="submit" value="@Amana.GlobalResources.Cpanel.Save" class="btn btn-warning" />
+
+            <input type="button" value="@Cpanel.Close" data-dismiss="modal" class="btn btn-danger" />
+        </div>
+    </div>
+
+}

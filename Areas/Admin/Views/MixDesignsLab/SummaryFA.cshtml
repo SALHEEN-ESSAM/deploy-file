@@ -1,0 +1,631 @@
+﻿@model Amana.ViewModels.MixDesigns.MD_LabSummaryFAViewModel
+@using Amana.Models.Helpers;
+@using Amana.GlobalResources;
+
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_Layout2.cshtml";
+    Amana.Models.Entities.MD_Requests requestItem = (Amana.Models.Entities.MD_Requests)ViewBag.RequestItem;
+}
+@section sectionSubHeader{
+
+    <div class="kt-subheader__main">
+        <h3 class="kt-subheader__title">
+            @Cpanel.MixDesigns
+        </h3>
+        <span class="kt-subheader__separator kt-hidden"></span>
+        <div class="kt-subheader__breadcrumbs">
+            <a href="#" class="kt-subheader__breadcrumbs-home"><i class="flaticon2-shelter"></i></a>
+            <span class="kt-subheader__breadcrumbs-separator"></span>
+            <span class="kt-subheader__breadcrumbs-link kt-subheader__breadcrumbs-link--active"> @Cpanel.LabResults</span>
+            <span class="kt-subheader__breadcrumbs-separator"></span>
+            <span class="kt-subheader__breadcrumbs-link kt-subheader__breadcrumbs-link--active">
+                Summary of test result ( Fine Aggregate )
+            </span>
+
+        </div>
+    </div>
+}
+<style>
+    .form-control {
+        width: 75px;
+        text-align: center;
+        border-color: #ccc;
+        margin: auto;
+        font-size: 14px;
+    }
+
+    input[type=file] {
+        width: 100%;
+    }
+
+    .badge-light {
+        background-color: lightgray;
+        padding: 15px 10px;
+        font-size: 14px;
+    }
+
+    .table thead th, .table thead td {
+        vertical-align: middle;
+        text-align: center;
+        font-size: 12px;
+        font-weight: bold;
+    }
+
+    .table tbody td {
+        vertical-align: middle;
+        text-align: center;
+        color: #000;
+    }
+
+    .kt-portlet .kt-portlet__body {
+        padding: 5px;
+    }
+
+    .kt-widget__item {
+        text-align: left;
+    }
+
+    .table-summ tbody td {
+        padding: 3px;
+    }
+
+    .table-summ .badge-light {
+        padding: 5px;
+    }
+
+    .alert-text {
+        text-align: center;
+    }
+</style>
+<div class="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content" style="padding:0px;direction:ltr">
+    @Html.Partial("_ResultSideMenu", requestItem);
+    <!--Begin::App-->
+    <div class="kt-grid kt-grid--desktop kt-grid--ver kt-grid--ver-desktop kt-app">
+
+
+        <div class="kt-portlet">
+            @*<div class="kt-portlet__head">
+                    <div class="kt-portlet__head-label">
+                        <h3 class="kt-portlet__head-title">
+                            Gradation ( Coarse Aggregate )
+
+                        </h3>
+                    </div>
+                </div>*@
+
+
+            <!--begin::Form-->
+            <div class="kt-portlet__body" style="direction:ltr;text-align:left">
+                @if (ViewBag.Success == true)
+                {
+                    @Html.Partial("~/Areas/Admin/Views/Shared/UcSuccess.cshtml")
+                }
+
+
+                @using (Html.BeginForm("SummaryFA", "MixDesignsLab", new { id = Model.RequestId }, FormMethod.Post, new { enctype = "multipart/form-data", @class = "kt-form kt-form--label-right" }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true)
+                    @Html.HiddenFor(model => model.RequestId)
+                    @Html.HiddenFor(model => model.FA_CsMaxSize)
+                    @Html.HiddenFor(model => model.FA_DsMaxSize)
+
+                    <div class="kt-portlet__body">
+                        <div class="kt-section kt-section--first">
+                            <h1 class="trial-mix "> Summary ( Fine Aggregate )</h1>
+
+                            <table class="table table-striped- table-bordered table-hover table-checkable table-summ" style="width:200px;">
+                                <tr><td colspan="2"><b><u>Blending Of Fine Aggregate</u></b></td></tr>
+                                <tr><td></td><td>Size</td></tr>
+                                <tr>
+                                    <td>Crushed Sand</td>
+
+                                    <td>
+                                        @if (Model.FA_CsMaxSize.HasValue)
+                                        {
+                                            <span class="badge badge-light">@Model.FA_CsMaxSize %</span>
+                                        }
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Silica Sand</td>
+                                    <td>
+                                        @if (Model.FA_DsMaxSize.HasValue)
+                                        {
+                                            <span class="badge badge-light">@Model.FA_DsMaxSize %</span>
+                                        }
+                                    </td>
+                                </tr>
+                            </table>
+                            <table class="table table-striped- table-bordered table-hover table-checkable" id="kt_table_1">
+                                <thead>
+                                    <tr>
+                                        <th colspan="2">Type of test</th>
+                                        <th>Reference</th>
+                                        <th>Result</th>
+                                        <th>Specification</th>
+                                        <th>Remarks</th>
+                                    </tr>
+
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td rowspan="4">F.M</td>
+                                        <td>Crushed Sand</td>
+                                        <td rowspan="2">ASTM C-136</td>
+                                        <td>
+                                            @Html.EditorFor(model => model.SummFA_FM1, new { htmlAttributes = new { @class = "form-control" } })
+                                        </td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Silica Sand</td>
+                                        <td>
+                                            @Html.EditorFor(model => model.SummFA_FM2, new { htmlAttributes = new { @class = "form-control" } })
+                                        </td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">Blended</td>
+                                        <td>
+                                            @RenderBlendedValue(Model.SummFA_FM1, Model.SummFA_FM2)
+                                        </td>
+                                        <td>1 % Max</td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">Attachment File</td>
+                                        <td colspan="2">
+                                            @Html.TextBoxFor(model => model.SummFA_FMFile, new Dictionary<string, object> { { "class", "form-control" }, { "type", "file" }, { "accept", "document/*" }, { "data-val", string.IsNullOrEmpty(Model.SummFA_FMFileUrl) ? "true" : "false" }, { "data-val-required", string.IsNullOrEmpty(Model.SummFA_FMFileUrl) ? Amana.GlobalResources.Validation.Required : "" } })
+                                        </td>
+                                        <td>
+                                            @if (!string.IsNullOrEmpty(Model.SummFA_FMFileUrl))
+                                            {
+                                                <a target="_blank" href="/Uploads/MixDesigns/@(Model.SummFA_FMFileUrl)">Download</a>
+                                            }
+                                        </td>
+                                    </tr>
+
+                                    <!-- end of item -->
+                                    <tr>
+                                        <td rowspan="4">(%) Passing Sieve #200</td>
+                                        <td>Crushed Sand</td>
+                                        <td rowspan="2">ASTM C-136</td>
+                                        <td>
+                                            @Html.EditorFor(model => model.SummFA_PassingSieve1, new { htmlAttributes = new { @class = "form-control" } })
+                                        </td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Silica Sand</td>
+                                        <td>
+                                            @Html.EditorFor(model => model.SummFA_PassingSieve2, new { htmlAttributes = new { @class = "form-control" } })
+                                        </td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">Blended</td>
+                                        <td>
+                                            @RenderBlendedValue(Model.SummFA_PassingSieve1, Model.SummFA_PassingSieve2)
+                                        </td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">Attachment File</td>
+                                        <td colspan="2">
+                                            @Html.TextBoxFor(model => model.SummFA_PassingSieveFile, new Dictionary<string, object> { { "class", "form-control" }, { "type", "file" }, { "accept", "document/*" }, { "data-val", string.IsNullOrEmpty(Model.SummFA_PassingSieveFileUrl) ? "true" : "false" }, { "data-val-required", string.IsNullOrEmpty(Model.SummFA_PassingSieveFileUrl) ? Amana.GlobalResources.Validation.Required : "" } })
+                                        </td>
+                                        <td>
+                                            @if (!string.IsNullOrEmpty(Model.SummFA_PassingSieveFileUrl))
+                                            {
+                                                <a target="_blank" href="/Uploads/MixDesigns/@(Model.SummFA_PassingSieveFileUrl)">Download</a>
+                                            }
+                                        </td>
+                                    </tr>
+                                    <!-- end of item -->
+
+                                    <tr>
+                                        <td rowspan="4">Bulk Specific Gravity (Oven Dry)</td>
+                                        <td>Crushed Sand</td>
+                                        <td rowspan="2">ASTM C-128</td>
+                                        <td>
+                                            @Html.EditorFor(model => model.SummFA_Bulk1, new { htmlAttributes = new { @class = "form-control" } })
+                                        </td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Silica Sand</td>
+                                        <td>
+                                            @Html.EditorFor(model => model.SummFA_Bulk2, new { htmlAttributes = new { @class = "form-control" } })
+                                        </td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">Blended</td>
+                                        <td>
+                                            @RenderBlendedValue(Model.SummFA_Bulk1, Model.SummFA_Bulk2)
+                                        </td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">Attachment File</td>
+                                        <td colspan="2">
+                                            @Html.TextBoxFor(model => model.SummFA_BulkFile, new Dictionary<string, object> { { "class", "form-control" }, { "type", "file" }, { "accept", "document/*" }, { "data-val", string.IsNullOrEmpty(Model.SummFA_BulkFileUrl) ? "true" : "false" }, { "data-val-required", string.IsNullOrEmpty(Model.SummFA_BulkFileUrl) ? Amana.GlobalResources.Validation.Required : "" } })
+
+                                        </td>
+                                        <td>
+                                            @if (!string.IsNullOrEmpty(Model.SummFA_BulkFileUrl))
+                                            {
+                                                <a target="_blank" href="/Uploads/MixDesigns/@(Model.SummFA_BulkFileUrl)">Download</a>
+                                            }
+                                        </td>
+                                    </tr>
+
+                                    <!-- end of item -->
+
+                                    <tr>
+                                        <td rowspan="4">Absorption</td>
+                                        <td>Crushed Sand</td>
+                                        <td rowspan="2">ASTM C-128</td>
+                                        <td>
+                                            @Html.EditorFor(model => model.SummFA_Absorption1, new { htmlAttributes = new { @class = "form-control" } })
+                                        </td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Silica Sand</td>
+                                        <td>
+                                            @Html.EditorFor(model => model.SummFA_Absorption2, new { htmlAttributes = new { @class = "form-control" } })
+                                        </td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">Blended</td>
+                                        <td>
+                                            @RenderBlendedValue(Model.SummFA_Absorption1, Model.SummFA_Absorption2)
+                                        </td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">Attachment File</td>
+                                        <td colspan="2">
+                                            @Html.TextBoxFor(model => model.SummFA_AbsorptionFile, new Dictionary<string, object> { { "class", "form-control" }, { "type", "file" }, { "accept", "document/*" }, { "data-val", string.IsNullOrEmpty(Model.SummFA_AbsorptionFileUrl) ? "true" : "false" }, { "data-val-required", string.IsNullOrEmpty(Model.SummFA_AbsorptionFileUrl) ? Amana.GlobalResources.Validation.Required : "" } })
+                                        </td>
+                                        <td>
+                                            @if (!string.IsNullOrEmpty(Model.SummFA_AbsorptionFileUrl))
+                                            {
+                                                <a target="_blank" href="/Uploads/MixDesigns/@(Model.SummFA_AbsorptionFileUrl)">Download</a>
+                                            }
+                                        </td>
+                                    </tr>
+
+                                    <!-- end of item -->
+                                    @*<tr>
+                                            <td rowspan="4">Los Angeles Abrasion (%)</td>
+                                            <td>Crushed Sand</td>
+                                            <td rowspan="2">ASTM C-131</td>
+                                            <td>
+                                                @Html.EditorFor(model => model.SummCA_LosAngeles1, new { htmlAttributes = new { @class = "form-control" } })
+                                            </td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Silica Sand</td>
+                                            <td>
+                                                @Html.EditorFor(model => model.SummCA_LosAngeles2, new { htmlAttributes = new { @class = "form-control" } })
+                                            </td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">Blended</td>
+                                            <td>
+                                                @RenderBlendedValue(Model.SummCA_LosAngeles1, Model.SummCA_LosAngeles2)
+                                            </td>
+                                            <td>40% Max</td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">Attachment File</td>
+                                            <td colspan="2">
+                                                @Html.TextBoxFor(model => model.SummCA_LosAngelesFileUrl, new Dictionary<string, object> { { "class", "form-control" }, { "type", "file" }, { "accept", "document/*" }, { "data-val", string.IsNullOrEmpty(Model.SummCA_LosAngelesFileUrl) ? "true" : "false" }, { "data-val-required", string.IsNullOrEmpty(Model.SummCA_LosAngelesFileUrl) ? Amana.GlobalResources.Validation.Required : "" } })
+                                                @Html.ValidationMessageFor(model => model.SummCA_LosAngelesFileUrl)
+                                            </td>
+                                            <td>
+                                                @if (!string.IsNullOrEmpty(Model.SummCA_LosAngelesFileUrl))
+                                                {
+                                                    <a target="_blank" href="/Uploads/MixDesigns/@(Model.SummCA_LosAngelesFileUrl)">Download</a>
+                                                }
+                                            </td>
+                                        </tr>*@
+
+                                    <!-- end of item -->
+                                    @*<tr>
+                                            <td rowspan="4">Flaky & Elongated (%)</td>
+                                            <td>Crushed Sand</td>
+                                            <td rowspan="2">BS 812</td>
+                                            <td>
+                                                @Html.EditorFor(model => model.SummCA_Flaky1, new { htmlAttributes = new { @class = "form-control" } })
+                                            </td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Silica Sand</td>
+                                            <td>
+                                                @Html.EditorFor(model => model.SummCA_Flaky2, new { htmlAttributes = new { @class = "form-control" } })
+                                            </td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">Blended</td>
+                                            <td>
+                                                @RenderBlendedValue(Model.SummCA_Flaky1, Model.SummCA_Flaky2)
+                                            </td>
+                                            <td>10% Max</td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">Attachment File</td>
+                                            <td colspan="2">
+                                                @Html.TextBoxFor(model => model.SummCA_FlakyFileUrl, new Dictionary<string, object> { { "class", "form-control" }, { "type", "file" }, { "accept", "document/*" }, { "data-val", string.IsNullOrEmpty(Model.SummCA_FlakyFileUrl) ? "true" : "false" }, { "data-val-required", string.IsNullOrEmpty(Model.SummCA_FlakyFileUrl) ? Amana.GlobalResources.Validation.Required : "" } })
+                                                @Html.ValidationMessageFor(model => model.SummCA_FlakyFileUrl)
+                                            </td>
+                                            <td>
+                                                @if (!string.IsNullOrEmpty(Model.SummCA_FlakyFileUrl))
+                                                {
+                                                    <a target="_blank" href="/Uploads/MixDesigns/@(Model.SummCA_FlakyFileUrl)">Download</a>
+                                                }
+                                            </td>
+                                        </tr>*@
+
+                                    <!-- end of item -->
+
+                                    <tr>
+                                        <td rowspan="4">Clay Lumps (%)</td>
+                                        <td>Crushed Sand</td>
+                                        <td rowspan="2">ASTM C-142</td>
+                                        <td>
+                                            @Html.EditorFor(model => model.SummFA_Clay1, new { htmlAttributes = new { @class = "form-control" } })
+                                        </td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Silica Sand</td>
+                                        <td>
+                                            @Html.EditorFor(model => model.SummFA_Clay2, new { htmlAttributes = new { @class = "form-control" } })
+                                        </td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">Blended</td>
+                                        <td>
+                                            @RenderBlendedValue(Model.SummFA_Clay1, Model.SummFA_Clay2)
+                                        </td>
+                                        <td>3% Max</td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">Attachment File</td>
+                                        <td colspan="2">
+                                            @Html.TextBoxFor(model => model.SummFA_ClayFile, new Dictionary<string, object> { { "class", "form-control" }, { "type", "file" }, { "accept", "document/*" }, { "data-val", string.IsNullOrEmpty(Model.SummFA_ClayFileUrl) ? "true" : "false" }, { "data-val-required", string.IsNullOrEmpty(Model.SummFA_ClayFileUrl) ? Amana.GlobalResources.Validation.Required : "" } })
+
+                                        </td>
+                                        <td>
+                                            @if (!string.IsNullOrEmpty(Model.SummFA_ClayFileUrl))
+                                            {
+                                                <a target="_blank" href="/Uploads/MixDesigns/@(Model.SummFA_ClayFileUrl)">Download</a>
+                                            }
+                                        </td>
+                                    </tr>
+
+                                    <!-- end of item -->
+
+                                    <tr>
+                                        <td rowspan="4">Soundness by Na2So4 (%)</td>
+                                        <td>Crushed Sand</td>
+                                        <td rowspan="2">ASTM C-88</td>
+                                        <td>
+                                            @Html.EditorFor(model => model.SummFA_Soundness1, new { htmlAttributes = new { @class = "form-control" } })
+                                        </td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Silica Sand</td>
+                                        <td>
+                                            @Html.EditorFor(model => model.SummFA_Soundness2, new { htmlAttributes = new { @class = "form-control" } })
+                                        </td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">Blended</td>
+                                        <td>
+                                            @RenderBlendedValue(Model.SummFA_Soundness1, Model.SummFA_Soundness2)
+
+                                        </td>
+                                        <td>12% Max</td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">Attachment File</td>
+                                        <td colspan="2">
+                                            @Html.TextBoxFor(model => model.SummFA_SoundnessFile, new Dictionary<string, object> { { "class", "form-control" }, { "type", "file" }, { "accept", "document/*" }, { "data-val", string.IsNullOrEmpty(Model.SummFA_SoundnessFileUrl) ? "true" : "false" }, { "data-val-required", string.IsNullOrEmpty(Model.SummFA_SoundnessFileUrl) ? Amana.GlobalResources.Validation.Required : "" } })
+                                        </td>
+                                        <td>
+                                            @if (!string.IsNullOrEmpty(Model.SummFA_SoundnessFileUrl))
+                                            {
+                                                <a target="_blank" href="/Uploads/MixDesigns/@(Model.SummFA_SoundnessFileUrl)">Download</a>
+                                            }
+                                        </td>
+                                    </tr>
+
+
+                                    <!-- end of item -->
+
+                                    <tr>
+                                        <td rowspan="4">Chloride Acid Soluble (%)</td>
+                                        <td>Crushed Sand</td>
+                                        <td rowspan="2">BS 812</td>
+                                        <td>
+                                            @Html.EditorFor(model => model.SummFA_Chloride1, new { htmlAttributes = new { @class = "form-control" } })
+                                        </td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Silica Sand</td>
+                                        <td>
+                                            @Html.EditorFor(model => model.SummFA_Chloride2, new { htmlAttributes = new { @class = "form-control" } })
+                                        </td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">Blended</td>
+                                        <td>
+                                            @RenderBlendedValue(Model.SummFA_Chloride1, Model.SummFA_Chloride2)
+                                        </td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">Attachment File</td>
+                                        <td colspan="2">
+                                            @Html.TextBoxFor(model => model.SummFA_ChlorideFile, new Dictionary<string, object> { { "class", "form-control" }, { "type", "file" }, { "accept", "document/*" }, { "data-val", string.IsNullOrEmpty(Model.SummFA_ChlorideFileUrl) ? "true" : "false" }, { "data-val-required", string.IsNullOrEmpty(Model.SummFA_ChlorideFileUrl) ? Amana.GlobalResources.Validation.Required : "" } })
+                                        </td>
+                                        <td>
+                                            @if (!string.IsNullOrEmpty(Model.SummFA_ChlorideFileUrl))
+                                            {
+                                                <a target="_blank" href="/Uploads/MixDesigns/@(Model.SummFA_ChlorideFileUrl)">Download</a>
+                                            }
+                                        </td>
+                                    </tr>
+
+
+                                    <!-- end of item -->
+
+
+                                    <tr>
+                                        <td rowspan="4">Sulphate Acid Soluble (%)</td>
+                                        <td>Crushed Sand</td>
+                                        <td rowspan="2">BS 812</td>
+                                        <td>
+                                            @Html.EditorFor(model => model.SummFA_Sulphate1, new { htmlAttributes = new { @class = "form-control" } })
+                                        </td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Silica Sand</td>
+                                        <td>
+                                            @Html.EditorFor(model => model.SummFA_Sulphate2, new { htmlAttributes = new { @class = "form-control" } })
+                                        </td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">Blended</td>
+                                        <td>
+                                            @RenderBlendedValue(Model.SummFA_Sulphate1, Model.SummFA_Sulphate2)
+                                        </td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">Attachment File</td>
+                                        <td colspan="2">
+                                            @Html.TextBoxFor(model => model.SummFA_SulphateFile, new Dictionary<string, object> { { "class", "form-control" }, { "type", "file" }, { "accept", "document/*" }, { "data-val", string.IsNullOrEmpty(Model.SummFA_SulphateFileUrl) ? "true" : "false" }, { "data-val-required", string.IsNullOrEmpty(Model.SummFA_SulphateFileUrl) ? Amana.GlobalResources.Validation.Required : "" } })
+
+                                        </td>
+                                        <td>
+                                            @if (!string.IsNullOrEmpty(Model.SummFA_SulphateFileUrl))
+                                            {
+                                                <a target="_blank" href="/Uploads/MixDesigns/@(Model.SummFA_SulphateFileUrl)">Download</a>
+                                            }
+                                        </td>
+                                    </tr>
+
+                                    <!-- end of item -->
+
+                                </tbody>
+                            </table>
+
+
+
+
+                        </div>
+
+
+
+
+
+
+                    </div>
+                    <div class="kt-portlet__foot">
+                        <div class="kt-form__actions">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <input type="submit" value="@Amana.GlobalResources.Cpanel.Save" class="btn btn-warning" />
+                                    @*<a class="btn btn-danger" href="@Url.Action("ResultConcClsInfo",new {id=requestItem.RequestId,cls=15 })">رجوع</a>*@
+
+                                </div>
+                                @*<div class="col-lg-6 kt-align-right">
+                                        <button type="reset" class="btn btn-danger">Delete</button>
+                                    </div>*@
+                            </div>
+                        </div>
+                    </div>
+
+                }
+
+
+            </div>
+
+
+            <!--end::Form-->
+        </div>
+    </div>
+
+    <!--End::App-->
+</div>
+@helper RenderBlendedValue(double? val1, double? val2)
+{
+    if (Model.FA_CsMaxSize.HasValue && Model.FA_DsMaxSize.HasValue && val1.HasValue && val2.HasValue)
+    {
+        <text>@Math.Round((double)((Model.FA_CsMaxSize.Value / 100) * val1.Value) + (double)((Model.FA_DsMaxSize.Value / 100) * val2.Value), 4)</text>
+    }
+
+}
+
+@section sectionScripts{
+    <script>
+        $(document).ready(function () {
+
+            $("#lnkSummFA").addClass("active");
+        });
+
+    </script>
+}
+
+
+
+
+

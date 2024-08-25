@@ -1,0 +1,111 @@
+﻿@model Amana.ViewModels.Factories.FactoryLocationViewModel
+
+
+@{
+    Layout = null;
+}
+<div class="row">
+    <div class="col-lg-1"></div>
+    <div class="col-lg-10">
+
+        @using (Html.BeginForm("FactoryLocation", "Factorys", FormMethod.Post, new { enctype = "multipart/form-data", @class = "kt-form kt-form--label-right" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
+            @Html.HiddenFor(model => model.ID)
+
+            <div class="kt-portlet__body">
+                <div class="form-group row">
+                    <div class="col-md-12">
+                        <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBMMpfFDCKmx8ZwhotaWBjRN6GJBFefD_4&sensor=false"></script>
+                        <script type="text/javascript">
+                        $(function () {
+                            initialize();
+                        });
+                        var marker;
+                        var markersArray = [];
+                        function initialize() {
+                            var longitude = parseFloat(document.getElementById("txtLongitude").value);
+                            var latitude = parseFloat(document.getElementById("txtLatitude").value);
+                            var myLatlng;
+                            if (latitude)
+                                myLatlng = new google.maps.LatLng(latitude, longitude);
+                            else
+                                myLatlng = new google.maps.LatLng(22.43134015636061, 46.845703125);
+                            var mapOptions;
+                            var url = window.location.href;
+                            mapOptions = {
+                                center: myLatlng,
+                                zoom: 8,
+                                mapTypeId: google.maps.MapTypeId.ROADMAP
+                            };
+                            var map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
+
+                            marker = new google.maps.Marker({
+                                position: myLatlng,
+                                map: map
+                            });
+                            markersArray.push(marker);
+
+                            google.maps.event.addListener(map, 'click', function (event) {
+                                //alert(event.latLng);
+                                document.getElementById("txtLongitude").value = event.latLng.lng();
+                                document.getElementById("txtLatitude").value = event.latLng.lat();
+                                if (markersArray) {
+                                    for (i in markersArray) {
+                                        markersArray[i].setMap(null);
+                                    }
+                                }
+                                marker = new google.maps.Marker({
+                                    position: event.latLng,
+                                    map: map
+                                });
+                                markersArray.push(marker);
+                            });
+                        }
+                        </script>
+                        <div id="map_canvas" style="width: 100%; height: 300px;"></div>
+                    </div>
+                </div>
+              
+                <div class="form-group row">
+                    <div class="col-lg-6">
+                        <label>
+                            Longitude
+                            :
+                        </label>
+                        @Html.TextBoxFor(model => model.Lang, new { @id = "txtLongitude",@class="form-control", @placeholder = "Click on map for Longitude" })
+                        @Html.ValidationMessageFor(model => model.Lang)
+                    </div>
+                    <div class="col-lg-6">
+                        <label>
+                            Latitude
+                            :
+                        </label>
+                        @Html.TextBoxFor(model => model.Lat, new { @id = "txtLatitude", @class = "form-control", @placeholder = "Click on map for Latitude" })
+                        @Html.ValidationMessageFor(model => model.Lat)
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="kt-portlet__foot">
+                <div class="kt-form__actions">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <input type="submit" value="@Amana.GlobalResources.Cpanel.Save" class="btn btn-warning" />
+
+
+                        </div>
+                        @*<div class="col-lg-6 kt-align-right">
+                                <button type="reset" class="btn btn-danger">Delete</button>
+                            </div>*@
+                    </div>
+                </div>
+            </div>
+
+        }
+
+    </div>
+    <div class="col-lg-1"></div>
+</div>

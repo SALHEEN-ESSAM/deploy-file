@@ -1,0 +1,79 @@
+﻿@model Amana.Models.Entities.C_UserItems
+
+@{
+    ViewBag.Title = @Amana.GlobalResources.Cpanel.Delete;
+    Layout = "~/Areas/Admin/Views/Shared/_Layout2.cshtml";
+}
+@section sectionSubHeader{
+
+    <div class="kt-subheader__main">
+        <h3 class="kt-subheader__title">
+            المستخدمين
+        </h3>
+        <span class="kt-subheader__separator kt-hidden"></span>
+        <div class="kt-subheader__breadcrumbs">
+            <a href="#" class="kt-subheader__breadcrumbs-home"><i class="flaticon2-shelter"></i></a>
+          
+            <span class="kt-subheader__breadcrumbs-separator"></span>
+            <span class="kt-subheader__breadcrumbs-link kt-subheader__breadcrumbs-link--active">
+              حذف مستخدم
+            </span>
+
+        </div>
+    </div>
+}
+<div class="kt-portlet kt-portlet--mobile">
+    <div class="kt-portlet__head kt-portlet__head--lg">
+        <div class="kt-portlet__head-label">
+            <span class="kt-portlet__head-icon">
+                <i class="kt-font-brand flaticon2-line-chart"></i>
+            </span>
+
+            <h3 class="kt-portlet__head-title">
+                @Amana.GlobalResources.Cpanel.ConfirmDelete
+            </h3>
+
+        </div>
+        <div class="kt-portlet__head-toolbar">
+            <div class="kt-portlet__head-wrapper">
+              
+            </div>
+        </div>
+    </div>
+
+    <div class="kt-portlet__body">
+        @if (ViewBag.Error == true)
+        {
+            @Html.Partial("~/Areas/Admin/Views/Shared/UcDelete.cshtml")
+        }
+
+        <h4>@Model.Email</h4>
+
+
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            <div class="kt-portlet__foot">
+                <div class="kt-form__actions">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <input type="submit" value="@Amana.GlobalResources.Cpanel.Delete" class="btn btn-primary" />
+                            @Html.ActionLink(@Amana.GlobalResources.Cpanel.BackToList, "Index", new { id = Request.QueryString["roleId"] }, new { @class = "btn btn-secondary" })
+
+                        </div>
+                        @*<div class="col-lg-6 kt-align-right">
+                            <button type="reset" class="btn btn-danger">Delete</button>
+                        </div>*@
+                    </div>
+                </div>
+            </div>
+           
+        }
+
+    </div>
+</div>
+<script>
+    $("#liUsers").addClass("kt-menu__item--open");
+
+</script>
+

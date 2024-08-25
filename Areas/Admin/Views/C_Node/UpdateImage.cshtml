@@ -1,0 +1,37 @@
+﻿@model Amana.ViewModels.BaseViewModels.TitleViewModel
+
+@{
+    var imageId = ViewContext.RouteData.Values["id"];
+    int typeId = int.Parse(Request.QueryString["typeId"]);
+    var catId = Request.QueryString["catId"];
+    var pageNum = Request.QueryString["page"];
+    var parentId = Request.QueryString["parentId"];
+    Amana.Models.Entities.C_NodeType nodeType = (Amana.Models.Entities.C_NodeType)ViewBag.NodeType;
+}
+
+<div class="modal-header">
+    <h4 class="modal-title">@Amana.GlobalResources.Cpanel.Image</h4>
+</div>
+
+@using (Html.BeginForm("UpdateImage", "C_Node", new { imageId = imageId, typeId = typeId, page = pageNum, catId = catId, parentId = parentId }, FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="modal-body">
+        @Html.ValidationSummary(true)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Title, "ALT")
+            <div class="col-md-7">
+                @Html.TextBoxFor(model => model.Title)
+                @Html.ValidationMessageFor(model => model.Title)
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div>
+            <input type="submit" value="@Amana.GlobalResources.Cpanel.Save" name="command" class="lnkCreate lnkInline" />
+            <input type="button" value="@Amana.GlobalResources.Cpanel.Close" data-dismiss="modal" class="lnkCreate lnkClose lnkInline" />
+        </div>
+    </div>
+}

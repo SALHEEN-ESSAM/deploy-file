@@ -1,0 +1,144 @@
+﻿@model Amana.Models.Entities.C_GeneralSettings
+
+@{
+    ViewBag.Title = @Amana.GlobalResources.Cpanel.Email;
+    Layout = "~/Areas/Admin/Views/Shared/_Settings.cshtml";
+}
+
+<h1>@Amana.GlobalResources.Cpanel.GeneralSettings</h1>
+<div class="sep100x100"></div>
+
+@if (ViewBag.Success == true)
+{
+    @Html.Partial("~/Areas/Admin/Views/Shared/UcSuccess.cshtml")
+}
+else if (ViewBag.Success == false)
+{
+    @Html.Partial("~/Areas/Admin/Views/Shared/UcError.cshtml")
+}
+
+@using (Html.BeginForm("Create", "C_GeneralSettings", FormMethod.Post, new { enctype = "multipart/form-data" })) 
+{
+    @Html.AntiForgeryToken()
+    
+    <div>
+        @Html.ValidationSummary(true)
+        <div style="display:none;">
+            <h2>@Amana.GlobalResources.Cpanel.SMS</h2>
+            <div class="sep100x100"></div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.SmsUserName, "SMS user")
+                <div class="col-md-7">
+                    @Html.EditorFor(model => model.SmsUserName)
+                    @Html.ValidationMessageFor(model => model.SmsUserName)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.SmsPassword, "SMS pass")
+                <div class="col-md-7">
+                    @Html.EditorFor(model => model.SmsPassword)
+                    @Html.ValidationMessageFor(model => model.SmsPassword)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.SmsSenderName, "SMS display name")
+                <div class="col-md-7">
+                    @Html.EditorFor(model => model.SmsSenderName)
+                    @Html.ValidationMessageFor(model => model.SmsSenderName)
+                </div>
+            </div>
+            <div class="sep100x100"></div>
+        </div>
+        <h2>إيميلات الإستقبال</h2>
+        <div class="form-group">
+            @Html.LabelFor(model => model.ReceptionEmails, "يجب الفصل بين كل بريد والآخر بعلامة , ")
+            <div class="col-md-7">
+                @Html.EditorFor(model => model.ReceptionEmails)
+                @Html.ValidationMessageFor(model => model.ReceptionEmails)
+            </div>
+        </div>
+        <div class="sep100x100"></div>
+        <h2>بيانات بريد الإرسال</h2>
+        <div class="sep100x100"></div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Email, "Email")
+            <div class="col-md-7">
+                @Html.EditorFor(model => model.Email)
+                @Html.ValidationMessageFor(model => model.Email)
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.DisplayName, "Display name")
+            <div class="col-md-7">
+                @Html.EditorFor(model => model.DisplayName)
+                @Html.ValidationMessageFor(model => model.DisplayName)
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Host, "Host")
+            <div class="col-md-7">
+                @Html.EditorFor(model => model.Host)
+                @Html.ValidationMessageFor(model => model.Host)
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.UserName, "UserName")
+            <div class="col-md-7">
+                @Html.EditorFor(model => model.UserName)
+                @Html.ValidationMessageFor(model => model.UserName)
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Password, "Password")
+            <div class="col-md-7">
+                @Html.EditorFor(model => model.Password)
+                @Html.ValidationMessageFor(model => model.Password)
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Port, "Port")
+            <div class="col-md-7">
+                @Html.TextBoxFor(model => model.Port)
+                @Html.ValidationMessageFor(model => model.Port)
+            </div>
+        </div>
+        <div class="form-group" style="display:none;">
+            @Html.LabelFor(model => model.AllowEmailService, "AllowEmailService")
+            @Html.CheckBoxFor(model => model.AllowEmailService, new { @checked = true })
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.EnableSSL, "EnableSSL")
+            @Html.CheckBoxFor(model => model.EnableSSL, new { @checked = true })
+        </div>
+
+        <div class="sep100x100"></div>
+        <div class="form-group">
+            <div>
+                <input type="submit" value="@Amana.GlobalResources.Cpanel.Save" class="lnkCreate lnkInline" />
+            </div>
+        </div>
+    </div>
+}
+
+<div class="sep100x100"></div>
+<h1>@Amana.GlobalResources.Cpanel.SendTestEmail</h1>
+<div class="sep100x100"></div>
+
+@using (Html.BeginForm("SendTestEmail", "C_GeneralSettings", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <div>
+        @Html.ValidationSummary(true)
+        <div class="form-group">
+            @Html.LabelFor(model => model.Email, @Amana.GlobalResources.Cpanel.Email)
+            <div class="col-md-7">
+                @Html.EditorFor(model => model.Email)
+                @Html.ValidationMessageFor(model => model.Email)
+            </div>
+        </div>
+        <div class="form-group">
+            <div>
+                <input type="submit" value="@Amana.GlobalResources.Cpanel.SendEmail" class="lnkCreate lnkCreateInline" />
+            </div>
+        </div>
+    </div>
+}

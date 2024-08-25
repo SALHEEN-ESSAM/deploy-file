@@ -1,0 +1,66 @@
+﻿@model PagedList.IPagedList<Amana.Models.Entities.C_CountriesLoc>
+@using PagedList.Mvc;
+
+@{
+    Layout = "_Layout.cshtml";
+    int langId = ViewBag.LangId;
+    var pageNum = Request.QueryString["page"];
+}
+
+<h1>@Amana.GlobalResources.Cpanel.Countries</h1>
+<div class="sep100x100"></div>
+
+@Html.ActionLink(@Amana.GlobalResources.Cpanel.Create + " »", "Create",null, new { @class = "lnkCreate" })
+
+@if (Model.Count > 0)
+{
+    using (Html.BeginForm("Index", "C_Countries", FormMethod.Get))
+    {
+        <p>@Html.TextBox("searchString", ViewBag.CurrentFilter as string, new { @class = "txtSearch" }) <input type="submit" value="@Amana.GlobalResources.Cpanel.Search" class="btnSearch" /></p>
+    }
+    
+    <div class="table-responsive">
+        <table class="tblView">
+            <tr>
+                <th>
+                    @Html.ActionLink(@Amana.GlobalResources.Cpanel.Title, "Index", new { sortOrder = ViewBag.TitleSortParam, currentFilter = ViewBag.CurrentFilter }) <span><img src="~/Content/Admin/images/icoSort.png" /></span>
+                </th>
+                <th>
+                    @Html.ActionLink(@Amana.GlobalResources.Cpanel.IsActive + " ?", "Index", new { sortOrder = ViewBag.ActiveSortParam, currentFilter = ViewBag.CurrentFilter }, new { @class = "lnkSortCat" }) <span><img src="~/Content/Admin/images/icoSort.png" /></span>
+                </th>
+                <th class="settings"><img src="~/Content/Admin/images/icoSettings.png" alt="" /></th>
+            </tr>
+
+            @{
+    int i = 0;
+    foreach (var item in Model)
+    {
+        <tr class="@(i % 2 == 0 ? "odd" : "even")">
+            <td>
+                @Html.DisplayFor(modelItem => item.Title) <span class="notTranslated">@(!item.IsTranslated ? Amana.GlobalResources.Cpanel.NotTranslated : "")</span>
+            </td>
+            <td>
+                @Html.ActionLink(" ", "Activate", new { id = item.CountryId, page = pageNum }, new { @class = item.C_Countries.IsActive ? "activated" : "notActivated" })
+            </td>
+            <td>
+                @Html.ActionLink(@Amana.GlobalResources.Cpanel.Cities, "Index", "C_Cities", new { id = item.CountryId }, null) |
+                @Html.ActionLink(@Amana.GlobalResources.Cpanel.Edit, "Create", new { id = item.CountryId }) |
+                @Html.ActionLink(@Amana.GlobalResources.Cpanel.Delete, "Delete", new { id = item.CountryId })
+            </td>
+        </tr>
+                i++;
+    }
+            }
+
+        </table>
+    </div>
+}
+
+
+@if (Model.TotalItemCount > Model.PageSize)
+{
+    <p style="text-align:center; margin:10px 0;">@Amana.GlobalResources.Cpanel.Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) @Amana.GlobalResources.Cpanel.Of @Model.PageCount</p>
+
+    @Html.PagedListPager(Model, page => Url.Action("Index",
+        new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+}

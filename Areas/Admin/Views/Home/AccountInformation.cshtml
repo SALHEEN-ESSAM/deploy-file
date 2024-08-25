@@ -1,0 +1,42 @@
+﻿@model Amana.ViewModels.C_UserItemsViewModel
+
+@using (Html.BeginForm("AccountInformation", "Home", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Name, @Amana.GlobalResources.Cpanel.Name)
+        <div class="col-md-7">
+            @Html.TextBoxFor(model => model.Name)
+            @Html.ValidationMessageFor(model => model.Name)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.Email, @Amana.GlobalResources.Cpanel.Email)
+        <div class="col-md-7">
+            @Html.TextBoxFor(model => model.Email)
+            @Html.ValidationMessageFor(model => model.Email)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.Phone, @Amana.GlobalResources.Cpanel.Phone)
+        <div class="col-md-7">
+            @Html.TextBoxFor(model => model.Phone)
+            @Html.ValidationMessageFor(model => model.Phone)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.CellPhone, @Amana.GlobalResources.Cpanel.CellPhone)
+        <div class="col-md-7">
+            @Html.TextBoxFor(model => model.CellPhone)
+            @Html.ValidationMessageFor(model => model.CellPhone)
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div>
+            <input type="submit" value="@Amana.GlobalResources.Cpanel.Save" class="lnkCreate lnkInline" />
+        </div>
+    </div>
+}

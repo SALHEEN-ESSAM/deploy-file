@@ -1,0 +1,26 @@
+﻿.printOnly
+{
+    display:none;
+}
+.labelCard {
+    border: 1px solid #000;
+    padding: 20px;
+  
+}
+@media print {
+    .kt-subheader__main {
+        display: none !important;
+    }
+    .noPrint {
+        display: none;
+    }
+    .printOnly {
+        margin-top:20px;
+        display: block;
+    }
+    .col-lg-4
+    {
+        width:30% !important;
+    }
+   
+}

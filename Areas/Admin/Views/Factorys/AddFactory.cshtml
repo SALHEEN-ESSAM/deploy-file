@@ -1,0 +1,607 @@
+﻿@model Amana.ViewModels.Factories.FactoryViewModel
+@using Amana.GlobalResources;
+@{
+    Amana.Models.Entities.Factories factoryItem = ViewBag.FactoryItem;
+    Amana.ViewModels.Factories.FactoryLocationViewModel factoryLocationVm = ViewBag.FactoryLocationVm;
+    Layout = "~/Areas/Admin/Views/Shared/_Layout2.cshtml";
+}
+@section sectionSubHeader{
+
+    <div class="kt-subheader__main">
+        <h3 class="kt-subheader__title">
+            @Cpanel.Factories
+        </h3>
+        <span class="kt-subheader__separator kt-hidden"></span>
+        <div class="kt-subheader__breadcrumbs">
+            <a href="#" class="kt-subheader__breadcrumbs-home"><i class="flaticon2-shelter"></i></a>
+            <span class="kt-subheader__breadcrumbs-separator"></span>
+            <span class="kt-subheader__breadcrumbs-link kt-subheader__breadcrumbs-link--active">@Cpanel.AddEditFactory</span>
+        </div>
+    </div>
+}
+<!--begin::Page Custom Styles(used by this page) -->
+<link href="/Content/assets/css/demo1/pages/general/wizard/wizard-4.rtl.css" rel="stylesheet" type="text/css" />
+
+<div class="row">
+    <div class="col-lg-12">
+        <!--begin::Portlet-->
+        <div class="kt-portlet">
+            <div class="kt-portlet__head">
+                <div class="kt-portlet__head-label">
+                    <h3 class="kt-portlet__head-title">
+                        @if (factoryItem != null)
+                        {
+                            <text>@factoryItem.Name</text>
+                        }
+                        else
+                        {
+                            <text> @Amana.GlobalResources.Cpanel.Create / @Amana.GlobalResources.Cpanel.Edit</text>
+                        }
+
+                    </h3>
+                </div>
+            </div>
+
+
+            <!--begin::Form-->
+            <div class="kt-portlet__body">
+                @if (ViewBag.Success == true)
+                {
+                    @Html.Partial("~/Areas/Admin/Views/Shared/UcSuccess.cshtml")
+                }
+                <ul class="nav nav-tabs" role="tablist">
+                    <li class="nav-item">
+                        <a id="kt_link_1" class="nav-link" data-toggle="tab" href="#" data-target="#kt_tabs_1">@Cpanel.FactoryInfo</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a id="kt_link_2" class="nav-link" data-toggle="tab" href="#kt_tabs_2">@Cpanel.LocationOnMap</a>
+                    </li>
+                    <li class="nav-item">
+                        <a id="kt_link_3" class="nav-link" data-toggle="tab" href="#kt_tabs_3">@Cpanel.Equipments</a>
+                    </li>
+                    <li class="nav-item">
+                        <a id="kt_link_4" class="nav-link" data-toggle="tab" href="#kt_tabs_4">@Cpanel.TechnicalStaff</a>
+                    </li>
+                    <li class="nav-item">
+                        <a id="kt_link_5" class="nav-link" data-toggle="tab" href="#kt_tabs_5">@Cpanel.MaterialSuppliers</a>
+                    </li>
+                    <li class="nav-item">
+                        <a id="kt_link_6" class="nav-link" data-toggle="tab" href="#kt_tabs_6">@Cpanel.SystemLoginInformation</a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane" id="kt_tabs_1" role="tabpanel">
+                        <div class="row">
+                            <div class="col-lg-1"></div>
+                            <div class="col-lg-10">
+
+                                @using (Html.BeginForm("AddFactory", "Factorys", FormMethod.Post, new { enctype = "multipart/form-data", @class = "kt-form kt-form--label-right" }))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    @Html.ValidationSummary(true)
+                                    @Html.HiddenFor(model => model.ID)
+
+                                <div class="kt-portlet__body">
+                                    <div class="form-group row">
+                                        <label class="col-md-2 text-left">
+                                            @Html.LabelFor(model => model.FactoryType, Cpanel.FactoryType)
+                                        </label>
+
+                                        <div class="col-md-1">
+                                            <label class="kt-radio kt-radio--bold kt-radio--brand">
+                                                @Html.RadioButtonFor(model => model.FactoryType, "0")  @Cpanel.Concrete2
+                                                <span></span>
+                                            </label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="kt-radio kt-radio--bold kt-radio--brand">
+                                                @Html.RadioButtonFor(model => model.FactoryType, "1")  @Cpanel.Block
+                                                <span></span>
+                                            </label>
+                                        </div>
+                                        @Html.ValidationMessageFor(model => model.FactoryType)
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-lg-6">
+                                            <label>
+                                               @Cpanel.FactoryName
+                                                :
+                                            </label>
+                                            @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.Name)
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <label>
+                                               @Cpanel.FactoryCode
+                                                :
+                                            </label>
+                                            @Html.EditorFor(model => model.CodeNo, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.CodeNo)
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-lg-12">
+                                            <label>
+                                                @Cpanel.Details
+                                                :
+                                            </label>
+                                            @Html.TextAreaFor(model => model.Description, new { @class = "form-control" })
+                                            @Html.ValidationMessageFor(model => model.Name)
+                                        </div>
+
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-lg-6">
+                                            <label>
+                                                @Cpanel.Location
+                                                :
+                                            </label>
+                                            @Html.DropDownListFor(model => model.LocationId, ViewData["LocationsList"] as SelectList, @Amana.GlobalResources.Cpanel.ChooseOption, new { @class = "form-control" })
+
+                                            @Html.ValidationMessageFor(model => model.LocationId)
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <label>
+                                               @Cpanel.OwnerName
+                                                :
+                                            </label>
+                                            @Html.EditorFor(model => model.OwnerName, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.OwnerName)
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-lg-6">
+                                            <label>
+                                                @Cpanel.Location
+                                                :
+                                            </label>
+                                            @Html.EditorFor(model => model.Location, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.Location)
+                                        </div>
+
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-lg-6">
+                                            <label>
+                                               @Cpanel.ResponsibleManager
+                                                :
+                                            </label>
+                                            @Html.EditorFor(model => model.ResponsibleManager, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.ResponsibleManager)
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <label>
+                                               @Cpanel.ResponsibleManagerQualification
+                                                :
+                                            </label>
+                                            @Html.EditorFor(model => model.ResponsibleManagerCertified, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.ResponsibleManagerCertified)
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-lg-6">
+                                            <label>
+                                                @Cpanel.TechnicalManager
+                                                :
+                                            </label>
+                                            @Html.EditorFor(model => model.TechManager, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.TechManager)
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <label>
+                                               @Cpanel.TechnicalManagerQualification
+                                                :
+                                            </label>
+                                            @Html.EditorFor(model => model.TechManagerCertified, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.TechManagerCertified)
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-lg-6">
+                                            <label>
+                                               @Cpanel.Phone
+                                                :
+                                            </label>
+                                            @Html.EditorFor(model => model.TelephoneNo, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.TelephoneNo)
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <label>
+                                                @Cpanel.Fax
+                                                :
+                                            </label>
+                                            @Html.EditorFor(model => model.FaxNo, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.FaxNo)
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-lg-6">
+                                            <label>
+                                               @Cpanel.ProductionEnergy
+                                                :
+                                            </label>
+                                            @Html.EditorFor(model => model.ProductEnergy, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.ProductEnergy)
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <label>
+                                               @Cpanel.DailyProductionRate
+                                                :
+                                            </label>
+                                            @Html.EditorFor(model => model.DailyProductRating, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.DailyProductRating)
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                                    <div class="kt-portlet__foot">
+                                        <div class="kt-form__actions">
+                                            <div class="row">
+                                                <div class="col-lg-6">
+                                                    <input type="submit" value="@Amana.GlobalResources.Cpanel.Save" class="btn btn-warning" />
+                                                    @Html.ActionLink(@Amana.GlobalResources.Cpanel.BackToList, "Index", null, new { @class = "btn btn-secondary" })
+
+                                                </div>
+                                                @*<div class="col-lg-6 kt-align-right">
+                                        <button type="reset" class="btn btn-danger">Delete</button>
+                                    </div>*@
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                }
+
+                            </div>
+                            <div class="col-lg-1"></div>
+                        </div>
+
+                    </div>
+                    <div class="tab-pane" id="kt_tabs_2" role="tabpanel">
+                        @if (factoryItem != null)
+                        {
+                            @Html.Partial("_FactoryLocation", factoryLocationVm)
+                        }
+                    </div>
+                    <div class="tab-pane" id="kt_tabs_3" role="tabpanel">
+                        @if (factoryItem != null)
+                        {
+                            <div class="kt-portlet__head kt-portlet__head--lg kt-padding-0">
+                                <div class="kt-portlet__head-label">
+                                    <span class="kt-portlet__head-icon">
+                                        <i class="kt-font-brand flaticon2-settings"></i>
+                                    </span>
+
+                                    <h3 class="kt-portlet__head-title">
+                                     @Cpanel.Equipments
+                                    </h3>
+
+                                </div>
+                                <div class="kt-portlet__head-toolbar">
+                                    <div class="kt-portlet__head-wrapper">
+                                        <div class="kt-portlet__head-actions">
+
+                                            <a onclick="ShowFormsModal('@Url.Action("AddEquipment",new {factoryId= factoryItem.ID})')" href="javascript:void();" class="btn btn-brand btn-elevate btn-icon-sm">
+                                                <i class="la la-plus"></i>
+                                                @Cpanel.Create
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            if (factoryItem.FactoryEquipments.Count > 0)
+                            {
+                                <table class="table table-striped- table-bordered table-hover table-checkable" id="kt_table_1">
+                                    <thead>
+                                        <tr>
+                                            <th>@Cpanel.EquipmentName</th>
+                                            <th>@Cpanel.TotalCount</th>
+                                            <th>
+                                                @Cpanel.Working
+                                            </th>
+                                            <th>
+                                                @Cpanel.NotWorking
+                                            </th>
+                                            <th>
+                                                @Cpanel.SpareCount
+                                            </th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @{
+                                            int i = 0;
+                                            foreach (var item in factoryItem.FactoryEquipments)
+                                            {
+                                                i++;
+                                                <tr>
+                                                    <td>
+                                                        @item.EquipmentName
+                                                    </td>
+                                                    <td>
+                                                        @item.TotalCount
+                                                    </td>
+                                                    <td>
+                                                        @item.EquipWorking
+                                                    </td>
+                                                    <td>
+                                                        @item.EquipNoWorking
+                                                    </td>
+                                                    <td>
+                                                        @item.EquipSpare
+                                                    </td>
+                                                    <td nowrap>
+                                                        <a onclick="ShowFormsModal('@Url.Action("AddEquipment",new {id=item.ID ,factoryId= item.FactoryId})')" href="javascript:void();" class="btn btn-success btn-sm mr-2">
+                                                            @Cpanel.Edit
+                                                        </a>
+                                                        <a href="@Url.Action("DeleteEquipment", new { id = item.ID })" onclick="return confirm('سيتم الحذف, هل أنت متاكد ؟');" class="btn btn-danger btn-sm mr-2">@Amana.GlobalResources.Cpanel.Delete</a>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        }
+
+                                    </tbody>
+                                </table>
+                            }
+
+                        }
+                    </div>
+                    <div class="tab-pane" id="kt_tabs_4" role="tabpanel">
+                        @if (factoryItem != null)
+                        {
+                            <div class="kt-portlet__head kt-portlet__head--lg kt-padding-0">
+                                <div class="kt-portlet__head-label">
+                                    <span class="kt-portlet__head-icon">
+                                        <i class="kt-font-brand flaticon2-user"></i>
+                                    </span>
+
+                                    <h3 class="kt-portlet__head-title">
+                                      @Cpanel.TechnicalStaff
+                                    </h3>
+
+                                </div>
+                                <div class="kt-portlet__head-toolbar">
+                                    <div class="kt-portlet__head-wrapper">
+                                        <div class="kt-portlet__head-actions">
+
+                                            <a onclick="ShowFormsModal('@Url.Action("AddTechnicalStuff",new {factoryId= factoryItem.ID})')" href="javascript:void();" class="btn btn-brand btn-elevate btn-icon-sm">
+                                                <i class="la la-plus"></i>
+                                                @Cpanel.Create
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            if (factoryItem.FactoryTechnicalStuff.Count > 0)
+                            {
+                                <table class="table table-striped- table-bordered table-hover table-checkable" id="kt_table_1">
+                                    <thead>
+                                        <tr>
+                                            <th>@Cpanel.Name</th>
+                                            <th>@Cpanel.Qualification</th>
+                                            <th>
+                                               @Cpanel.JobTitle
+                                            </th>
+
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @{
+                                            int i = 0;
+                                            foreach (var item in factoryItem.FactoryTechnicalStuff)
+                                            {
+                                                i++;
+                                                <tr>
+                                                    <td>
+                                                        @item.Name
+                                                    </td>
+                                                    <td>
+                                                        @item.TechnicalCertified
+                                                    </td>
+                                                    <td>
+                                                        @(item.IdxJobDescription == null ? "" : item.IdxJobDescription.Name)
+                                                    </td>
+
+                                                    <td nowrap>
+
+                                                        <a onclick="ShowFormsModal('@Url.Action("AddTechnicalStuff",new {id=item.ID ,factoryId= item.FactoryId})')" href="javascript:void();" class="btn btn-success btn-sm mr-2">
+
+                                                            @Cpanel.Edit
+                                                        </a>
+
+
+                                                        <a href="@Url.Action("DeleteTechnicalStuff", new { id = item.ID })" onclick="return confirm('سيتم الحذف, هل أنت متاكد ؟');" class="btn btn-danger btn-sm mr-2">@Amana.GlobalResources.Cpanel.Delete</a>
+
+                                                    </td>
+                                                </tr>
+                                            }
+                                        }
+
+                                    </tbody>
+                                </table>
+                            }
+
+                        }
+                    </div>
+                    <div class="tab-pane" id="kt_tabs_5" role="tabpanel">
+                        @if (factoryItem != null)
+                        {
+                            <div class="kt-portlet__head kt-portlet__head--lg kt-padding-0">
+                                <div class="kt-portlet__head-label">
+                                    <span class="kt-portlet__head-icon">
+                                        <i class="kt-font-brand flaticon2-analytics"></i>
+                                    </span>
+
+                                    <h3 class="kt-portlet__head-title">
+                                       @Cpanel.MaterialSuppliers
+                                    </h3>
+
+                                </div>
+                                <div class="kt-portlet__head-toolbar">
+                                    <div class="kt-portlet__head-wrapper">
+                                        <div class="kt-portlet__head-actions">
+
+                                            <a onclick="ShowFormsModal('@Url.Action("AddMaterialSupplier",new {factoryId= factoryItem.ID})')" href="javascript:void();" class="btn btn-brand btn-elevate btn-icon-sm">
+                                                <i class="la la-plus"></i>
+                                                @Cpanel.Create
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            if (factoryItem.FactoryMaterialSuppliers.Count > 0)
+                            {
+                                <table class="table table-striped- table-bordered table-hover table-checkable" id="kt_table_1">
+                                    <thead>
+                                        <tr>
+                                            <th>@Cpanel.MaterialType</th>
+                                            <th>@Cpanel.Supplier_Name</th>
+                                            <th>
+                                                @Cpanel.Phone
+                                            </th>
+
+                                            <th>
+                                                @Cpanel.Location
+                                            </th>
+                                            <th>
+                                                @Cpanel.MaterialType
+                                            </th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @{
+                                            int i = 0;
+                                            foreach (var item in factoryItem.FactoryMaterialSuppliers)
+                                            {
+                                                i++;
+                                                <tr>
+                                                    <td>
+                                                        @(item.IdxMaterialTypes == null ? "" : item.IdxMaterialTypes.Name)
+                                                    </td>
+                                                    <td>
+                                                        @item.Name
+                                                    </td>
+                                                    <td>
+                                                        @item.Telephone
+                                                    </td>
+                                                    <td>
+                                                        @item.Location
+                                                    </td>
+                                                    <td>
+                                                        @item.TypeofMaterial
+                                                    </td>
+                                                    <td nowrap>
+
+                                                        <a onclick="ShowFormsModal('@Url.Action("AddMaterialSupplier",new {id=item.ID ,factoryId= item.FactoryId})')" href="javascript:void();" class="btn btn-success btn-sm mr-2">
+
+                                                            @Cpanel.Edit
+                                                        </a>
+
+
+                                                        <a href="@Url.Action("DeleteMaterialSupplier", new { id = item.ID })" onclick="return confirm('سيتم الحذف, هل أنت متاكد ؟');" class="btn btn-danger btn-sm mr-2">@Amana.GlobalResources.Cpanel.Delete</a>
+
+                                                    </td>
+                                                </tr>
+                                            }
+                                        }
+
+                                    </tbody>
+                                </table>
+                            }
+
+                        }
+                    </div>
+                    <div class="tab-pane" id="kt_tabs_6" role="tabpanel">
+                        @if (factoryItem != null)
+                        {
+                            <div class="kt-portlet__head kt-portlet__head--lg kt-padding-0">
+                                <div class="kt-portlet__head-label">
+                                    <span class="kt-portlet__head-icon">
+                                        <i class="kt-font-brand flaticon2-analytics"></i>
+                                    </span>
+
+                                    <h3 class="kt-portlet__head-title">
+                                        @Cpanel.SystemLoginInformation
+                                    </h3>
+
+                                </div>
+                                <div class="kt-portlet__head-toolbar">
+                                    <div class="kt-portlet__head-wrapper">
+                                        <div class="kt-portlet__head-actions">
+                                            @if (factoryItem.C_UserItems == null)
+                                            {
+                                                <a  href="@Url.Action("Create","C_UserItems",new { roleId = 1002 , factoryId= factoryItem.ID })" class="btn btn-brand btn-elevate btn-icon-sm">
+                                                    <i class="la la-plus"></i>
+                                                    @Cpanel.Create
+                                                </a>
+                                            }
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            if (factoryItem.C_UserItems!=null)
+                            {
+                                <table class="table table-striped- table-bordered table-hover table-checkable" id="kt_table_1">
+                                    <thead>
+                                        <tr>
+                                            <th>@Cpanel.Name</th>
+                                            <th>@Cpanel.Email</th>
+                                            <th>
+                                                @Cpanel.Phone
+                                            </th>
+
+                                          
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                @factoryItem.C_UserItems.Name
+                                            </td>
+                                            <td>
+                                                @factoryItem.C_UserItems.Email
+                                            </td>
+                                            <td>
+                                                @factoryItem.C_UserItems.CellPhone
+                                            </td>
+                                            <td nowrap>
+                                                <a  href="@Url.Action("Create","C_UserItems", new { id =  @factoryItem.C_UserItems.UserId, roleId =  @factoryItem.C_UserItems.RoleId , factoryId= factoryItem.ID})" class="btn btn-success btn-sm mr-2">
+                                                    @Cpanel.Edit
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            }
+
+                        }
+                    </div>
+                </div>
+            </div>
+
+
+            <!--end::Form-->
+        </div>
+
+
+    </div>
+</div>
+<script>
+
+    var activeTabNo = '@Request["t"]';
+    if (activeTabNo == '') {
+        activeTabNo = '1';
+
+    }
+
+    $("#kt_link_" + activeTabNo).addClass("active");
+    $("#kt_tabs_" + activeTabNo).addClass("active");
+    $("#liFactories").addClass("kt-menu__item--open");
+</script>
+
+

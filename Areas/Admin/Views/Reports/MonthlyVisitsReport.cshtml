@@ -1,0 +1,150 @@
+﻿@model List<Amana.ViewModels.VisitsAndSamples.FactoryVisitsReport>
+@using Amana.Models.Utilities;
+@using Amana.GlobalResources;
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_Layout2.cshtml";
+    var month = string.IsNullOrEmpty(Request["month"]) ? HelperMethods.GetCurrentDateTime().Month.ToString() : Request["month"];
+    var year = string.IsNullOrEmpty(Request["year"]) ? HelperMethods.GetCurrentDateTime().Year.ToString() : Request["year"];
+}
+@section sectionSubHeader{
+
+    <div class="kt-subheader__main">
+        <h3 class="kt-subheader__title">
+            @Cpanel.Reports
+        </h3>
+        <span class="kt-subheader__separator kt-hidden"></span>
+        <div class="kt-subheader__breadcrumbs">
+            <a href="#" class="kt-subheader__breadcrumbs-home"><i class="flaticon2-shelter"></i></a>
+            @*<span class="kt-subheader__breadcrumbs-separator"></span>
+                <a href="" class="kt-subheader__breadcrumbs-link">
+                    قائمة
+                </a>*@
+            <span class="kt-subheader__breadcrumbs-separator"></span>
+            <span class="kt-subheader__breadcrumbs-link kt-subheader__breadcrumbs-link--active">@Cpanel.MonthlyVisitsReport</span>
+
+        </div>
+    </div>
+}
+<div class="kt-portlet kt-portlet--mobile">
+    <div class="kt-portlet__head kt-portlet__head--lg">
+        <div class="kt-portlet__head-label">
+            <span class="kt-portlet__head-icon">
+                <i class="kt-font-brand flaticon2-line-chart"></i>
+            </span>
+
+            <h3 class="kt-portlet__head-title">
+              @Cpanel.MonthlyVisitsReport
+            </h3>
+
+        </div>
+        <div class="kt-portlet__head-toolbar">
+            <div class="kt-portlet__head-wrapper">
+                <div class="kt-portlet__head-actions">
+                    @*<a  href="@Url.Action("AddFactory")" class="btn btn-brand btn-elevate btn-icon-sm">
+                            <i class="la la-plus"></i>
+                            إضافة
+                        </a>*@
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="kt-portlet__body">
+        @if (ViewBag.Success == true)
+        {
+            @Html.Partial("~/Areas/Admin/Views/Shared/UcSuccess.cshtml")
+        }
+
+        <!--begin: Search Form -->
+
+        <div class="row align-items-center">
+            <div class="col-xl-8 order-2 order-xl-1">
+                <div class="row align-items-center">
+                    <div class="col-md-3 kt-margin-b-20-tablet-and-mobile">
+                        <div class="kt-form__control">
+                            <label>@Cpanel.MonthName</label>
+                            @*<input id="month" name="month" type="number" class="form-control" value="@month" />*@
+                            @Html.DropDownList("month", new List<SelectListItem>
+                         {
+                             new SelectListItem{ Text= "يناير", Value = "1" , Selected= (month=="1") },
+                             new SelectListItem{ Text= "فبراير", Value = "2", Selected= (month=="2") },
+                             new SelectListItem{ Text= "مارس", Value = "3", Selected= (month=="3") },
+                             new SelectListItem{ Text= "إبريل", Value = "4", Selected= (month=="4") },
+                             new SelectListItem{ Text= "مايو", Value = "5", Selected= (month=="5")},
+                             new SelectListItem{ Text= "يونيو", Value =  "6", Selected= (month=="6")},
+                             new SelectListItem{ Text= "يوليو", Value =  "7", Selected= (month=="7")},
+                             new SelectListItem{ Text= "أغسطس", Value = "8", Selected= (month=="8")},
+                             new SelectListItem{ Text= "سبتمبر", Value =  "9", Selected= (month=="9")},
+                             new SelectListItem{ Text= "أكتوبر", Value =  "10", Selected= (month=="10")},
+                             new SelectListItem{ Text= "نوفمبر", Value =  "11", Selected= (month=="11")},
+                             new SelectListItem{ Text= "ديسمبر", Value =  "12", Selected= (month=="12")},
+                         }, new { @class = "form-control" })
+                        </div>
+
+
+                    </div>
+                    <div class="col-md-3 kt-margin-b-20-tablet-and-mobile">
+
+
+                        <div class="kt-form__control">
+                            <label>@Cpanel.Year</label>
+                            <input id="year" name="year" type="number" class="form-control" value="@year" />
+
+                        </div>
+
+
+                    </div>
+                    <div class="col-md-3">
+
+                        <input id="btnSearch" type="button" value="@Cpanel.ViewReport" class="btn btn-success btn-sm kt-mt-20" />
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+        <div class="row align-items-center kt-mt-10">
+
+            <div id="divReport" style="text-align:center;width:830px;margin:auto">
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@section sectionScripts{
+
+    <script>
+
+        $(document).ready(function () {
+            //KTDatatablesDataSourceHtml.init();
+            $("#liReports").addClass("kt-menu__item--open");
+        });
+    </script>
+    <script>
+        $(function () {
+            $('#btnSearch').click(function () {
+                var month = $("#month").val();
+                var year = $("#year").val();
+                //ASPX page URL to load report
+                var src = '/Reports/Monthly.aspx?';
+                //We can add parameters here
+                src = src + "m=" + month + "&y=" + year;
+
+                //Create a dynamic iframe here and append this to div tag
+                var iframe = '<iframe id="reportFrame" width="100%" height="1250px" style="border:1px solid #ccc;" scrolling="no" frameborder="0" src="' + src + '" allowfullscreen></iframe>';
+                $("#divReport").html(iframe);
+
+            });
+        });
+    </script>
+}
+
+
+
+
+
